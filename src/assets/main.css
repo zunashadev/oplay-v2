@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Lobster Fugu';
+  src: url('/fonts/LobsterFuguRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  /* START : FONT */
+  --font-poppins: 'Poppins', sans-serif;
+  --font-lobster-fugu: 'Lobster Fugu', cursive;
+  /* END : FONT */
+
+  /* START : COLOR */
+  --color-blue-charcoal-50: #eefaff;
+  --color-blue-charcoal-100: #dcf4ff;
+  --color-blue-charcoal-200: #b2ebff;
+  --color-blue-charcoal-300: #6dddff;
+  --color-blue-charcoal-400: #20cdff;
+  --color-blue-charcoal-500: #00b7ff;
+  --color-blue-charcoal-600: #0093df;
+  --color-blue-charcoal-700: #0074b4;
+  --color-blue-charcoal-800: #006295;
+  --color-blue-charcoal-900: #00517a;
+  --color-blue-charcoal-950: #00111b; /* Core */
+
+  --color-firefly-50: #eefdfd;
+  --color-firefly-100: #d5f7f8;
+  --color-firefly-200: #b0eef1;
+  --color-firefly-300: #7ae1e6;
+  --color-firefly-400: #3ccad4;
+  --color-firefly-500: #20adba;
+  --color-firefly-600: #1e8c9c;
+  --color-firefly-700: #1f717f;
+  --color-firefly-800: #215d69;
+  --color-firefly-900: #204e59;
+  --color-firefly-950: #0d2a32; /* Core */
+
+  --color-buttered-rum-50: #ffffe7;
+  --color-buttered-rum-100: #fdffc1;
+  --color-buttered-rum-200: #fffe85;
+  --color-buttered-rum-300: #fff740;
+  --color-buttered-rum-400: #ffe70c;
+  --color-buttered-rum-500: #f3ce00;
+  --color-buttered-rum-600: #d2a000;
+  --color-buttered-rum-700: #a57101; /* Core */
+  --color-buttered-rum-800: #8a5909;
+  --color-buttered-rum-900: #75480e;
+  --color-buttered-rum-950: #442604;
+
+  --color-lightning-yellow-50: #fffceb;
+  --color-lightning-yellow-100: #fff5c6;
+  --color-lightning-yellow-200: #feea89;
+  --color-lightning-yellow-300: #fed94b;
+  --color-lightning-yellow-400: #fdc317; /* Core */
+  --color-lightning-yellow-500: #f7a509;
+  --color-lightning-yellow-600: #db7d04;
+  --color-lightning-yellow-700: #b65807;
+  --color-lightning-yellow-800: #93440d;
+  --color-lightning-yellow-900: #79380e;
+  --color-lightning-yellow-950: #461c02;
+  /* END : COLOR */
+}
