@@ -42,8 +42,8 @@ onMounted(() => {
 
 <template>
   <div class="rounded-md border border-gray-200">
-    <div class="bg-gray-200 px-3 py-3">
-      <p class="text-lg font-medium">Tambah Paket Produk</p>
+    <div class="border-b border-gray-200 bg-gray-50 px-3 py-3">
+      <p class="text-lg font-medium">➕ Tambah Paket Produk</p>
     </div>
 
     <!-- START : MESSAGE AND ERROR -->

@@ -33,8 +33,8 @@ const addProduct = async () => {
 
 <template>
   <div class="rounded-md border border-gray-200">
-    <div class="bg-gray-200 px-3 py-3">
-      <p class="text-lg font-medium">Tambah Produk</p>
+    <div class="border-b border-gray-200 bg-gray-50 px-3 py-3">
+      <p class="text-lg font-medium">➕ Tambah Produk</p>
     </div>
     <div class="px-3 py-3">
       <form @submit.prevent="addProduct" class="flex flex-col gap-2">
@@ -46,7 +46,14 @@ const addProduct = async () => {
           class="rounded border p-2"
           required
         ></textarea>
-        <input type="file" ref="fileInputRef" @change="onFileChange" />
+        <div class="rounded-sm border px-4 py-2">
+          <input
+            type="file"
+            ref="fileInputRef"
+            @change="onFileChange"
+            class="hover:cursor-pointer"
+          />
+        </div>
         <button type="submit" class="rounded bg-blue-500 px-4 py-2 text-white">
           Tambah Produk
         </button>
