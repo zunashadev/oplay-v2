@@ -8,20 +8,20 @@ export const useProductStore = defineStore('productStore', () => {
   const products = ref([]);
   const loading = ref(false);
   const message = ref(null);
-  const error = ref(null);
+  const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
 
-  // Fetch semua produk
+  // Fungsi : Fetch semua produk
   const fetchProducts = async () => {
     loading.value = true;
     try {
       const { data, error: fetchError } = await supabase
         .from('products')
         .select('*, product_packages(*)') // Ambil juga data paket terkait
-        .order('created_at', { ascending: false }); // Urutkan produk dari terbaru
+        .order('created_at', { ascending: false });
 
       if (fetchError) throw fetchError;
 
-      // Urutkan product_packages secara manual
+      // Isi products dan usrutkan product_packages secara manual
       products.value = data.map((product) => ({
         ...product,
         product_packages: product.product_packages
@@ -29,37 +29,44 @@ export const useProductStore = defineStore('productStore', () => {
           : [],
       }));
     } catch (err) {
-      error.value = err.message;
       message.value = 'Gagal mengambil data produk!';
+      error.value = err.message;
     } finally {
       loading.value = false;
     }
   };
 
-  // Fungsi untuk mengupload gambar ke Supabase Storage
+  // Fungsi : Upload gambar ke Supabase Storage
   const uploadImage = async (file) => {
     if (!file) return null;
 
-    // Validasi ekstensi file
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
-    const fileExt = file.name.split('.').pop().toLowerCase();
-    if (!allowedExtensions.includes(fileExt)) {
-      throw new Error('Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau WEBP.');
+    try {
+      // Validasi ekstensi file
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+      const fileExt = file.name.split('.').pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExt)) {
+        error.value = 'Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau WEBP.';
+        return null; // Stop proses upload jika format tidak valid
+      }
+
+      const fileName = `${Date.now()}.${fileExt}`; // Buat nama unik
+      const filePath = `products/${fileName}`; // Simpan di folder "products"
+
+      // Upload file ke Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Dapatkan URL publik gambar
+      const { data } = supabase.storage.from('product-images').getPublicUrl(filePath);
+      return data.publicUrl;
+    } catch (err) {
+      message.value = 'Gagal mengunggah gambar!';
+      error.value = err.message;
+      return null;
     }
-
-    const fileName = `${Date.now()}.${fileExt}`; // Buat nama unik
-    const filePath = `products/${fileName}`; // Simpan di folder "products"
-
-    // Upload file ke Supabase Storage
-    const { error: uploadError } = await supabase.storage
-      .from('product-images')
-      .upload(filePath, file);
-
-    if (uploadError) throw uploadError;
-
-    // Dapatkan URL publik gambar
-    const { data } = supabase.storage.from('product-images').getPublicUrl(filePath);
-    return data.publicUrl;
   };
 
   // Tambah produk baru
@@ -80,6 +87,11 @@ export const useProductStore = defineStore('productStore', () => {
       let imageUrl = null;
       if (file) {
         imageUrl = await uploadImage(file);
+        if (!imageUrl) {
+          message.value = 'Gagal menambahkan produk!';
+          loading.value = false;
+          return; // Stop eksekusi jika gambar tidak valid
+        }
       }
 
       // Simpan produk ke database
@@ -89,6 +101,7 @@ export const useProductStore = defineStore('productStore', () => {
         .select()
         .single();
 
+      // Hentikan eksekusi dan lempar error ke blok catch jika terjadi error
       if (insertError) throw insertError;
 
       // Tambahkan daftar paket kosong agar konsisten
@@ -97,8 +110,8 @@ export const useProductStore = defineStore('productStore', () => {
 
       message.value = 'Produk berhasil ditambahkan!';
     } catch (err) {
-      error.value = err.message;
       message.value = 'Gagal menambahkan produk!';
+      error.value = err.message;
     } finally {
       loading.value = false;
     }

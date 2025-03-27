@@ -11,7 +11,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
   const message = ref(null);
   const error = ref(null);
 
-  // Fetch semua paket berdasarkan product_id
+  // Fetch product package berdasarkan product id
   const fetchProductPackages = async (productId) => {
     loading.value = true;
     try {
@@ -23,8 +23,8 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
       if (fetchError) throw fetchError;
       packages.value = data;
     } catch (err) {
-      error.value = err.message;
       message.value = 'Gagal mengambil data paket!';
+      error.value = err.message;
     } finally {
       loading.value = false;
     }

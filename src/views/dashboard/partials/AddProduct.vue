@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue';
 import { useProductStore } from '@/stores/productStore';
 
+import AlertComponent from '../components/alerts/Alert.vue';
+
 const productStore = useProductStore();
 
 const name = ref('');
@@ -29,6 +31,12 @@ const addProduct = async () => {
     fileInputRef.value.value = '';
   }
 };
+
+// Fungsi untuk menghapus message & error dari store
+const clearAlert = () => {
+  productStore.message = null;
+  productStore.error = null;
+};
 </script>
 
 <template>
@@ -36,6 +44,17 @@ const addProduct = async () => {
     <div class="border-b border-gray-200 bg-gray-50 px-3 py-3">
       <p class="text-lg font-medium">➕ Tambah Produk</p>
     </div>
+
+    <!-- START : MESSAGE AND ERROR -->
+    <template v-if="productStore.message || productStore.error">
+      <AlertComponent
+        :message="productStore.message"
+        :error="productStore.error"
+        @close-alert="clearAlert"
+      />
+    </template>
+    <!-- START : MESSAGE AND ERROR -->
+
     <div class="px-3 py-3">
       <form @submit.prevent="addProduct" class="flex flex-col gap-2">
         <input v-model="name" placeholder="Nama Produk" class="rounded border p-2" required />
