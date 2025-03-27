@@ -69,7 +69,7 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Tambah produk baru
+  // Fungsi : Tambah produk baru
   const addProduct = async (name, category, description, file) => {
     loading.value = true;
     error.value = null;
@@ -117,7 +117,7 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Fungsi untuk menghapus gambar dari Supabase Storage
+  // Fungsi : Hapus gambar dari Supabase Storage
   const deleteImage = async (imageUrl) => {
     if (!imageUrl) return;
 
@@ -134,7 +134,7 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Fungsi untuk menghapus produk
+  // Fungsi : Hapus produk
   const deleteProduct = async (productId) => {
     loading.value = true;
     error.value = null;

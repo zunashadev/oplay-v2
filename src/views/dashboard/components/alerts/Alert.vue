@@ -16,21 +16,25 @@ const closeAlert = () => {
 </script>
 
 <template>
-  <div class="px-3 py-3">
+  <div class="fixed top-20 right-10 z-50 w-80">
     <div
-      class="mt-2 flex items-start justify-between gap-2 rounded-lg p-4 text-sm text-white"
+      class="flex flex-col gap-1 rounded-lg p-3 text-sm text-white shadow-lg"
       :class="error ? 'bg-red-500' : 'bg-green-500'"
     >
-      <div class="flex flex-col gap-1">
+      <!-- Title -->
+      <div class="flex items-center justify-between">
         <p class="text-sm font-medium">{{ message }}</p>
-        <p v-if="error" class="text-xs font-normal">{{ error }}</p>
+        <div
+          @click="closeAlert"
+          class="rounded-md p-1 transition-all hover:cursor-pointer"
+          :class="error ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'"
+        >
+          <CrossIcon class="size-5" />
+        </div>
       </div>
-      <div
-        @click="closeAlert"
-        class="rounded-md p-1 transition-all hover:cursor-pointer"
-        :class="error ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'"
-      >
-        <CrossIcon class="size-5" />
+      <!-- Description -->
+      <div class="">
+        <p v-if="error" class="text-xs font-normal">{{ error }}</p>
       </div>
     </div>
   </div>
