@@ -8,20 +8,36 @@ export const useProductStore = defineStore('productStore', () => {
   const products = ref([]);
   const loading = ref(false);
   const message = ref(null);
-  const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
+  const error = ref(null);
+
+  // Handle : Response
+  const handleResponse = (type, operation, err = null, customMessage = null, logError = true) => {
+    if (type === 'error') {
+      if (err && logError) console.error(`Gagal ${operation}:`, err.message || err);
+      error.value = err?.message || 'Terjadi kesalahan!';
+      message.value = customMessage || `Gagal ${operation}!`;
+    } else if (type === 'success') {
+      message.value = customMessage || `Berhasil ${operation}!`;
+      error.value = null; // Reset error jika sebelumnya ada
+    }
+  };
 
   // Fungsi : Fetch semua produk
   const fetchProducts = async () => {
     loading.value = true;
+    error.value = null;
+    message.value = null;
+
     try {
       const { data, error: fetchError } = await supabase
         .from('products')
         .select('*, product_packages(*)') // Ambil juga data paket terkait
         .order('created_at', { ascending: false });
 
+      // Hentikan eksekusi dan lempar error ke blok catch jika terjadi error
       if (fetchError) throw fetchError;
 
-      // Isi products dan usrutkan product_packages secara manual
+      // Isi products dan urutkan product_packages secara manual
       products.value = data.map((product) => ({
         ...product,
         product_packages: product.product_packages
@@ -29,8 +45,7 @@ export const useProductStore = defineStore('productStore', () => {
           : [],
       }));
     } catch (err) {
-      message.value = 'Gagal mengambil data produk!';
-      error.value = err.message;
+      handleResponse('error', 'mengambil data produk', err);
     } finally {
       loading.value = false;
     }
@@ -45,12 +60,12 @@ export const useProductStore = defineStore('productStore', () => {
       const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
       const fileExt = file.name.split('.').pop().toLowerCase();
       if (!allowedExtensions.includes(fileExt)) {
-        error.value = 'Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau WEBP.';
-        return null; // Stop proses upload jika format tidak valid
+        throw new Error('Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau WEBP.');
       }
 
-      const fileName = `${Date.now()}.${fileExt}`; // Buat nama unik
-      const filePath = `products/${fileName}`; // Simpan di folder "products"
+      // Buat nama unik & simpan di folder "products"
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `products/${fileName}`;
 
       // Upload file ke Supabase Storage
       const { error: uploadError } = await supabase.storage
@@ -61,10 +76,10 @@ export const useProductStore = defineStore('productStore', () => {
 
       // Dapatkan URL publik gambar
       const { data } = supabase.storage.from('product-images').getPublicUrl(filePath);
+      handleResponse('success', 'mengunggah gambar');
       return data.publicUrl;
     } catch (err) {
-      message.value = 'Gagal mengunggah gambar!';
-      error.value = err.message;
+      handleResponse('error', 'mengunggah gambar', err);
       return null;
     }
   };
@@ -75,43 +90,37 @@ export const useProductStore = defineStore('productStore', () => {
     error.value = null;
     message.value = null;
 
-    const user_id = useAuthStore().user?.id;
-    if (!user_id) {
-      error.value = 'User tidak ditemukan!';
-      loading.value = false;
-      return;
-    }
-
     try {
+      // Cek user
+      const user_id = useAuthStore().user?.id;
+      if (!user_id) {
+        throw new Error('User tidak ditemukan/belum login');
+      }
+
       // Upload gambar
-      let imageUrl = null;
+      let image_url = null;
       if (file) {
-        imageUrl = await uploadImage(file);
-        if (!imageUrl) {
-          message.value = 'Gagal menambahkan produk!';
-          loading.value = false;
-          return; // Stop eksekusi jika gambar tidak valid
-        }
+        image_url = await uploadImage(file);
+        if (!image_url) return; // Stop eksekusi jika gambar tidak valid, message dan error diambil dari fungsi uploadImage()
       }
 
       // Simpan produk ke database
       const { data, error: insertError } = await supabase
         .from('products')
-        .insert([{ name, category, user_id, description, image_url: imageUrl }])
+        .insert([{ name, category, user_id, description, image_url }])
         .select()
         .single();
 
-      // Hentikan eksekusi dan lempar error ke blok catch jika terjadi error
       if (insertError) throw insertError;
 
       // Tambahkan daftar paket kosong agar konsisten
       data.product_packages = [];
       products.value.unshift(data);
 
-      message.value = 'Produk berhasil ditambahkan!';
+      // message.value = 'Produk berhasil ditambahkan!';
+      handleResponse('success', 'menambah produk');
     } catch (err) {
-      message.value = 'Gagal menambahkan produk!';
-      error.value = err.message;
+      handleResponse('error', 'menambah produk', err);
     } finally {
       loading.value = false;
     }
@@ -119,18 +128,25 @@ export const useProductStore = defineStore('productStore', () => {
 
   // Fungsi : Hapus gambar dari Supabase Storage
   const deleteImage = async (imageUrl) => {
-    if (!imageUrl) return;
+    if (!imageUrl) return null;
 
-    const parts = imageUrl.split('/storage/v1/object/public/product-images/');
-    if (parts.length < 2) return;
+    try {
+      // Ekstrak nama file dari URL dengan cara yang lebih sederhana
+      const fileName = imageUrl.split('/').pop();
+      const filePath = `products/${fileName}`;
 
-    const filePath = parts[1];
+      // Hapus gambar dari storage
+      const { error: deleteError } = await supabase.storage
+        .from('product-images')
+        .remove([filePath]);
 
-    // Hapus gambar dari storage
-    const { error: deleteError } = await supabase.storage.from('product-images').remove([filePath]);
+      if (deleteError) throw deleteError;
 
-    if (deleteError) {
-      console.error('Gagal menghapus gambar:', deleteError.message);
+      handleResponse('success', 'menghapus gambar');
+      return true;
+    } catch (err) {
+      handleResponse('error', 'menghapus gambar', err);
+      return null;
     }
   };
 
@@ -155,30 +171,25 @@ export const useProductStore = defineStore('productStore', () => {
 
       // Hapus gambar jika ada
       if (product?.image_url) {
-        await deleteImage(product.image_url);
+        const imageDeleted = await deleteImage(product.image_url);
+        if (!imageDeleted) {
+          console.error('Gagal menghapus gambar, produk tidak akan dihapus.');
+          return; // Stop eksekusi jika gagal hapus gambar
+        }
       }
 
       // Hapus produk dari database
       const { error: deleteError } = await supabase.from('products').delete().eq('id', productId);
-      if (deleteError) {
-        console.error('Gagal menghapus produk dari database:', deleteError.message);
-        throw deleteError;
-      }
+      if (deleteError) throw deleteError;
 
       // Hapus produk dari state lokal
       products.value = products.value.filter((p) => p.id !== productId);
-      message.value = 'Produk berhasil dihapus!';
+      handleResponse('success', 'menghapus produk');
     } catch (err) {
-      error.value = err.message;
-      message.value = 'Gagal menghapus produk!';
+      handleResponse('error', 'menghapus produk', err);
     } finally {
       loading.value = false;
     }
-  };
-
-  // Filter produk berdasarkan kategori
-  const filterByCategory = (category) => {
-    return computed(() => products.value.filter((product) => product.category === category));
   };
 
   return {
@@ -192,6 +203,5 @@ export const useProductStore = defineStore('productStore', () => {
     fetchProducts,
     addProduct,
     deleteProduct,
-    filterByCategory,
   };
 });

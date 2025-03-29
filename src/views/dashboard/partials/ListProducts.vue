@@ -62,7 +62,7 @@ const deleteProductPackage = async (id) => {
           <div
             class="flex w-1/2 flex-col gap-5 rounded-md border border-dashed border-gray-200 px-3 py-3"
           >
-            <p class="text-base font-normal">ℹ️ Informasi</p>
+            <p class="text-base font-medium">ℹ️ Informasi</p>
             <div class="flex flex-col gap-2">
               <div>
                 <p class="text-xs font-normal text-gray-400">Category</p>
@@ -80,7 +80,7 @@ const deleteProductPackage = async (id) => {
           <div
             class="flex w-1/2 flex-col gap-5 rounded-md border border-dashed border-gray-200 px-3 py-3"
           >
-            <p class="text-base font-normal">📦 Paket</p>
+            <p class="text-base font-medium">📦 Paket</p>
             <div v-if="product.product_packages.length">
               <div class="flex flex-col gap-1">
                 <div
@@ -89,7 +89,15 @@ const deleteProductPackage = async (id) => {
                   class="flex items-center justify-between rounded-md border border-l-6 border-gray-200 bg-gray-50 px-4 py-2"
                 >
                   <div>
-                    <p class="text-base font-medium">{{ pkg.name }}</p>
+                    <div class="flex items-center gap-3">
+                      <p class="text-base font-medium">{{ pkg.name }}</p>
+                      <p
+                        v-if="pkg.is_best_seller"
+                        class="bg-lightning-yellow-400 rounded-md px-3 py-0.5 text-xs font-medium"
+                      >
+                        🔥 Terlaris
+                      </p>
+                    </div>
                     <p class="text-sm font-normal">Rp{{ pkg.price }}</p>
                   </div>
                   <div class="flex gap-1">

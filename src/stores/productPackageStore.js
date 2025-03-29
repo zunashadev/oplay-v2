@@ -9,7 +9,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
   const packages = ref([]);
   const loading = ref(false);
   const message = ref(null);
-  const error = ref(null);
+  const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
 
   // Fetch product package berdasarkan product id
   const fetchProductPackages = async (productId) => {
@@ -31,7 +31,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
   };
 
   // Tambah paket baru
-  const addProductPackage = async (productId, name, price) => {
+  const addProductPackage = async (product_id, name, price, is_best_seller = false) => {
     loading.value = true;
     error.value = null;
     message.value = null;
@@ -47,7 +47,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
       // Simpan paket ke database
       const { data, error: insertError } = await supabase
         .from('product_packages')
-        .insert([{ product_id: productId, name, price, user_id }])
+        .insert([{ product_id, name, price, user_id, is_best_seller }])
         .select()
         .single();
 
@@ -58,7 +58,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       // Update product di products.value agar UI langsung berubah
       const productStore = useProductStore();
-      const product = productStore.products.find((p) => p.id === productId);
+      const product = productStore.products.find((p) => p.id === product_id);
 
       if (product) {
         // Pastikan daftar paket ada sebelum menambahkan

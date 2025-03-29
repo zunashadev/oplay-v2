@@ -11,6 +11,7 @@ const productPackageStore = useProductPackageStore();
 const name = ref('');
 const price = ref('');
 const selectedProductId = ref('');
+const isBestSeller = ref(false);
 
 onMounted(() => {
   productStore.fetchProducts(); // Ambil daftar produk
@@ -19,13 +20,19 @@ onMounted(() => {
 const addProductPackage = async () => {
   if (!name.value || !price.value || !selectedProductId.value) return alert('Isi semua field!');
 
-  await productPackageStore.addProductPackage(selectedProductId.value, name.value, price.value);
+  await productPackageStore.addProductPackage(
+    selectedProductId.value,
+    name.value,
+    price.value,
+    isBestSeller.value,
+  );
 
   // Reset form jika berhasil
   if (!productPackageStore.error) {
     name.value = '';
     price.value = '';
     selectedProductId.value = '';
+    isBestSeller.value = false;
   }
 };
 
@@ -62,7 +69,10 @@ const clearAlert = () => {
           </option>
         </select>
 
+        <!-- Name -->
         <input v-model="name" placeholder="Nama Paket" class="rounded border p-2" required />
+
+        <!-- Price -->
         <input
           v-model="price"
           type="number"
@@ -70,6 +80,14 @@ const clearAlert = () => {
           class="rounded border p-2"
           required
         />
+
+        <!-- Is Best Seller -->
+        <label class="flex items-center gap-2">
+          <input type="checkbox" v-model="isBestSeller" class="rounded border" />
+          <span>🔥 Terlaris</span>
+        </label>
+
+        <!-- Button -->
         <button type="submit" class="rounded bg-blue-500 px-4 py-2 text-white">
           Tambah Produk
         </button>
