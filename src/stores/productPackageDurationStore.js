@@ -4,9 +4,10 @@ import { ref, computed } from 'vue';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from './authStore';
 import { useProductStore } from './productStore';
+import { useProductPackageStore } from './productPackageStore';
 
-export const useProductPackageStore = defineStore('productPackageStore', () => {
-  const packages = ref([]);
+export const useProductPackageDurationStore = defineStore('productPackageDurationStore', () => {
+  const durations = ref([]);
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
@@ -23,96 +24,84 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     }
   };
 
-  // Fetch product package berdasarkan product id
-  const fetchProductPackages = async (productId) => {
+  // Fetch product package duration berdasarkan product package id
+  const fetchProductPackageDurations = async (productPackageId) => {
     loading.value = true;
     error.value = null;
     message.value = null;
 
     try {
       const { data, error: fetchError } = await supabase
-        .from('product_packages')
+        .from('product_package_durations')
         .select('*')
-        .eq('product_id', productId)
+        .eq('product_package_id', productPackageId)
         .order('created_at', { ascending: false });
       if (fetchError) throw fetchError;
-      packages.value = data;
+      durations.value = data;
     } catch (err) {
-      handleResponse('error', 'mengambil data paket produk', err);
+      handleResponse('error', 'mengambil data durasi paket produk', err);
     } finally {
       loading.value = false;
     }
   };
 
-  // Tambah paket baru
-  const addProductPackage = async (
-    product_id,
-    name,
-    price,
-    discount_type = null,
-    discount_value = 0,
-    is_best_seller = false,
-  ) => {
+  const addProductPackageDuration = async (product_id, product_package_id, unit, value) => {
     loading.value = true;
     error.value = null;
     message.value = null;
 
     try {
-      // Cek user
       const user_id = useAuthStore().user?.id;
       if (!user_id) {
         throw new Error('User tidak ditemukan/belum login');
       }
 
-      // Validasi input harga dan diskon
-      if (price <= 0) throw new Error('Harga harus lebih dari 0');
-      if (discount_type && !['percentage', 'fixed_amount'].includes(discount_type)) {
-        throw new Error('Jenis diskon tidak valid');
-      }
-      if (discount_value < 0) throw new Error('Nilai diskon tidak boleh negatif');
-
-      // Simpan paket ke database
       const { data, error: insertError } = await supabase
-        .from('product_packages')
+        .from('product_package_durations')
         .insert([
           {
-            product_id,
-            name,
-            price,
-            user_id,
-            discount_type: discount_type || null, // ini akan mengubah undefined, null, "", dan false menjadi null
-            discount_value: discount_value || 0, // ini akan mengubah undefined, null, "", dan false menjadi 0
-            is_best_seller,
+            product_package_id,
+            unit,
+            value,
           },
         ])
         .select()
         .single();
 
-      if (insertError) throw insertError;
+      // if (insertError) throw insertError;
+      if (insertError) {
+        console.log(insertError);
+        throw insertError;
+      }
 
-      // Tambahkan paket baru ke state langsung agar UI langsung diperbarui
-      packages.value.unshift(data);
+      durations.value.unshift(data);
 
-      // Update product di products.value agar UI langsung berubah
       const productStore = useProductStore();
       const product = productStore.products.find((p) => p.id === product_id);
 
       if (product) {
-        // Pastikan daftar paket ada sebelum menambahkan
-        product.product_packages = product.product_packages || [];
-        product.product_packages.unshift(data);
+        // Pastikan paket produk ada dan memiliki array product_package_durations
+        const productPackage = product.product_packages.find(
+          (pkg) => pkg.id === product_package_id,
+        );
+
+        if (productPackage) {
+          // Inisialisasi jika belum ada
+          productPackage.product_package_durations = productPackage.product_package_durations || [];
+          // Menambahkan durasi ke dalam array product_package_durations
+          productPackage.product_package_durations.unshift(data);
+        }
       }
 
-      handleResponse('success', 'menambah paket produk');
+      handleResponse('success', 'menambah durasi paket produk');
     } catch (err) {
-      handleResponse('error', 'menambah paket produk', err);
+      handleResponse('error', 'menambah durasi paket produk', err);
     } finally {
       loading.value = false;
     }
   };
 
-  // Hapus paket
-  const deleteProductPackage = async (packageId) => {
+  const deleteProductPackageDuration = async (durationId) => {
     loading.value = true;
     error.value = null;
     message.value = null;
@@ -120,21 +109,24 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     try {
       // Hapus paket dari database
       const { error: deleteError } = await supabase
-        .from('product_packages')
+        .from('product_package_durations')
         .delete()
-        .eq('id', packageId);
+        .eq('id', durationId);
 
       if (deleteError) throw deleteError;
 
       // Hapus paket dari state lokal
-      packages.value = packages.value.filter((p) => p.id !== packageId);
+      durations.value = durations.value.filter((d) => d.id !== durationId);
 
       // Update produk di store agar UI langsung diperbarui
       const productStore = useProductStore();
       productStore.products.forEach((product) => {
-        if (product.product_packages) {
-          product.product_packages = product.product_packages.filter((pkg) => pkg.id !== packageId);
-        }
+        product.product_packages.forEach((pkg) => {
+          // Hapus durasi dari product_package_durations
+          pkg.product_package_durations = pkg.product_package_durations.filter(
+            (d) => d.id !== durationId,
+          );
+        });
       });
 
       handleResponse('success', 'menghapus paket produk');
@@ -147,14 +139,14 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
   return {
     // State
-    packages,
+    durations,
     loading,
     message,
     error,
 
     // Methods
-    fetchProductPackages,
-    addProductPackage,
-    deleteProductPackage,
+    fetchProductPackageDurations,
+    addProductPackageDuration,
+    deleteProductPackageDuration,
   };
 });

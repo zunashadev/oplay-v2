@@ -40,7 +40,7 @@ const clearAlert = () => {
 </script>
 
 <template>
-  <div class="rounded-md border border-gray-200">
+  <div class="overflow-hidden rounded-md border border-gray-200">
     <div class="border-b border-gray-200 bg-gray-50 px-3 py-3">
       <p class="text-lg font-medium">➕ Tambah Produk</p>
     </div>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from './authStore';
@@ -31,17 +31,26 @@ export const useProductStore = defineStore('productStore', () => {
     try {
       const { data, error: fetchError } = await supabase
         .from('products')
-        .select('*, product_packages(*)') // Ambil juga data paket terkait
+        .select('*, product_packages (*, product_package_durations (*))')
         .order('created_at', { ascending: false });
 
       // Hentikan eksekusi dan lempar error ke blok catch jika terjadi error
       if (fetchError) throw fetchError;
 
-      // Isi products dan urutkan product_packages secara manual
+      // Isi products dan urutkan product_packages serta product_package_durations secara manual
       products.value = data.map((product) => ({
         ...product,
         product_packages: product.product_packages
-          ? product.product_packages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          ? product.product_packages
+              .map((productPackage) => ({
+                ...productPackage,
+                product_package_durations: productPackage.product_package_durations
+                  ? productPackage.product_package_durations.sort(
+                      (a, b) => new Date(b.created_at) - new Date(a.created_at),
+                    )
+                  : [],
+              }))
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Urutkan paket produk
           : [],
       }));
     } catch (err) {
@@ -76,6 +85,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       // Dapatkan URL publik gambar
       const { data } = supabase.storage.from('product-images').getPublicUrl(filePath);
+
       handleResponse('success', 'mengunggah gambar');
       return data.publicUrl;
     } catch (err) {
@@ -117,7 +127,6 @@ export const useProductStore = defineStore('productStore', () => {
       data.product_packages = [];
       products.value.unshift(data);
 
-      // message.value = 'Produk berhasil ditambahkan!';
       handleResponse('success', 'menambah produk');
     } catch (err) {
       handleResponse('error', 'menambah produk', err);
@@ -132,7 +141,7 @@ export const useProductStore = defineStore('productStore', () => {
 
     try {
       // Ekstrak nama file dari URL dengan cara yang lebih sederhana
-      const fileName = imageUrl.split('/').pop();
+      const fileName = imageUrl.split('/').pop(); // mengambil elemen terakhir, yaitu nama file
       const filePath = `products/${fileName}`;
 
       // Hapus gambar dari storage
@@ -164,10 +173,7 @@ export const useProductStore = defineStore('productStore', () => {
         .eq('id', productId)
         .single();
 
-      if (fetchError) {
-        console.error('Gagal mendapatkan produk:', fetchError.message);
-        throw fetchError;
-      }
+      if (fetchError) throw fetchError;
 
       // Hapus gambar jika ada
       if (product?.image_url) {
@@ -180,10 +186,12 @@ export const useProductStore = defineStore('productStore', () => {
 
       // Hapus produk dari database
       const { error: deleteError } = await supabase.from('products').delete().eq('id', productId);
+
       if (deleteError) throw deleteError;
 
       // Hapus produk dari state lokal
       products.value = products.value.filter((p) => p.id !== productId);
+
       handleResponse('success', 'menghapus produk');
     } catch (err) {
       handleResponse('error', 'menghapus produk', err);

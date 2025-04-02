@@ -11,6 +11,8 @@ const productPackageStore = useProductPackageStore();
 const name = ref('');
 const price = ref('');
 const selectedProductId = ref('');
+const discountType = ref(''); // 'percentage' atau 'fixed_amount'
+const discountValue = ref(0); // Nilai diskon
 const isBestSeller = ref(false);
 
 onMounted(() => {
@@ -24,6 +26,8 @@ const addProductPackage = async () => {
     selectedProductId.value,
     name.value,
     price.value,
+    discountType.value, // Kirim jenis diskon
+    discountValue.value, // Kirim nilai diskon
     isBestSeller.value,
   );
 
@@ -32,6 +36,8 @@ const addProductPackage = async () => {
     name.value = '';
     price.value = '';
     selectedProductId.value = '';
+    discountType.value = '';
+    discountValue.value = 0;
     isBestSeller.value = false;
   }
 };
@@ -44,7 +50,7 @@ const clearAlert = () => {
 </script>
 
 <template>
-  <div class="rounded-md border border-gray-200">
+  <div class="overflow-hidden rounded-md border border-gray-200">
     <div class="border-b border-gray-200 bg-gray-50 px-3 py-3">
       <p class="text-lg font-medium">➕ Tambah Paket Produk</p>
     </div>
@@ -78,6 +84,23 @@ const clearAlert = () => {
           type="number"
           placeholder="Harga"
           class="rounded border p-2"
+          required
+        />
+
+        <!-- Diskon Type -->
+        <select v-model="discountType" class="rounded border p-2">
+          <option value="" disabled>Pilih Jenis Diskon</option>
+          <option value="percentage">Persentase (%)</option>
+          <option value="fixed_amount">Potongan Harga (Rp)</option>
+        </select>
+
+        <!-- Diskon Value -->
+        <input
+          v-model="discountValue"
+          type="number"
+          placeholder="Nilai Diskon"
+          class="rounded border p-2"
+          :disabled="!discountType"
           required
         />
 
