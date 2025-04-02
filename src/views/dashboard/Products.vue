@@ -1,6 +1,5 @@
 <script setup>
 import AddProductPartial from './partials/AddProduct.vue';
-import AddProductPackagePartial from './partials/AddProductPackage.vue';
 import ListProductsPartial from './partials/ListProducts.vue';
 </script>
 

@@ -27,6 +27,15 @@ const router = createRouter({
             requiresAuth: false,
           },
         },
+        {
+          path: 'faq',
+          name: 'PublicFAQ',
+          component: () => import('../views/public/FAQ.vue'),
+          meta: {
+            title: 'FAQ',
+            requiresAuth: false,
+          },
+        },
       ],
     },
     // Auth
