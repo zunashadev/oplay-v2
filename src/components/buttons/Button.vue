@@ -9,7 +9,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: 'lightning-yellow',
+    default: 'buttered-rum',
     validator: (value) =>
       [
         'blue-charcoal',

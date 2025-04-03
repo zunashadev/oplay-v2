@@ -22,6 +22,33 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
+  // Fungsi : Generate Slug dari Nama Produk
+  const generateSlug = async (name) => {
+    let slug = name
+      .toLowerCase()
+      .replace(/\s+/g, '-') // Ganti spasi dengan "-"
+      .replace(/[^\w-]+/g, ''); // Hapus karakter spesial
+
+    let uniqueSlug = slug;
+    let count = 1;
+
+    // Cek apakah slug sudah ada di database
+    while (true) {
+      const { data, error } = await supabase.from('products').select('id').eq('slug', uniqueSlug);
+      if (error) {
+        console.error('Error saat memeriksa slug:', error);
+        return slug;
+      }
+      if (!data || data.length === 0) break; // Jika slug belum ada, gunakan slug ini
+
+      // Jika slug sudah ada, tambahkan angka di belakangnya
+      uniqueSlug = `${slug}-${count}`;
+      count++;
+    }
+
+    return uniqueSlug;
+  };
+
   // Fungsi : Fetch semua produk
   const fetchProducts = async () => {
     loading.value = true;
@@ -55,6 +82,47 @@ export const useProductStore = defineStore('productStore', () => {
       }));
     } catch (err) {
       handleResponse('error', 'mengambil data produk', err);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // Fungsi : Ambil produk berdasarkan Slug
+  const fetchProductBySlug = async (slug) => {
+    loading.value = true;
+    error.value = null;
+    message.value = null;
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('products')
+        .select('*, product_packages (*, product_package_durations (*))')
+        .eq('slug', slug)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Urutkan product_packages dan product_package_durations
+      const product = {
+        ...data,
+        product_packages: data.product_packages
+          ? data.product_packages
+              .map((productPackage) => ({
+                ...productPackage,
+                product_package_durations: productPackage.product_package_durations
+                  ? productPackage.product_package_durations.sort(
+                      (a, b) => new Date(b.created_at) - new Date(a.created_at),
+                    )
+                  : [],
+              }))
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          : [],
+      };
+
+      return product;
+    } catch (err) {
+      handleResponse('error', 'mengambil detail produk', err);
+      return null;
     } finally {
       loading.value = false;
     }
@@ -107,6 +175,9 @@ export const useProductStore = defineStore('productStore', () => {
         throw new Error('User tidak ditemukan/belum login');
       }
 
+      // Generate slug unik
+      const slug = await generateSlug(name);
+
       // Upload gambar
       let image_url = null;
       if (file) {
@@ -117,7 +188,7 @@ export const useProductStore = defineStore('productStore', () => {
       // Simpan produk ke database
       const { data, error: insertError } = await supabase
         .from('products')
-        .insert([{ name, category, user_id, description, image_url }])
+        .insert([{ name, slug, category, user_id, description, image_url }])
         .select()
         .single();
 
@@ -209,6 +280,7 @@ export const useProductStore = defineStore('productStore', () => {
 
     // Methods
     fetchProducts,
+    fetchProductBySlug,
     addProduct,
     deleteProduct,
   };

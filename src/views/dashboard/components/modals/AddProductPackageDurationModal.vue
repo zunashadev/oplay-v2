@@ -105,7 +105,7 @@ const clearAlert = () => {
 
             <!-- Button -->
             <button type="submit" class="rounded bg-blue-500 px-4 py-2 text-white">
-              Tambah Produk
+              Tambah Durasi
             </button>
           </form>
         </div>

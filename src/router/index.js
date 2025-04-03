@@ -28,6 +28,15 @@ const router = createRouter({
           },
         },
         {
+          path: 'products/:slug',
+          name: 'PublicProductDetail',
+          component: () => import('../views/public/ProductDetail.vue'),
+          meta: {
+            title: 'Detail Produk',
+            requiresAuth: false,
+          },
+        },
+        {
           path: 'faq',
           name: 'PublicFAQ',
           component: () => import('../views/public/FAQ.vue'),

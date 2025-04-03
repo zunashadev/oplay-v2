@@ -28,6 +28,7 @@ const handleLogout = async () => {
     router.push({ name: 'AuthLogin' });
   } catch (error) {
     console.error('Logout gagal');
+    console.error(error);
   }
 };
 </script>

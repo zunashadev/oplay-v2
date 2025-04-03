@@ -23,8 +23,11 @@ const menuItems = ref([
       <div class="flex items-center justify-between">
         <!-- START : BRAND -->
         <div class="flex w-60 justify-start">
-          <RouterLink :to="{ name: 'PublicHome' }" class="flex items-center space-x-2 sm:space-x-3">
-            <img src="/public/app-logo.png" class="h-8 w-auto" alt="Flowbite Logo" />
+          <RouterLink
+            :to="{ name: 'PublicHome' }"
+            class="flex items-center space-x-1 px-2 sm:space-x-2"
+          >
+            <img src="/app-logo.png" class="h-6 w-auto" />
             <p class="text-xl font-semibold text-white sm:text-2xl">OPLAY</p>
           </RouterLink>
         </div>
