@@ -31,9 +31,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex h-screen">
+  <div class="flex h-screen bg-black text-white">
     <!-- Sidebar -->
-    <div class="h-screen w-full max-w-64 flex-none bg-white">
+    <div class="h-screen w-full max-w-64 flex-none bg-black">
       <SideBarPartial />
     </div>
 
@@ -41,8 +41,8 @@ onUnmounted(() => {
     <div ref="mainContent" class="flex flex-1 flex-col overflow-y-auto">
       <!-- Navbar dengan sticky -->
       <div
-        class="sticky top-0 z-50 border-b bg-white transition-all duration-150"
-        :class="{ 'border-gray-200': isScrolled, 'border-transparent': !isScrolled }"
+        class="sticky top-0 z-50 border-b bg-black transition-all duration-150"
+        :class="{ 'border-gray-800': isScrolled, 'border-transparent': !isScrolled }"
       >
         <NavBarPartial />
       </div>

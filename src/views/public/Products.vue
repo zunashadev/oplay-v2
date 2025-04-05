@@ -31,7 +31,7 @@ const goToDetail = (slug) => {
 <template>
   <div class="flex min-h-screen flex-col gap-8 px-24 py-6">
     <!-- START : FILTER -->
-    <div>Filter</div>
+    <!-- <div>Filter</div> -->
     <!-- END : FILTER -->
 
     <!-- START : LIST PRODUCTS -->
@@ -68,7 +68,7 @@ const goToDetail = (slug) => {
                 <p class="text-xl font-semibold">
                   {{ product.name }}
                 </p>
-                <p class="text-sm font-normal text-gray-400">
+                <p class="line-clamp-2 text-sm font-normal text-gray-400">
                   {{ product.description }}
                 </p>
               </div>

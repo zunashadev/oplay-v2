@@ -7,16 +7,16 @@ import LogOutIcon from '@/components/icons/LogOut.vue';
 
 // Data menu
 const menuItems = ref([
-  { name: 'Home', link: 'DashboardHome' },
+  { name: 'Home', link: 'AdminDashboardHome' },
   {
     name: 'Products',
     submenu: [
-      { name: 'Products', link: 'DashboardProducts' },
+      { name: 'Products', link: 'AdminDashboardProducts' },
       { name: 'Category', link: '' },
     ],
   },
-  { name: 'Users', link: 'DashboardUsers' },
-  { name: 'Profile', link: 'DashboardProfile' },
+  { name: 'Users', link: 'AdminDashboardUsers' },
+  { name: 'Profile', link: 'AdminDashboardProfile' },
 ]);
 
 const authStore = useAuthStore();
@@ -34,10 +34,10 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <div class="flex h-screen flex-col justify-between border-e border-gray-200 bg-white">
+  <div class="flex h-screen flex-col justify-between border-e border-gray-800 bg-gray-900">
     <div class="px-4 py-6">
       <span
-        class="grid h-10 w-32 place-content-center rounded-lg bg-gray-100 text-lg font-bold text-gray-600"
+        class="grid h-10 w-32 place-content-center rounded-lg bg-gray-800 text-lg font-bold text-white"
       >
         🍅 OPLAY
       </span>
@@ -46,7 +46,7 @@ const handleLogout = async () => {
         <li v-for="(menu, index) in menuItems" :key="index">
           <details v-if="menu.submenu" class="group [&_summary::-webkit-details-marker]:hidden">
             <summary
-              class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-800"
             >
               <span class="text-sm font-medium">{{ menu.name }}</span>
 
@@ -70,7 +70,7 @@ const handleLogout = async () => {
               <li v-for="(sub, subIndex) in menu.submenu" :key="subIndex">
                 <RouterLink
                   :to="{ name: sub.link }"
-                  class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  class="block rounded-lg px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
                 >
                   {{ sub.name }}
                 </RouterLink>
@@ -81,7 +81,7 @@ const handleLogout = async () => {
           <RouterLink
             v-else
             :to="{ name: menu.link }"
-            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            class="block rounded-lg px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
           >
             {{ menu.name }}
           </RouterLink>
@@ -91,9 +91,9 @@ const handleLogout = async () => {
 
     <div
       v-if="authStore.isAuthenticated"
-      class="sticky inset-x-0 bottom-0 flex flex-col space-y-3 border-t border-gray-200 p-4"
+      class="sticky inset-x-0 bottom-0 flex flex-col space-y-3 border-t border-gray-800 p-4"
     >
-      <a href="#" class="flex w-full items-center gap-2 bg-white hover:bg-gray-50">
+      <a href="#" class="flex w-full items-center gap-2">
         <img
           alt="User Avatar"
           src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"

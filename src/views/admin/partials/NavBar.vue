@@ -15,8 +15,8 @@ const route = useRoute();
         </p>
       </div>
       <div>
-        <div class="rounded-full bg-gray-100 p-2">
-          <BellIcon class="size-5 text-gray-500" />
+        <div class="rounded-full bg-gray-900 p-2">
+          <BellIcon class="size-5 text-white" />
         </div>
       </div>
     </div>

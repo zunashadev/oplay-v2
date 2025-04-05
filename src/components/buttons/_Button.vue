@@ -31,10 +31,6 @@ const props = defineProps({
         'gray',
       ].includes(value),
   },
-  textColor: {
-    type: String,
-    default: '',
-  },
   disabled: {
     type: Boolean,
     default: false,
@@ -43,6 +39,7 @@ const props = defineProps({
 
 const colorMap = computed(() => {
   const colors = {
+    // Custom
     'blue-charcoal': {
       bg: 'bg-blue-charcoal-600',
       hoverBg: 'hover:bg-blue-charcoal-700',
@@ -119,6 +116,7 @@ const colorMap = computed(() => {
       ghostFocusBg: 'focus:bg-lightning-yellow-100',
       darkGhostHoverBg: 'dark:hover:bg-lightning-yellow-800/30',
     },
+    // Tailwind
     blue: {
       bg: 'bg-blue-600',
       hoverBg: 'hover:bg-blue-700',
@@ -243,21 +241,19 @@ const buttonClasses = computed(() => {
   const baseClasses = 'disabled:opacity-50 disabled:pointer-events-none';
   const color = colorMap.value;
 
-  // Handle custom text color
-  const customText = props.textColor ? `text-${props.textColor}` : '';
-
   const variantClasses = {
-    solid: `border border-transparent ${color.bg} ${props.textColor ? customText : 'text-white'} ${color.hoverBg} focus:outline-hidden ${color.focusBg}`,
+    solid: `border border-transparent ${color.bg} text-white ${color.hoverBg} focus:outline-hidden ${color.focusBg}`,
 
-    outline: `border border-gray-200 ${props.textColor ? customText : 'text-gray-500'} hover:border-${props.color}-600 hover:${color.text} focus:outline-hidden focus:border-${props.color}-600 focus:${color.text} dark:border-neutral-700 dark:text-neutral-400 dark:hover:${color.darkText} dark:hover:border-${props.color}-600 dark:focus:${color.darkText} dark:focus:border-${props.color}-600`,
+    outline: `border border-gray-200 text-gray-500 hover:border-${props.color}-600 hover:${color.text} focus:outline-hidden focus:border-${props.color}-600 focus:${color.text} dark:border-neutral-700 dark:text-neutral-400 dark:hover:${color.darkText} dark:hover:border-${props.color}-600 dark:focus:${color.darkText} dark:focus:border-${props.color}-600`,
 
-    ghost: `border border-transparent ${props.textColor ? customText : color.text} ${color.ghostHoverBg} ${color.hoverText} focus:outline-hidden ${color.ghostFocusBg} ${color.focusText} ${color.darkText} ${color.darkGhostHoverBg} ${color.darkHoverText} dark:focus:bg-${props.color}-800/30 ${color.darkFocusText}`,
+    ghost: `border border-transparent ${color.text} ${color.ghostHoverBg} ${color.hoverText} focus:outline-hidden ${color.ghostFocusBg} ${color.focusText} ${color.darkText} ${color.darkGhostHoverBg} ${color.darkHoverText} dark:focus:bg-${props.color}-800/30 ${color.darkFocusText}`,
 
-    soft: `border border-transparent ${color.softBg} ${props.textColor ? customText : color.softText} ${color.softHoverBg} focus:outline-hidden ${color.softFocusBg} ${color.darkText} dark:hover:bg-${props.color}-900 dark:focus:bg-${props.color}-900`,
+    soft: `border border-transparent ${color.softBg} ${color.softText} ${color.softHoverBg} focus:outline-hidden ${color.softFocusBg} ${color.darkText} dark:hover:bg-${props.color}-900 dark:focus:bg-${props.color}-900`,
 
-    white: `border border-gray-200 bg-white ${props.textColor ? customText : 'text-gray-800'} shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700`,
+    white:
+      'border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700',
 
-    link: `border border-transparent ${props.textColor ? customText : color.text} ${color.hoverText} focus:outline-hidden ${color.focusText} ${color.darkText} ${color.darkHoverText} ${color.darkFocusText}`,
+    link: `border border-transparent ${color.text} ${color.hoverText} focus:outline-hidden ${color.focusText} ${color.darkText} ${color.darkHoverText} ${color.darkFocusText}`,
   };
 
   return `${variantClasses[props.variant]} ${baseClasses}`;

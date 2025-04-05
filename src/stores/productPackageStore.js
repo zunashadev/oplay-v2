@@ -4,24 +4,13 @@ import { ref, computed } from 'vue';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from './authStore';
 import { useProductStore } from './productStore';
+import { handleResponse } from '@/utils/responseHandler';
 
 export const useProductPackageStore = defineStore('productPackageStore', () => {
   const packages = ref([]);
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
-
-  // Handle : Response
-  const handleResponse = (type, operation, err = null, customMessage = null, logError = true) => {
-    if (type === 'error') {
-      if (err && logError) console.error(`Gagal ${operation}:`, err.message || err);
-      error.value = err?.message || 'Terjadi kesalahan!';
-      message.value = customMessage || `Gagal ${operation}!`;
-    } else if (type === 'success') {
-      message.value = customMessage || `Berhasil ${operation}!`;
-      error.value = null; // Reset error jika sebelumnya ada
-    }
-  };
 
   // Fetch product package berdasarkan product id
   const fetchProductPackages = async (productId) => {
@@ -38,7 +27,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
       if (fetchError) throw fetchError;
       packages.value = data;
     } catch (err) {
-      handleResponse('error', 'mengambil data paket produk', err);
+      handleResponse({ message, error }, 'error', 'mengambil data paket produk', err);
     } finally {
       loading.value = false;
     }
@@ -103,9 +92,9 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
         product.product_packages.unshift(data);
       }
 
-      handleResponse('success', 'menambah paket produk');
+      handleResponse({ message, error }, 'success', 'menambah paket produk');
     } catch (err) {
-      handleResponse('error', 'menambah paket produk', err);
+      handleResponse({ message, error }, 'error', 'menambah paket produk', err);
     } finally {
       loading.value = false;
     }
@@ -137,9 +126,9 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
         }
       });
 
-      handleResponse('success', 'menghapus paket produk');
+      handleResponse({ message, error }, 'success', 'menghapus paket produk');
     } catch (err) {
-      handleResponse('error', 'menghapus paket produk', err);
+      handleResponse({ message, error }, 'error', 'menghapus paket produk', err);
     } finally {
       loading.value = false;
     }

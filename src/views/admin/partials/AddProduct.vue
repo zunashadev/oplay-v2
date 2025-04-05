@@ -3,6 +3,10 @@ import { ref, onMounted } from 'vue';
 import { useProductStore } from '@/stores/productStore';
 
 import AlertComponent from '../components/alerts/Alert.vue';
+import ButtonComponent from '@/components/buttons/Button.vue';
+import InputComponent from '@/components/form/Input.vue';
+import TextAreaComponent from '@/components/form/TextArea.vue';
+import FileInputComponent from '@/components/form/FileInput.vue';
 
 const productStore = useProductStore();
 
@@ -40,8 +44,8 @@ const clearAlert = () => {
 </script>
 
 <template>
-  <div class="overflow-hidden rounded-md border border-gray-200">
-    <div class="border-b border-gray-200 bg-gray-50 px-3 py-3">
+  <div class="overflow-hidden rounded-2xl bg-gray-900">
+    <div class="bg-gray-800 px-3 py-3">
       <p class="text-lg font-medium">➕ Tambah Produk</p>
     </div>
 
@@ -55,27 +59,22 @@ const clearAlert = () => {
     </template>
     <!-- START : MESSAGE AND ERROR -->
 
-    <div class="px-3 py-3">
-      <form @submit.prevent="addProduct" class="flex flex-col gap-2">
-        <input v-model="name" placeholder="Nama Produk" class="rounded border p-2" required />
-        <input v-model="category" placeholder="Kategori" class="rounded border p-2" required />
-        <textarea
-          v-model="description"
-          placeholder="Deskripsi"
-          class="rounded border p-2"
-          required
-        ></textarea>
-        <div class="rounded-sm border px-4 py-2">
-          <input
-            type="file"
-            ref="fileInputRef"
-            @change="onFileChange"
-            class="hover:cursor-pointer"
-          />
+    <div class="px-5 py-5">
+      <form @submit.prevent="addProduct" class="flex flex-col gap-8">
+        <div class="flex flex-col gap-2">
+          <!-- Name -->
+          <InputComponent v-model="name" placeholder="Masukkan nama produk" required />
+          <!-- Category -->
+          <InputComponent v-model="category" placeholder="Masukkan kategori produk" required />
+          <!-- Description -->
+          <TextAreaComponent v-model="description" placeholder="Masukkan deskripsi" required />
+          <!-- File -->
+          <FileInputComponent v-model="file" required class="mt-3" />
         </div>
-        <button type="submit" class="rounded bg-blue-500 px-4 py-2 text-white">
-          Tambah Produk
-        </button>
+
+        <ButtonComponent type="submit" variant="solid" textColor="black"
+          >Tambah Produk</ButtonComponent
+        >
       </form>
     </div>
   </div>

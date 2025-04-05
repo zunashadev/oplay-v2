@@ -1,5 +1,6 @@
 <script setup>
 import { RouterView } from 'vue-router';
+
 import NavBarPartial from '@/components/navbars/NavBar.vue';
 </script>
 

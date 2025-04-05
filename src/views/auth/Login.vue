@@ -1,11 +1,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 
 // Inisialisasi store dan router
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 // State lokal
 const email = ref('');
@@ -14,11 +15,19 @@ const password = ref('');
 // Fungsi Login
 const handleLogin = async () => {
   try {
-    // Menggunakan method login dari store
-    const result = await authStore.login(email.value, password.value);
+    await authStore.login(email.value, password.value);
 
-    // Contoh redirect setelah login berhasil
-    router.push({ name: 'DashboardHome' });
+    // Redirect ke halaman sebelumnya atau dashboard
+    const redirect = route.query.redirect;
+    if (redirect) {
+      router.push(redirect);
+    } else if (authStore.userRole === 'admin') {
+      router.push({ name: 'AdminDashboardHome' });
+    } else if (authStore.userRole === 'customer') {
+      router.push({ name: 'CustomerDashboardHome' });
+    } else {
+      router.push('/');
+    }
   } catch (error) {
     // Error sudah di-handle di store,
     // authStore.error akan otomatis terisi

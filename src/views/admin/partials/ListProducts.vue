@@ -8,7 +8,6 @@ import AddProductPackageComponent from '../components/modals/AddProductPackageMo
 import AddProductPackageDurationModalComponent from '../components/modals/AddProductPackageDurationModal.vue';
 
 import CrossIcon from '@/components/icons/Cross.vue';
-import SquarePlusIcon from '@/components/icons/SquarePlus.vue';
 import PlusIcon from '@/components/icons/Plus.vue';
 
 const productStore = useProductStore();
@@ -79,7 +78,7 @@ function closeAddDurationModal() {
 
   <div class="flex flex-col gap-5">
     <!-- START : HEADER -->
-    <div class="rounded-md border border-gray-200 bg-gray-50 px-6 py-3">
+    <div class="rounded-md bg-gray-800 px-6 py-3">
       <p class="text-center text-2xl font-semibold">🛒 Daftar Produk</p>
     </div>
     <!-- END : HEADER -->
@@ -89,12 +88,10 @@ function closeAddDurationModal() {
       <div
         v-for="product in productStore.products"
         :key="product.id"
-        class="rounded-md border border-gray-200"
+        class="overflow-hidden rounded-md bg-gray-900"
       >
         <!-- START : HEAD -->
-        <div
-          class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-4"
-        >
+        <div class="flex items-center justify-between bg-gray-800 px-4 py-4">
           <div class="flex items-center space-x-3">
             <img v-if="product.image_url" :src="product.image_url" alt="Produk" class="max-h-8" />
             <p class="text-xl font-semibold">
@@ -121,7 +118,7 @@ function closeAddDurationModal() {
         <div class="flex w-full flex-col gap-3 px-4 py-5">
           <!-- START : DETAIL -->
           <div
-            class="flex w-full flex-col gap-5 rounded-md border border-dashed border-gray-200 px-3 py-3"
+            class="flex w-full flex-col gap-5 rounded-md border border-dashed border-gray-600 px-3 py-3"
           >
             <p class="text-base font-medium">ℹ️ Informasi</p>
             <div class="flex flex-col gap-2">
@@ -139,12 +136,12 @@ function closeAddDurationModal() {
 
           <!-- START : PACKAGES -->
           <div
-            class="flex w-full flex-col gap-5 rounded-md border border-dashed border-gray-200 px-3 py-3"
+            class="flex w-full flex-col gap-5 rounded-md border border-dashed border-gray-600 px-3 py-3"
           >
             <div class="flex items-center justify-between">
               <p class="text-base font-medium">📦 Paket</p>
               <div
-                class="group hover:bg-lightning-yellow-100 hover:border-lightning-yellow-400 rounded-md border border-gray-200 bg-gray-100 p-1 transition-all hover:cursor-pointer"
+                class="group hover:bg-lightning-yellow-100 hover:border-lightning-yellow-400 rounded-md border border-gray-600 bg-gray-800 p-1 transition-all hover:cursor-pointer"
               >
                 <PlusIcon
                   @click="openAddProductPackageModal(product.id)"
@@ -157,19 +154,19 @@ function closeAddDurationModal() {
                 <div
                   v-for="pkg in product.product_packages"
                   :key="pkg.id"
-                  class="flex items-center justify-between gap-3 rounded-md border border-l-6 border-gray-200 bg-gray-50 px-4 py-2"
+                  class="flex items-center justify-between gap-3 rounded-md border border-l-6 border-gray-600 bg-gray-800 px-4 py-2"
                 >
                   <div class="flex w-full flex-col gap-3">
                     <div class="flex items-center gap-3">
                       <p class="text-lg font-medium">{{ pkg.name }}</p>
                       <p
                         v-if="pkg.is_best_seller"
-                        class="bg-lightning-yellow-400 rounded-md px-3 py-0.5 text-xs font-medium"
+                        class="bg-lightning-yellow-400 rounded-md px-3 py-0.5 text-xs font-medium text-black"
                       >
                         🔥 Terlaris
                       </p>
                     </div>
-                    <div class="flex w-full flex-col gap-6 text-gray-600">
+                    <div class="flex w-full flex-col gap-6 text-gray-400">
                       <div class="flex flex-col gap-2">
                         <p class="text-sm font-normal">Harga Normal : Rp{{ pkg.price }}</p>
                         <p
@@ -198,7 +195,7 @@ function closeAddDurationModal() {
                               class="flex gap-1"
                             >
                               <div
-                                class="relative flex min-w-20 items-center justify-start gap-1 rounded-full bg-pink-500 py-0.5 ps-3 pe-8 text-white"
+                                class="relative flex min-w-20 items-center justify-start gap-1 rounded-full bg-gray-200 py-0.5 ps-3 pe-8 text-black"
                               >
                                 <div class="flex gap-1 text-xs">
                                   <p>{{ duration.value }}</p>
@@ -206,7 +203,7 @@ function closeAddDurationModal() {
                                 </div>
                                 <div
                                   @click="deleteProductPackageDuration(duration.id)"
-                                  class="absolute right-0.5 rounded-full p-0.5 text-pink-700 transition-all hover:cursor-pointer hover:bg-pink-600 hover:text-white"
+                                  class="absolute right-0.5 rounded-full p-0.5 text-black transition-all hover:cursor-pointer hover:bg-red-600 hover:text-white"
                                 >
                                   <CrossIcon class="size-3" />
                                 </div>
@@ -216,9 +213,9 @@ function closeAddDurationModal() {
                           <!-- Add Duration -->
                           <div
                             @click="openAddDurationModal(product.id, pkg.id)"
-                            class="group flex items-center justify-center rounded-full border border-dashed border-pink-500 bg-pink-100 px-3 transition-all hover:cursor-pointer hover:border-pink-800 hover:bg-pink-200"
+                            class="group hover:bg-lightning-yellow-400 flex items-center justify-center rounded-full border border-dashed border-gray-600 bg-gray-200 px-3 transition-all hover:cursor-pointer hover:border-black"
                           >
-                            <span class="text-xs text-pink-500 group-hover:text-pink-800"
+                            <span class="text-xs text-gray-600 group-hover:text-black"
                               >Tambah Durasi
                             </span>
                           </div>

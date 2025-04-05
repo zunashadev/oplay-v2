@@ -1,31 +1,39 @@
 <script setup>
 import { ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 
 // Inisialisasi store dan router
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 // State lokal
 const name = ref(null);
-const role = ref(null);
+const username = ref(null);
 const email = ref('');
 const password = ref('');
 
 // Fungsi Register
 const handleRegister = async () => {
   try {
-    // Registrasi dengan optional metadata
-    await authStore.register(email.value, password.value, {
-      name: name.value,
-      role: role.value,
-    });
-    // Redirect ke halaman login atau dashboard
-    router.push('/dashboard');
+    await authStore.register(email.value, password.value, name.value, username.value);
+
+    // Redirect ke halaman sebelumnya atau dashboard
+    const redirect = route.query.redirect;
+    if (redirect) {
+      router.push(redirect);
+    } else if (authStore.userRole === 'admin') {
+      router.push({ name: 'AdminDashboardHome' });
+    } else if (authStore.userRole === 'customer') {
+      router.push({ name: 'CustomerDashboardHome' });
+    } else {
+      router.push('/');
+    }
   } catch (error) {
     // Error sudah di-handle di store
     console.error('Registrasi gagal');
+    console.log(error);
   }
 };
 </script>
@@ -56,6 +64,19 @@ const handleRegister = async () => {
                 v-model="name"
                 type="text"
                 placeholder="Masukkan nama"
+                class="outline-blue-charcoal-900 focus:outline-lightning-yellow-400 block w-full rounded-md bg-black px-3 py-1.5 text-base font-normal text-white outline-1 -outline-offset-1 placeholder:text-gray-600 focus:outline-2 focus:-outline-offset-2"
+              />
+            </div>
+          </div>
+
+          <!-- Username -->
+          <div class="">
+            <label for="username" class="block text-sm font-normal">Username</label>
+            <div class="mt-2">
+              <input
+                v-model="username"
+                type="text"
+                placeholder="Masukkan username"
                 class="outline-blue-charcoal-900 focus:outline-lightning-yellow-400 block w-full rounded-md bg-black px-3 py-1.5 text-base font-normal text-white outline-1 -outline-offset-1 placeholder:text-gray-600 focus:outline-2 focus:-outline-offset-2"
               />
             </div>

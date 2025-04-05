@@ -3,51 +3,14 @@ import { ref } from 'vue';
 
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from './authStore';
+import { handleResponse } from '@/utils/responseHandler';
+import { generateSlug } from '@/utils/slug';
 
 export const useProductStore = defineStore('productStore', () => {
   const products = ref([]);
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);
-
-  // Handle : Response
-  const handleResponse = (type, operation, err = null, customMessage = null, logError = true) => {
-    if (type === 'error') {
-      if (err && logError) console.error(`Gagal ${operation}:`, err.message || err);
-      error.value = err?.message || 'Terjadi kesalahan!';
-      message.value = customMessage || `Gagal ${operation}!`;
-    } else if (type === 'success') {
-      message.value = customMessage || `Berhasil ${operation}!`;
-      error.value = null; // Reset error jika sebelumnya ada
-    }
-  };
-
-  // Fungsi : Generate Slug dari Nama Produk
-  const generateSlug = async (name) => {
-    let slug = name
-      .toLowerCase()
-      .replace(/\s+/g, '-') // Ganti spasi dengan "-"
-      .replace(/[^\w-]+/g, ''); // Hapus karakter spesial
-
-    let uniqueSlug = slug;
-    let count = 1;
-
-    // Cek apakah slug sudah ada di database
-    while (true) {
-      const { data, error } = await supabase.from('products').select('id').eq('slug', uniqueSlug);
-      if (error) {
-        console.error('Error saat memeriksa slug:', error);
-        return slug;
-      }
-      if (!data || data.length === 0) break; // Jika slug belum ada, gunakan slug ini
-
-      // Jika slug sudah ada, tambahkan angka di belakangnya
-      uniqueSlug = `${slug}-${count}`;
-      count++;
-    }
-
-    return uniqueSlug;
-  };
 
   // Fungsi : Fetch semua produk
   const fetchProducts = async () => {
@@ -81,7 +44,7 @@ export const useProductStore = defineStore('productStore', () => {
           : [],
       }));
     } catch (err) {
-      handleResponse('error', 'mengambil data produk', err);
+      handleResponse({ message, error }, 'error', 'mengambil data produk', err);
     } finally {
       loading.value = false;
     }
@@ -121,7 +84,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       return product;
     } catch (err) {
-      handleResponse('error', 'mengambil detail produk', err);
+      handleResponse({ message, error }, 'error', 'mengambil detail produk', err);
       return null;
     } finally {
       loading.value = false;
@@ -154,10 +117,10 @@ export const useProductStore = defineStore('productStore', () => {
       // Dapatkan URL publik gambar
       const { data } = supabase.storage.from('product-images').getPublicUrl(filePath);
 
-      handleResponse('success', 'mengunggah gambar');
+      handleResponse({ message, error }, 'success', 'mengunggah gambar');
       return data.publicUrl;
     } catch (err) {
-      handleResponse('error', 'mengunggah gambar', err);
+      handleResponse({ message, error }, 'error', 'mengunggah gambar', err);
       return null;
     }
   };
@@ -176,7 +139,7 @@ export const useProductStore = defineStore('productStore', () => {
       }
 
       // Generate slug unik
-      const slug = await generateSlug(name);
+      const slug = await generateSlug(name, 'products');
 
       // Upload gambar
       let image_url = null;
@@ -198,9 +161,9 @@ export const useProductStore = defineStore('productStore', () => {
       data.product_packages = [];
       products.value.unshift(data);
 
-      handleResponse('success', 'menambah produk');
+      handleResponse({ message, error }, 'success', 'menambah produk');
     } catch (err) {
-      handleResponse('error', 'menambah produk', err);
+      handleResponse({ message, error }, 'error', 'menambah produk', err);
     } finally {
       loading.value = false;
     }
@@ -222,10 +185,10 @@ export const useProductStore = defineStore('productStore', () => {
 
       if (deleteError) throw deleteError;
 
-      handleResponse('success', 'menghapus gambar');
+      handleResponse({ message, error }, 'success', 'menghapus gambar');
       return true;
     } catch (err) {
-      handleResponse('error', 'menghapus gambar', err);
+      handleResponse({ message, error }, 'error', 'menghapus gambar', err);
       return null;
     }
   };
@@ -263,9 +226,9 @@ export const useProductStore = defineStore('productStore', () => {
       // Hapus produk dari state lokal
       products.value = products.value.filter((p) => p.id !== productId);
 
-      handleResponse('success', 'menghapus produk');
+      handleResponse({ message, error }, 'success', 'menghapus produk');
     } catch (err) {
-      handleResponse('error', 'menghapus produk', err);
+      handleResponse({ message, error }, 'error', 'menghapus produk', err);
     } finally {
       loading.value = false;
     }

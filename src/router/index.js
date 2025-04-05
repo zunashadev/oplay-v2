@@ -72,46 +72,64 @@ const router = createRouter({
         },
       ],
     },
-    // Dashboard (Login)
+    // Customer
     {
-      path: '/dashboard',
-      component: () => import('../views/dashboard/layouts/DashboardLayout.vue'),
+      path: '/customer',
+      component: () => import('../views/customer/layouts/CustomerLayout.vue'),
       children: [
         {
           path: '',
-          name: 'DashboardHome',
-          component: () => import('../views/dashboard/Home.vue'),
+          name: 'CustomerDashboardHome',
+          component: () => import('../views/customer/Home.vue'),
           meta: {
-            title: 'Dashboard',
+            title: 'Customer Dashboard',
             requiresAuth: true,
+            requiredRoles: ['customer'],
+          },
+        },
+      ],
+    },
+    // Admin
+    {
+      path: '/admin',
+      component: () => import('../views/admin/layouts/AdminLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'AdminDashboardHome',
+          component: () => import('../views/admin/Home.vue'),
+          meta: {
+            title: 'Admin Dashboard',
+            requiresAuth: true,
+            requiredRoles: ['admin'],
           },
         },
         {
           path: 'products',
-          name: 'DashboardProducts',
-          component: () => import('../views/dashboard/Products.vue'),
+          name: 'AdminDashboardProducts',
+          component: () => import('../views/admin/Products.vue'),
           meta: {
-            title: 'Produk Dashboard',
+            title: 'Admin Produk Dashboard',
             requiresAuth: true,
             requiredRoles: ['admin'],
           },
         },
         {
           path: 'users',
-          name: 'DashboardUsers',
-          component: () => import('../views/dashboard/Users.vue'),
+          name: 'AdminDashboardUsers',
+          component: () => import('../views/admin/Users.vue'),
           meta: {
-            title: 'Manajemen Pengguna',
+            title: 'Admin Manajemen Pengguna',
             requiresAuth: true,
             requiredRoles: ['admin'],
           },
         },
         {
           path: 'profile',
-          name: 'DashboardProfile',
-          component: () => import('../views/dashboard/Profile.vue'),
+          name: 'AdminDashboardProfile',
+          component: () => import('../views/admin/Profile.vue'),
           meta: {
-            title: 'Profile Pengguna',
+            title: 'Admin Profile Pengguna',
             requiresAuth: true,
             requiredRoles: ['admin'],
           },
@@ -133,46 +151,32 @@ const router = createRouter({
 
 // Navigation Guard Global
 router.beforeEach(async (to, from, next) => {
-  // Ambil auth store
   const authStore = useAuthStore();
-
-  // Cek session saat ini
   await authStore.getCurrentSession();
 
-  // Update judul halaman
+  // Set judul halaman
   document.title = to.meta.title ? `${to.meta.title} - Oplay` : 'Oplay';
 
-  // Cek apakah route membutuhkan autentikasi - ini dapat dari 'meta' pada router
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-  const requiresGuest = to.matched.some((record) => record.meta.requiresGuest);
-
-  // Cek role (jika ada)
+  const requiresAuth = to.matched.some((r) => r.meta.requiresAuth);
+  const requiresGuest = to.matched.some((r) => r.meta.requiresGuest);
   const requiredRoles = to.meta.requiredRoles || [];
 
-  // Logic guard autentikasi
-  if (requiresAuth && !authStore.isAuthenticated) {
-    // Jika membutuhkan auth tapi tidak login, redirect ke login
-    next({
-      name: 'AuthLogin',
-      query: { redirect: to.fullPath }, // Mengarahkan pengguna ke halaman yang ingin dikunjungi sebelumnya
-    });
-  }
-  // Cek halaman guest
-  else if (requiresGuest && authStore.isAuthenticated) {
-    // Jika halaman guest tapi sudah login, redirect ke dashboard
-    next({ name: 'DashboardHome' });
-  }
-  // Cek role (jika diperlukan)
-  else if (
-    requiresAuth &&
-    authStore.isAuthenticated &&
-    requiredRoles.length > 0 &&
-    !requiredRoles.includes(authStore.userRole)
-  ) {
-    // Jika role tidak sesuai, redirect ke dashboard atau tampilkan error - ini perlu disesuaikan lagi si ❗❗❗
-    next({ name: 'DashboardHome' });
+  const isAuth = authStore.isAuthenticated;
+  const role = authStore.userRole;
+
+  if (requiresAuth && !isAuth) {
+    next({ name: 'AuthLogin', query: { redirect: to.fullPath } });
+  } else if (requiresGuest && isAuth) {
+    // Redirect logged in user ke dashboard sesuai role
+    if (role === 'admin') next({ name: 'AdminDashboardHome' });
+    else if (role === 'customer') next({ name: 'CustomerDashboardHome' });
+    else next('/');
+  } else if (requiresAuth && isAuth && requiredRoles.length && !requiredRoles.includes(role)) {
+    // Jika login tapi role tidak sesuai
+    if (role === 'admin') next({ name: 'AdminDashboardHome' });
+    else if (role === 'customer') next({ name: 'CustomerDashboardHome' });
+    else next('/');
   } else {
-    // Lanjutkan navigasi
     next();
   }
 });
