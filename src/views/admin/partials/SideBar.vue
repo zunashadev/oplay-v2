@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 
 import LogOutIcon from '@/components/icons/LogOut.vue';
@@ -12,7 +12,7 @@ const menuItems = ref([
     name: 'Products',
     submenu: [
       { name: 'Products', link: 'AdminDashboardProducts' },
-      { name: 'Category', link: '' },
+      // { name: 'Category', link: '' },
     ],
   },
   { name: 'Users', link: 'AdminDashboardUsers' },
@@ -21,6 +21,7 @@ const menuItems = ref([
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const handleLogout = async () => {
   try {
@@ -68,22 +69,27 @@ const handleLogout = async () => {
 
             <ul class="mt-2 space-y-1 px-4">
               <li v-for="(sub, subIndex) in menu.submenu" :key="subIndex">
-                <RouterLink
-                  :to="{ name: sub.link }"
-                  class="block rounded-lg px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
-                >
-                  {{ sub.name }}
+                <RouterLink :to="{ name: sub.link }">
+                  <span
+                    class="block rounded-lg px-4 py-2 text-sm font-medium transition-all"
+                    :class="[
+                      route.name === sub.link ? 'bg-gray-600' : 'text-white hover:bg-gray-800',
+                    ]"
+                  >
+                    {{ sub.name }}
+                  </span>
                 </RouterLink>
               </li>
             </ul>
           </details>
 
-          <RouterLink
-            v-else
-            :to="{ name: menu.link }"
-            class="block rounded-lg px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
-          >
-            {{ menu.name }}
+          <RouterLink v-else :to="{ name: menu.link }">
+            <span
+              class="block rounded-lg px-4 py-2 text-sm font-medium transition-all"
+              :class="[route.name === menu.link ? 'bg-gray-600' : 'text-white hover:bg-gray-800']"
+            >
+              {{ menu.name }}
+            </span>
           </RouterLink>
         </li>
       </ul>
@@ -96,7 +102,7 @@ const handleLogout = async () => {
       <a href="#" class="flex w-full items-center gap-2">
         <img
           alt="User Avatar"
-          src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+          :src="authStore.user.avatar_url || '/images/avatar.jpg'"
           class="size-10 rounded-full object-cover"
         />
 

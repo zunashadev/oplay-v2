@@ -47,10 +47,10 @@ const goToDetail = (slug) => {
         <div
           v-for="product in productStore.products"
           :key="product.id"
-          class="rounded-2xl bg-gradient-to-b from-gray-200/50 via-gray-400/50 to-gray-600/50 p-[1px]"
+          class="rounded-xl bg-gradient-to-b from-gray-200/50 via-gray-400/50 to-gray-600/50 p-[1px]"
         >
           <div
-            class="flex h-full flex-col justify-between gap-5 rounded-2xl bg-gradient-to-b from-gray-800 to-gray-900 px-5 py-5"
+            class="flex h-full flex-col justify-between gap-5 rounded-xl bg-gradient-to-b from-gray-800 to-gray-900 px-5 py-5"
           >
             <div class="flex flex-col gap-5">
               <div class="flex items-start justify-between">
@@ -108,7 +108,7 @@ const goToDetail = (slug) => {
                             <span
                               v-if="pkg.discount_type === 'fixed_amount'"
                               class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                              >-{{ pkg.discount_value }}</span
+                              >-{{ formatRupiah(pkg.discount_value) }}</span
                             >
                             <span
                               v-if="pkg.discount_type === 'percentage'"
@@ -135,7 +135,11 @@ const goToDetail = (slug) => {
             <div class="flex flex-col gap-4">
               <hr class="rounded-full border-gray-700" />
               <div class="flex flex-col flex-wrap gap-2">
-                <ButtonComponent @click="goToDetail(product.slug)" variant="solid">
+                <ButtonComponent
+                  @click="goToDetail(product.slug)"
+                  variant="solid"
+                  textColor="black"
+                >
                   Lihat Detail
                 </ButtonComponent>
               </div>

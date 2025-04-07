@@ -1,9 +1,11 @@
 <script setup>
-defineProps({
+import { ref, watch } from 'vue';
+
+const props = defineProps({
   modelValue: File,
   accept: {
     type: String,
-    default: '', // contoh: 'image/*' atau 'application/pdf'
+    default: '',
   },
   disabled: {
     type: Boolean,
@@ -24,11 +26,21 @@ defineProps({
 });
 
 const emit = defineEmits(['update:modelValue']);
+const inputRef = ref(null);
 
 function handleChange(event) {
   const file = event.target.files?.[0] || null;
   emit('update:modelValue', file);
 }
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (!newVal && inputRef.value) {
+      inputRef.value.value = '';
+    }
+  },
+);
 </script>
 
 <template>
@@ -36,6 +48,7 @@ function handleChange(event) {
     <label class="block w-full">
       <span class="sr-only">Choose file</span>
       <input
+        ref="inputRef"
         type="file"
         :accept="accept"
         :disabled="disabled"

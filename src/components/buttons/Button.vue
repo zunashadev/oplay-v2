@@ -12,6 +12,11 @@ const props = defineProps({
     default: 'solid',
     validator: (value) => ['solid', 'outline', 'ghost', 'soft', 'white', 'link'].includes(value),
   },
+  size: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['sm', 'md', 'lg'].includes(value),
+  },
   color: {
     type: String,
     default: 'lightning-yellow',
@@ -40,6 +45,12 @@ const props = defineProps({
     default: false,
   },
 });
+
+const sizeClasses = {
+  sm: 'px-3 py-2 text-xs',
+  md: 'px-4 py-3 text-sm',
+  lg: 'px-5 py-4 text-base',
+};
 
 const colorMap = computed(() => {
   const colors = {
@@ -260,14 +271,15 @@ const buttonClasses = computed(() => {
     link: `border border-transparent ${props.textColor ? customText : color.text} ${color.hoverText} focus:outline-hidden ${color.focusText} ${color.darkText} ${color.darkHoverText} ${color.darkFocusText}`,
   };
 
-  return `${variantClasses[props.variant]} ${baseClasses}`;
+  // return `${variantClasses[props.variant]} ${baseClasses}`;
+  return `${variantClasses[props.variant]} ${sizeClasses[props.size]} ${baseClasses}`;
 });
 </script>
 
 <template>
   <button
     :type="type"
-    class="inline-flex items-center justify-center gap-x-2 rounded-xl px-4 py-3 text-sm font-medium transition-all hover:cursor-pointer"
+    class="inline-flex items-center justify-center gap-x-2 rounded-lg font-medium transition-all hover:cursor-pointer"
     :class="buttonClasses"
     :disabled="disabled"
   >

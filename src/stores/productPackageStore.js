@@ -12,11 +12,16 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
   const message = ref(null);
   const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
 
+  // Fungsi : Reset message and error state
+  const resetMessageState = () => {
+    message.value = null;
+    error.value = null;
+  };
+
   // Fetch product package berdasarkan product id
   const fetchProductPackages = async (productId) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       const { data, error: fetchError } = await supabase
@@ -33,6 +38,29 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     }
   };
 
+  // Ambil satu paket produk berdasarkan ID
+  const getProductPackageById = async (packageId) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('product_packages')
+        .select('*')
+        .eq('id', packageId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      return data;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengambil detail paket produk', err);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   // Tambah paket baru
   const addProductPackage = async (
     product_id,
@@ -43,8 +71,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     is_best_seller = false,
   ) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       // Cek user
@@ -103,8 +130,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
   // Hapus paket
   const deleteProductPackage = async (packageId) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       // Hapus paket dari database
@@ -134,6 +160,67 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     }
   };
 
+  // Edit paket produk
+  const updateProductPackage = async (
+    packageId,
+    updatedFields = {}, // { name, price, discount_type, discount_value, is_best_seller }
+  ) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      if (!packageId) throw new Error('ID paket tidak ditemukan');
+
+      // Validasi jika ada harga/diskon yang diubah
+      if ('price' in updatedFields && updatedFields.price <= 0) {
+        throw new Error('Harga harus lebih dari 0');
+      }
+      if (
+        'discount_type' in updatedFields &&
+        updatedFields.discount_type &&
+        !['percentage', 'fixed_amount'].includes(updatedFields.discount_type)
+      ) {
+        throw new Error('Jenis diskon tidak valid');
+      }
+      if ('discount_value' in updatedFields && updatedFields.discount_value < 0) {
+        throw new Error('Nilai diskon tidak boleh negatif');
+      }
+
+      // Update ke database
+      const { data, error: updateError } = await supabase
+        .from('product_packages')
+        .update(updatedFields)
+        .eq('id', packageId)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      // Update state lokal
+      const index = packages.value.findIndex((pkg) => pkg.id === packageId);
+      if (index !== -1) {
+        packages.value[index] = data;
+      }
+
+      // Update juga productStore supaya sync
+      const productStore = useProductStore();
+      productStore.products.forEach((product) => {
+        if (product.product_packages) {
+          const pkgIndex = product.product_packages.findIndex((pkg) => pkg.id === packageId);
+          if (pkgIndex !== -1) {
+            product.product_packages[pkgIndex] = data;
+          }
+        }
+      });
+
+      handleResponse({ message, error }, 'success', 'mengedit paket produk');
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengedit paket produk', err);
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     // State
     packages,
@@ -142,8 +229,11 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     error,
 
     // Methods
+    resetMessageState,
     fetchProductPackages,
     addProductPackage,
     deleteProductPackage,
+    updateProductPackage,
+    getProductPackageById,
   };
 });

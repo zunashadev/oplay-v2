@@ -13,11 +13,16 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
   const message = ref(null);
   const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
 
+  // Fungsi : Reset message and error state
+  const resetMessageState = () => {
+    message.value = null;
+    error.value = null;
+  };
+
   // Fetch product package duration berdasarkan product package id
   const fetchProductPackageDurations = async (productPackageId) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       const { data, error: fetchError } = await supabase
@@ -34,10 +39,9 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
     }
   };
 
-  const addProductPackageDuration = async (product_id, product_package_id, unit, value) => {
+  const addProductPackageDuration = async (product_id, product_package_id, name, value) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       const user_id = useAuthStore().user?.id;
@@ -49,8 +53,9 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
         .from('product_package_durations')
         .insert([
           {
+            user_id,
             product_package_id,
-            unit,
+            name,
             value,
           },
         ])
@@ -92,8 +97,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
 
   const deleteProductPackageDuration = async (durationId) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       // Hapus paket dari database
@@ -118,9 +122,9 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
         });
       });
 
-      handleResponse({ message, error }, 'success', 'menghapus paket produk');
+      handleResponse({ message, error }, 'success', 'menghapus durasi paket produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus paket produk', err);
+      handleResponse({ message, error }, 'error', 'menghapus durasi paket produk', err);
     } finally {
       loading.value = false;
     }
@@ -134,6 +138,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
     error,
 
     // Methods
+    resetMessageState,
     fetchProductPackageDurations,
     addProductPackageDuration,
     deleteProductPackageDuration,

@@ -4,8 +4,11 @@ import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
 
-import AddProductPackageComponent from '../components/modals/AddProductPackageModal.vue';
+import AddProductPackageModalComponent from '../components/modals/AddProductPackageModal.vue';
 import AddProductPackageDurationModalComponent from '../components/modals/AddProductPackageDurationModal.vue';
+import EditProductPackageModalComponent from '../components/modals/EditProductPackageModal.vue';
+import EditProductModalComponent from '../components/modals/EditProductModal.vue';
+import ButtonComponent from '@/components/buttons/Button.vue';
 
 import CrossIcon from '@/components/icons/Cross.vue';
 import PlusIcon from '@/components/icons/Plus.vue';
@@ -19,22 +22,23 @@ onMounted(() => {
   productStore.fetchProducts();
 });
 
+// Edit Product
+const editProductModalRef = ref(null);
+
+function openEditProductModal(productId) {
+  editProductModalRef.value.openModal(productId);
+}
+
+function closeEditProductModal() {
+  editProductModalRef.value.closeModal();
+}
+
 // Delete Product
 const deleteProduct = async (id) => {
   await productStore.deleteProduct(id);
 };
 
-// Delete Product Package
-const deleteProductPackage = async (id) => {
-  await productPackageStore.deleteProductPackage(id);
-};
-
-// Delete Product Package Duration
-const deleteProductPackageDuration = async (id) => {
-  await productPackageDurationStore.deleteProductPackageDuration(id);
-};
-
-// Add Product Package Modal
+// Add Package
 const addProductPackageModalRef = ref(null);
 
 function openAddProductPackageModal(productId) {
@@ -50,7 +54,23 @@ function closeAddProductPackageModal() {
   addProductPackageModalRef.value.closeModal();
 }
 
-// Add Duration Modal
+// Edit Package
+const editProductPackageModalRef = ref(null);
+
+function openEditProductPackageModal(packageId) {
+  editProductPackageModalRef.value.openModal(packageId);
+}
+
+function closeEditProductPackageModal() {
+  editProductPackageModalRef.value.closeModal();
+}
+
+// Delete Package
+const deleteProductPackage = async (id) => {
+  await productPackageStore.deleteProductPackage(id);
+};
+
+// Add Duration
 const addDurationModalRef = ref(null);
 
 function openAddDurationModal(productId, productPackageId) {
@@ -65,20 +85,26 @@ function openAddDurationModal(productId, productPackageId) {
 function closeAddDurationModal() {
   addDurationModalRef.value.closeModal();
 }
+
+// Delete Duration
+const deleteProductPackageDuration = async (id) => {
+  await productPackageDurationStore.deleteProductPackageDuration(id);
+};
 </script>
 
 <template>
-  <!-- Start : Modal -->
-  <AddProductPackageComponent ref="addProductPackageModalRef"></AddProductPackageComponent>
-
-  <AddProductPackageDurationModalComponent
-    ref="addDurationModalRef"
-  ></AddProductPackageDurationModalComponent>
-  <!-- End : Modal -->
+  <!-- Edit Product -->
+  <EditProductModalComponent ref="editProductModalRef" />
+  <!-- Add Package -->
+  <AddProductPackageModalComponent ref="addProductPackageModalRef" />
+  <!-- Edit Package -->
+  <EditProductPackageModalComponent ref="editProductPackageModalRef" />
+  <!-- Add Duration -->
+  <AddProductPackageDurationModalComponent ref="addDurationModalRef" />
 
   <div class="flex flex-col gap-5">
     <!-- START : HEADER -->
-    <div class="rounded-md bg-gray-800 px-6 py-3">
+    <div class="rounded-xl bg-gray-800 px-6 py-3">
       <p class="text-center text-2xl font-semibold">🛒 Daftar Produk</p>
     </div>
     <!-- END : HEADER -->
@@ -88,7 +114,7 @@ function closeAddDurationModal() {
       <div
         v-for="product in productStore.products"
         :key="product.id"
-        class="overflow-hidden rounded-md bg-gray-900"
+        class="overflow-hidden rounded-xl bg-gray-900"
       >
         <!-- START : HEAD -->
         <div class="flex items-center justify-between bg-gray-800 px-4 py-4">
@@ -99,17 +125,25 @@ function closeAddDurationModal() {
             </p>
           </div>
           <div class="flex gap-1">
-            <button
-              class="bg-lightning-yellow-400 hover:bg-lightning-yellow-500 rounded-md px-3 py-1 text-sm font-medium text-white transition-all hover:cursor-pointer"
+            <ButtonComponent
+              @click="openEditProductModal(product.id)"
+              type="button"
+              variant="solid"
+              size="sm"
+              textColor="black"
             >
               Edit
-            </button>
-            <button
+            </ButtonComponent>
+            <ButtonComponent
               @click="deleteProduct(product.id)"
-              class="rounded-md bg-red-500 px-3 py-1 text-sm font-medium text-white transition-all hover:cursor-pointer hover:bg-red-600"
+              type="button"
+              variant="solid"
+              size="sm"
+              color="red"
+              textColor="black"
             >
               Delete
-            </button>
+            </ButtonComponent>
           </div>
         </div>
         <!-- END : HEAD -->
@@ -141,11 +175,11 @@ function closeAddDurationModal() {
             <div class="flex items-center justify-between">
               <p class="text-base font-medium">📦 Paket</p>
               <div
-                class="group hover:bg-lightning-yellow-100 hover:border-lightning-yellow-400 rounded-md border border-gray-600 bg-gray-800 p-1 transition-all hover:cursor-pointer"
+                class="group rounded-md border border-gray-600 bg-gray-800 p-1 transition-all hover:cursor-pointer hover:border-gray-500 hover:bg-gray-700"
               >
                 <PlusIcon
                   @click="openAddProductPackageModal(product.id)"
-                  class="group-hover:text-lightning-yellow-500 size-5 text-gray-500"
+                  class="size-5 text-gray-500 group-hover:text-white"
                 />
               </div>
             </div>
@@ -198,8 +232,7 @@ function closeAddDurationModal() {
                                 class="relative flex min-w-20 items-center justify-start gap-1 rounded-full bg-gray-200 py-0.5 ps-3 pe-8 text-black"
                               >
                                 <div class="flex gap-1 text-xs">
-                                  <p>{{ duration.value }}</p>
-                                  <p>{{ duration.unit }}</p>
+                                  <p>{{ duration.name }}</p>
                                 </div>
                                 <div
                                   @click="deleteProductPackageDuration(duration.id)"
@@ -224,22 +257,35 @@ function closeAddDurationModal() {
                     </div>
                   </div>
                   <div class="flex flex-none flex-col gap-1">
-                    <button
-                      class="rounded-md bg-blue-500 px-3 py-1 text-xs font-medium text-white transition-all hover:cursor-pointer hover:bg-blue-600"
+                    <ButtonComponent
+                      type="button"
+                      variant="solid"
+                      size="sm"
+                      color="blue"
+                      textColor="black"
                     >
                       Atur Sebagai Terlaris 🔥
-                    </button>
-                    <button
-                      class="bg-lightning-yellow-400 hover:bg-lightning-yellow-500 rounded-md px-3 py-1 text-xs font-medium text-white transition-all hover:cursor-pointer"
+                    </ButtonComponent>
+                    <ButtonComponent
+                      @click="openEditProductPackageModal(pkg.id)"
+                      type="button"
+                      variant="solid"
+                      size="sm"
+                      color="lightning-yellow"
+                      textColor="black"
                     >
                       Edit
-                    </button>
-                    <button
+                    </ButtonComponent>
+                    <ButtonComponent
                       @click="deleteProductPackage(pkg.id)"
-                      class="rounded-md bg-red-500 px-3 py-1 text-xs font-medium text-white transition-all hover:cursor-pointer hover:bg-red-600"
+                      type="button"
+                      variant="solid"
+                      size="sm"
+                      color="red"
+                      textColor="black"
                     >
                       Delete
-                    </button>
+                    </ButtonComponent>
                   </div>
                 </div>
               </div>

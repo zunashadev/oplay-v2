@@ -16,7 +16,7 @@ const closeAlert = () => {
 </script>
 
 <template>
-  <div class="fixed top-20 right-10 z-50 w-80">
+  <div class="fixed top-20 right-10 z-[100] w-80">
     <div
       class="flex flex-col gap-1 rounded-lg p-3 text-sm text-white shadow-lg"
       :class="error ? 'bg-red-500' : 'bg-green-500'"

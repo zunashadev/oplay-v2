@@ -87,6 +87,16 @@ const router = createRouter({
             requiredRoles: ['customer'],
           },
         },
+        {
+          path: 'profile',
+          name: 'CustomerDashboardEditProfile',
+          component: () => import('../views/customer/EditProfile.vue'),
+          meta: {
+            title: 'Customer Dashboard Edit Profile',
+            requiresAuth: true,
+            requiredRoles: ['customer'],
+          },
+        },
       ],
     },
     // Admin

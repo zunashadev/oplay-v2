@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useProductStore } from '@/stores/productStore';
 
 import AlertComponent from '../components/alerts/Alert.vue';
@@ -14,14 +14,9 @@ const name = ref('');
 const category = ref('');
 const description = ref('');
 const file = ref(null);
-const fileInputRef = ref(null); // Ref untuk input file - biar bisa reset inputan file saat berhasil add product
-
-const onFileChange = (event) => {
-  file.value = event.target.files[0];
-};
 
 const addProduct = async () => {
-  if (!name.value || !category.value) return alert('Isi semua field!');
+  if (!name.value || !category.value || !file.value) return alert('Isi semua field!');
   await productStore.addProduct(name.value, category.value, description.value, file.value);
 
   // Reset Form
@@ -29,22 +24,11 @@ const addProduct = async () => {
   category.value = '';
   description.value = '';
   file.value = null;
-
-  // Reset input file dengan mereset value-nya
-  if (fileInputRef.value) {
-    fileInputRef.value.value = '';
-  }
-};
-
-// Fungsi untuk menghapus message & error dari store
-const clearAlert = () => {
-  productStore.message = null;
-  productStore.error = null;
 };
 </script>
 
 <template>
-  <div class="overflow-hidden rounded-2xl bg-gray-900">
+  <div class="overflow-hidden rounded-xl bg-gray-900">
     <div class="bg-gray-800 px-3 py-3">
       <p class="text-lg font-medium">➕ Tambah Produk</p>
     </div>
@@ -54,13 +38,13 @@ const clearAlert = () => {
       <AlertComponent
         :message="productStore.message"
         :error="productStore.error"
-        @close-alert="clearAlert"
+        @close-alert="productStore.resetMessageState()"
       />
     </template>
     <!-- START : MESSAGE AND ERROR -->
 
     <div class="px-5 py-5">
-      <form @submit.prevent="addProduct" class="flex flex-col gap-8">
+      <form @submit.prevent="addProduct" class="flex flex-col gap-5">
         <div class="flex flex-col gap-2">
           <!-- Name -->
           <InputComponent v-model="name" placeholder="Masukkan nama produk" required />
@@ -72,9 +56,9 @@ const clearAlert = () => {
           <FileInputComponent v-model="file" required class="mt-3" />
         </div>
 
-        <ButtonComponent type="submit" variant="solid" textColor="black"
-          >Tambah Produk</ButtonComponent
-        >
+        <ButtonComponent type="submit" variant="solid" textColor="black">
+          Tambah Produk
+        </ButtonComponent>
       </form>
     </div>
   </div>

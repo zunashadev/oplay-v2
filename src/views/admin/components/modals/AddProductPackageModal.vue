@@ -1,23 +1,33 @@
 <script setup>
-import { ref, defineProps, defineExpose, watch, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 
+import DialogModalComponent from '@/components/modals/DialogModal.vue';
+import InputComponent from '@/components/form/Input.vue';
+import SelectComponent from '@/components/form/Select.vue';
+import CheckBoxComponent from '@/components/form/CheckBox.vue';
 import AlertComponent from '../alerts/Alert.vue';
-import BaseModalComponent from '@/components/modals/BaseModal.vue';
-
-import CrossIcon from '@/components/icons/Cross.vue';
+import ButtonComponent from '@/components/buttons/Button.vue';
 
 // START : MODAL
-const baseModalRef = ref(null);
+const dialogModalRef = ref(null);
 
 function openModal(productId) {
   selectedProductId.value = productId;
-  baseModalRef.value.openModal();
+
+  dialogModalRef.value.openModal();
 }
 
 function closeModal() {
-  baseModalRef.value.closeModal();
+  name.value = '';
+  price.value = '';
+  selectedProductId.value = '';
+  discountType.value = '';
+  discountValue.value = 0;
+  isBestSeller.value = false;
+
+  dialogModalRef.value.closeModal();
 }
 
 defineExpose({ openModal, closeModal });
@@ -33,6 +43,12 @@ const selectedProductId = ref('');
 const discountType = ref(''); // 'percentage' atau 'fixed_amount'
 const discountValue = ref(0); // Nilai diskon
 const isBestSeller = ref(false);
+
+const discountTypes = [
+  { label: 'Tidak ada', value: '' },
+  { label: 'Persentase (%)', value: 'percentage' },
+  { label: 'Potongan Harga (Rp)', value: 'fixed_amount' },
+];
 
 onMounted(() => {
   productStore.fetchProducts(); // Ambil daftar produk
@@ -62,12 +78,6 @@ const addProductPackage = async () => {
   // Tutup modal
   closeModal();
 };
-
-// Fungsi untuk menghapus message & error dari store
-const clearAlert = () => {
-  productPackageStore.message = null;
-  productPackageStore.error = null;
-};
 // END : ADD PRODUCT PACKAGE
 </script>
 
@@ -77,86 +87,55 @@ const clearAlert = () => {
     <AlertComponent
       :message="productPackageStore.message"
       :error="productPackageStore.error"
-      @close-alert="clearAlert"
+      @close-alert="productPackageStore.resetMessageState()"
     />
   </template>
-  <!-- START : MESSAGE AND ERROR -->
+  <!-- END : MESSAGE AND ERROR -->
 
-  <!-- START : MODAL -->
-  <BaseModalComponent ref="baseModalRef">
-    <div class="flex w-full max-w-xl bg-white">
-      <div class="flex w-xl flex-col">
-        <!-- Start : Header -->
-        <div class="flex items-center justify-between border-b border-gray-200 bg-white px-5 py-5">
-          <p class="font-semibold">Tambah Paket Produk</p>
-          <div
-            @click="closeModal"
-            class="transform text-gray-400 transition-all duration-200 hover:cursor-pointer hover:text-gray-950"
-          >
-            <CrossIcon class="size-6" />
-          </div>
-        </div>
-        <!-- End : Header -->
+  <DialogModalComponent ref="dialogModalRef" title="Tambah Produk">
+    <div class="">
+      <form @submit.prevent="addProductPackage" class="flex flex-col gap-2">
+        <!-- Dropdown Pilih Produk -->
+        <SelectComponent
+          v-model="selectedProductId"
+          :options="productStore.products"
+          labelKey="name"
+          valueKey="id"
+          placeholder="Pilih produk"
+          required
+        >
+        </SelectComponent>
 
-        <!-- Start : Content -->
-        <div class="flex flex-col px-5 py-5">
-          <form @submit.prevent="addProductPackage" class="flex flex-col gap-2">
-            <!-- Dropdown Pilih Produk -->
-            <select v-model="selectedProductId" class="rounded border p-2" required>
-              <option value="" disabled>Pilih Produk</option>
-              <option
-                v-for="product in productStore.products"
-                :key="product.id"
-                :value="product.id"
-              >
-                {{ product.name }}
-              </option>
-            </select>
+        <!-- Name -->
+        <InputComponent v-model="name" placeholder="Masukkan nama paket" type="text" required />
 
-            <!-- Name -->
-            <input v-model="name" placeholder="Nama Paket" class="rounded border p-2" required />
+        <!-- Price -->
+        <InputComponent v-model="price" placeholder="Masukkan harga" type="number" required />
 
-            <!-- Price -->
-            <input
-              v-model="price"
-              type="number"
-              placeholder="Harga"
-              class="rounded border p-2"
-              required
-            />
+        <!-- Diskon Type -->
+        <SelectComponent
+          v-model="discountType"
+          :options="discountTypes"
+          placeholder="Pilih jenis diskon"
+        >
+        </SelectComponent>
 
-            <!-- Diskon Type -->
-            <select v-model="discountType" class="rounded border p-2">
-              <option value="" disabled>Pilih Jenis Diskon</option>
-              <option value="percentage">Persentase (%)</option>
-              <option value="fixed_amount">Potongan Harga (Rp)</option>
-            </select>
+        <!-- Diskon Value -->
+        <InputComponent
+          v-model="discountValue"
+          placeholder="Masukkan nilai diskon"
+          type="number"
+          :disabled="!discountType"
+        />
 
-            <!-- Diskon Value -->
-            <input
-              v-model="discountValue"
-              type="number"
-              placeholder="Nilai Diskon"
-              class="rounded border p-2"
-              :disabled="!discountType"
-              required
-            />
+        <!-- Is Best Seller -->
+        <CheckBoxComponent v-model="isBestSeller" label="🔥 Terlaris" />
 
-            <!-- Is Best Seller -->
-            <label class="flex items-center gap-2">
-              <input type="checkbox" v-model="isBestSeller" class="rounded border" />
-              <span>🔥 Terlaris</span>
-            </label>
-
-            <!-- Button -->
-            <button type="submit" class="rounded bg-blue-500 px-4 py-2 text-white">
-              Tambah Produk
-            </button>
-          </form>
-        </div>
-        <!-- End : Content -->
-      </div>
+        <!-- Button -->
+        <ButtonComponent type="submit" variant="solid" textColor="black">
+          Tambah Produk
+        </ButtonComponent>
+      </form>
     </div>
-  </BaseModalComponent>
-  <!-- END : MODAL -->
+  </DialogModalComponent>
 </template>

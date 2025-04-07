@@ -35,46 +35,6 @@ export const useAuthStore = defineStore('authStore', () => {
     error.value = null;
   };
 
-  // Fungsi : Upload avatar ke Supabase Storage
-  const uploadAvatar = async (file) => {
-    if (!file) return null;
-
-    try {
-      const publicUrl = await storageService.uploadFile(file, 'user-images', 'avatars', [
-        'jpg',
-        'jpeg',
-        'png',
-        'webp',
-      ]);
-
-      if (!publicUrl) return null;
-
-      handleResponse({ message, error }, 'success', 'mengunggah gambar');
-      return publicUrl;
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengunggah gambar', err);
-      return null;
-    }
-  };
-
-  // Fungsi : Hapus avatar dari Supabase Storage
-  const deleteAvatar = async (imageUrl) => {
-    if (!imageUrl) return null;
-
-    try {
-      const success = await storageService.deleteFile(imageUrl, 'user-images');
-
-      if (success) {
-        handleResponse({ message, error }, 'success', 'menghapus avatar');
-      }
-
-      return success;
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus gambar', err);
-      return null;
-    }
-  };
-
   // Fungsi : Fetch user profile
   const fetchUserProfile = async () => {
     if (!user.value) return;
@@ -95,29 +55,6 @@ export const useAuthStore = defineStore('authStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil profil pengguna', err);
       throw err;
-    }
-  };
-
-  // Fungsi : Fetch All Profiles
-  const fetchAllProfiles = async () => {
-    loading.value = true;
-    resetMessageState();
-
-    try {
-      const { data, error: fetchError } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (fetchError) throw fetchError;
-
-      allProfiles.value = data;
-      handleResponse({ message, error }, 'success', 'mengambil semua profil');
-      return data;
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil semua profil', err);
-    } finally {
-      loading.value = false;
     }
   };
 
@@ -206,6 +143,62 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
+  // Fungsi : Upload gambar ke Supabase Storage
+  const uploadAvatar = async (file) => {
+    if (!file) return null;
+
+    try {
+      // Validasi ekstensi file
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+      const fileExt = file.name.split('.').pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExt)) {
+        throw new Error('Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau WEBP.');
+      }
+
+      // Buat nama unik & simpan di folder "products"
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `avatars/${fileName}`;
+
+      // Upload file ke Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('user-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Dapatkan URL publik gambar
+      const { data } = supabase.storage.from('user-images').getPublicUrl(filePath);
+
+      handleResponse({ message, error }, 'success', 'mengunggah gambar');
+      return data.publicUrl;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengunggah gambar', err);
+      return null;
+    }
+  };
+
+  // Fungsi : Hapus gambar dari Supabase Storage
+  const deleteAvatar = async (imageUrl) => {
+    if (!imageUrl) return null;
+
+    try {
+      // Ekstrak nama file dari URL dengan cara yang lebih sederhana
+      const fileName = imageUrl.split('/').pop(); // mengambil elemen terakhir, yaitu nama file
+      const filePath = `avatars/${fileName}`;
+
+      // Hapus gambar dari storage
+      const { error: deleteError } = await supabase.storage.from('user-images').remove([filePath]);
+
+      if (deleteError) throw deleteError;
+
+      handleResponse({ message, error }, 'success', 'menghapus gambar');
+      return true;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'menghapus gambar', err);
+      return null;
+    }
+  };
+
   // Fungsi : Update data pengguna (email / password)
   const updateUser = async (newEmail, newPassword) => {
     if (!user.value) {
@@ -291,43 +284,6 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Update Role Pengguna (admin only atau di dashboard user list)
-  const updateUserRole = async (userId, newRole) => {
-    if (!userId || !newRole) {
-      const err = new Error('User ID dan role baru diperlukan');
-      handleResponse({ message, error }, 'error', 'memperbarui role pengguna', err);
-      throw err;
-    }
-
-    loading.value = true;
-    resetMessageState();
-
-    try {
-      const { data, error: updateError } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('id', userId)
-        .select()
-        .single();
-
-      if (updateError) throw updateError;
-
-      // Update list allProfiles agar sinkron
-      const index = allProfiles.value.findIndex((user) => user.id === userId);
-      if (index !== -1) {
-        allProfiles.value[index].role = newRole;
-      }
-
-      handleResponse({ message, error }, 'success', 'memperbarui role pengguna');
-      return data;
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'memperbarui role pengguna', err);
-      throw err;
-    } finally {
-      loading.value = false;
-    }
-  };
-
   // Fungsi : Get Current Session
   const getCurrentSession = async () => {
     try {
@@ -365,6 +321,29 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
+  // Fungsi : Fetch All Profiles
+  const fetchAllProfiles = async () => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (fetchError) throw fetchError;
+
+      allProfiles.value = data;
+      handleResponse({ message, error }, 'success', 'mengambil semua profil');
+      return data;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengambil semua profil', err);
+    } finally {
+      loading.value = false;
+    }
+  };
+
   // Setup listener for Auth State Changes
   supabase.auth.onAuthStateChange((event, currentSession) => {
     if (event === 'SIGNED_IN') {
@@ -384,16 +363,14 @@ export const useAuthStore = defineStore('authStore', () => {
     user,
     session,
     profile,
-    allProfiles,
-    loading,
-    message,
-    error,
-
-    // Computed
     isAuthenticated,
     userName,
     userRole,
     userAvatar,
+    allProfiles,
+    loading,
+    message,
+    error,
 
     // Methods
     login,
@@ -404,6 +381,5 @@ export const useAuthStore = defineStore('authStore', () => {
     fetchAllProfiles,
     resetMessageState,
     updateUser,
-    updateUserRole,
   };
 });

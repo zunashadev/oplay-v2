@@ -64,8 +64,15 @@ const menuItems = ref([
 
               <RouterLink :to="{ name: 'AdminDashboardHome' }" class="flex-none">
                 <img
+                  v-if="authStore.profile && authStore.profile?.avatar_url"
                   alt="User Avatar"
-                  src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                  :src="authStore.profile.avatar_url"
+                  class="size-10 rounded-full object-cover"
+                />
+                <img
+                  v-else
+                  alt="User Avatar"
+                  src="/images/avatar.jpg"
                   class="size-10 rounded-full object-cover"
                 />
               </RouterLink>

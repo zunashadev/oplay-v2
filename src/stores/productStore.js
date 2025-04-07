@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from './authStore';
 import { handleResponse } from '@/utils/responseHandler';
 import { generateSlug } from '@/utils/slug';
+import { storageService } from '@/utils/storageService';
 
 export const useProductStore = defineStore('productStore', () => {
   const products = ref([]);
@@ -12,11 +13,56 @@ export const useProductStore = defineStore('productStore', () => {
   const message = ref(null);
   const error = ref(null);
 
+  // Fungsi : Reset message and error state
+  const resetMessageState = () => {
+    message.value = null;
+    error.value = null;
+  };
+
+  // Fungsi : Upload gambar ke Supabase Storage
+  const uploadImage = async (file) => {
+    if (!file) return null;
+
+    try {
+      const publicUrl = await storageService.uploadFile(file, 'product-images', 'products', [
+        'jpg',
+        'jpeg',
+        'png',
+        'webp',
+      ]);
+
+      if (!publicUrl) return null;
+
+      handleResponse({ message, error }, 'success', 'mengunggah gambar');
+      return publicUrl;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengunggah gambar', err);
+      return null;
+    }
+  };
+
+  // Fungsi : Hapus gambar dari Supabase Storage
+  const deleteImage = async (imageUrl) => {
+    if (!imageUrl) return null;
+
+    try {
+      const success = await storageService.deleteFile(imageUrl, 'product-images');
+
+      if (success) {
+        handleResponse({ message, error }, 'success', 'menghapus gambar');
+      }
+
+      return success;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'menghapus gambar', err);
+      return null;
+    }
+  };
+
   // Fungsi : Fetch semua produk
   const fetchProducts = async () => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       const { data, error: fetchError } = await supabase
@@ -53,8 +99,7 @@ export const useProductStore = defineStore('productStore', () => {
   // Fungsi : Ambil produk berdasarkan Slug
   const fetchProductBySlug = async (slug) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       const { data, error: fetchError } = await supabase
@@ -91,45 +136,50 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Fungsi : Upload gambar ke Supabase Storage
-  const uploadImage = async (file) => {
-    if (!file) return null;
+  // Fungsi : Ambil produk berdasarkan ID
+  const fetchProductById = async (id) => {
+    loading.value = true;
+    resetMessageState();
 
     try {
-      // Validasi ekstensi file
-      const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
-      const fileExt = file.name.split('.').pop().toLowerCase();
-      if (!allowedExtensions.includes(fileExt)) {
-        throw new Error('Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau WEBP.');
-      }
+      const { data, error: fetchError } = await supabase
+        .from('products')
+        .select('*, product_packages (*, product_package_durations (*))')
+        .eq('id', id)
+        .single();
 
-      // Buat nama unik & simpan di folder "products"
-      const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `products/${fileName}`;
+      if (fetchError) throw fetchError;
 
-      // Upload file ke Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from('product-images')
-        .upload(filePath, file);
+      // Urutkan product_packages dan product_package_durations
+      const product = {
+        ...data,
+        product_packages: data.product_packages
+          ? data.product_packages
+              .map((productPackage) => ({
+                ...productPackage,
+                product_package_durations: productPackage.product_package_durations
+                  ? productPackage.product_package_durations.sort(
+                      (a, b) => new Date(b.created_at) - new Date(a.created_at),
+                    )
+                  : [],
+              }))
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          : [],
+      };
 
-      if (uploadError) throw uploadError;
-
-      // Dapatkan URL publik gambar
-      const { data } = supabase.storage.from('product-images').getPublicUrl(filePath);
-
-      handleResponse({ message, error }, 'success', 'mengunggah gambar');
-      return data.publicUrl;
+      return product;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengunggah gambar', err);
+      handleResponse({ message, error }, 'error', 'mengambil produk berdasarkan ID', err);
       return null;
+    } finally {
+      loading.value = false;
     }
   };
 
   // Fungsi : Tambah produk baru
   const addProduct = async (name, category, description, file) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       // Cek user
@@ -169,35 +219,10 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Fungsi : Hapus gambar dari Supabase Storage
-  const deleteImage = async (imageUrl) => {
-    if (!imageUrl) return null;
-
-    try {
-      // Ekstrak nama file dari URL dengan cara yang lebih sederhana
-      const fileName = imageUrl.split('/').pop(); // mengambil elemen terakhir, yaitu nama file
-      const filePath = `products/${fileName}`;
-
-      // Hapus gambar dari storage
-      const { error: deleteError } = await supabase.storage
-        .from('product-images')
-        .remove([filePath]);
-
-      if (deleteError) throw deleteError;
-
-      handleResponse({ message, error }, 'success', 'menghapus gambar');
-      return true;
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus gambar', err);
-      return null;
-    }
-  };
-
   // Fungsi : Hapus produk
   const deleteProduct = async (productId) => {
     loading.value = true;
-    error.value = null;
-    message.value = null;
+    resetMessageState();
 
     try {
       // Ambil produk berdasarkan ID
@@ -234,6 +259,60 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
+  // Fungsi : Edit produk
+  const updateProduct = async (productId, updatedData, newFile = null) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      // Ambil produk lama
+      const oldProduct = products.value.find((p) => p.id === productId);
+      if (!oldProduct) throw new Error('Produk tidak ditemukan');
+
+      // Jika ada file baru, upload gambar baru
+      if (newFile) {
+        const newImageUrl = await uploadImage(newFile);
+        if (!newImageUrl) return; // uploadImage akan set message/error jika gagal
+
+        // Hapus gambar lama
+        if (oldProduct.image_url) {
+          await deleteImage(oldProduct.image_url);
+        }
+
+        // Tambahkan image_url ke data yang akan diupdate
+        updatedData.image_url = newImageUrl;
+      }
+
+      // Update produk di Supabase
+      const { data, error: updateError } = await supabase
+        .from('products')
+        .update(updatedData)
+        .eq('id', productId)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      // Update produk di state lokal
+      const index = products.value.findIndex((p) => p.id === productId);
+      if (index !== -1) {
+        // Jaga agar product_packages tetap ada
+        const oldPackages = products.value[index].product_packages || [];
+        products.value[index] = {
+          ...updatedData,
+          ...data,
+          product_packages: oldPackages,
+        };
+      }
+
+      handleResponse({ message, error }, 'success', 'mengedit produk');
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengedit produk', err);
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     // State
     products,
@@ -242,9 +321,12 @@ export const useProductStore = defineStore('productStore', () => {
     error,
 
     // Methods
+    resetMessageState,
     fetchProducts,
     fetchProductBySlug,
+    fetchProductById,
     addProduct,
     deleteProduct,
+    updateProduct,
   };
 });

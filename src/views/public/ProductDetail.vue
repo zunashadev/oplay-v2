@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useProductStore } from '@/stores/productStore';
+import { useOrderStore } from '@/stores/orderStore';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
 
@@ -11,6 +12,8 @@ import BoxOpenSolidIcon from '@/components/icons/BoxOpenSolid.vue';
 
 const route = useRoute();
 const productStore = useProductStore();
+const orderStore = useOrderStore();
+
 const product = ref(null);
 
 onMounted(async () => {
@@ -29,11 +32,33 @@ const selectDuration = (duration) => {
   selectedDuration.value = duration;
 };
 
-// BUAT TOTAL HARGA (SEPERTINYA PERLU FUNGSI UNTUK MENGHITUNG HARGA SETELAH DISKON, MASUKKAN PADA UTILS)
-// ........
+// Harga Total
+const totalPrice = computed(() => {
+  if (!selectedPackage.value || !selectedDuration.value) return 0;
 
-// FUNGSI PEMESANAN
-// ........
+  const finalPrice = calculateFinalPrice(
+    selectedPackage.value.price,
+    selectedPackage.value.discount_type,
+    selectedPackage.value.discount_value,
+  );
+
+  return finalPrice * selectedDuration.value.value;
+});
+
+// Fungsi Pemesanan
+const addOrder = async () => {
+  // Validasi
+  if (!product || !selectedPackage || !selectedDuration)
+    return alert('Terdapat data yang belum terisi');
+
+  await orderStore.addOrder(
+    product.value,
+    selectedPackage.value,
+    selectedDuration.value,
+    totalPrice.value,
+    'pending',
+  );
+};
 </script>
 
 <template>
@@ -101,7 +126,7 @@ const selectDuration = (duration) => {
                         <span
                           v-if="pkg.discount_type === 'fixed_amount'"
                           class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                          >-{{ pkg.discount_value }}</span
+                          >-{{ formatRupiah(pkg.discount_value) }}</span
                         >
                         <span
                           v-if="pkg.discount_type === 'percentage'"
@@ -148,7 +173,7 @@ const selectDuration = (duration) => {
                       : 'bg-gray-800',
                   ]"
                 >
-                  <p class="text-sm">{{ duration.value }} {{ duration.unit }}</p>
+                  <p class="text-sm">{{ duration.name }}</p>
                 </div>
               </template>
             </div>
@@ -157,10 +182,10 @@ const selectDuration = (duration) => {
         <!-- Total Harga -->
         <div class="flex items-center justify-between">
           <p>Total Harga :</p>
-          <p>Rp20000XXX</p>
+          <p>{{ formatRupiah(totalPrice) }}</p>
         </div>
         <!-- Buat Pesanan -->
-        <ButtonComponent variant="solid">Buat Pesanan</ButtonComponent>
+        <ButtonComponent @click="addOrder" variant="solid">Buat Pesanan</ButtonComponent>
       </div>
       <!-- END : RIGHT -->
     </div>
