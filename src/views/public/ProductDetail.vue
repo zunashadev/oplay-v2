@@ -47,7 +47,6 @@ const totalPrice = computed(() => {
 
 // Fungsi Pemesanan
 const addOrder = async () => {
-  // Validasi
   if (!product || !selectedPackage || !selectedDuration)
     return alert('Terdapat data yang belum terisi');
 
