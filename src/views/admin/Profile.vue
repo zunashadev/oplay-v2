@@ -68,13 +68,6 @@ const updateProfile = async () => {
     <div class="mx-auto mt-10 max-w-md rounded-lg bg-white p-6 shadow-lg">
       <h2 class="mb-4 text-xl font-semibold">Edit Profil</h2>
 
-      <div v-if="authStore.message" class="mb-2 rounded bg-green-100 p-2 text-green-600">
-        {{ authStore.message }}
-      </div>
-      <div v-if="authStore.error" class="mb-2 rounded bg-red-100 p-2 text-red-600">
-        {{ authStore.error }}
-      </div>
-
       <div class="mb-4">
         <label class="block text-gray-600">Nama</label>
         <input v-model="name" type="text" class="w-full rounded border px-3 py-2" />

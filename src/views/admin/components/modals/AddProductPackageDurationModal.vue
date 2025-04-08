@@ -6,7 +6,6 @@ import { useProductPackageDurationStore } from '@/stores/productPackageDurationS
 
 import DialogModalComponent from '@/components/modals/DialogModal.vue';
 import InputComponent from '@/components/form/Input.vue';
-import AlertComponent from '../alerts/Alert.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 
 // START : MODAL
@@ -69,16 +68,6 @@ const addProductPackageDuration = async () => {
 </script>
 
 <template>
-  <!-- START : MESSAGE AND ERROR -->
-  <template v-if="productPackageDurationStore.message || productPackageDurationStore.error">
-    <AlertComponent
-      :message="productPackageDurationStore.message"
-      :error="productPackageDurationStore.error"
-      @close-alert="productPackageDurationStore.resetMessageState()"
-    />
-  </template>
-  <!-- END : MESSAGE AND ERROR -->
-
   <DialogModalComponent ref="dialogModalRef" title="Tambah Durasi Paket">
     <div class="">
       <form @submit.prevent="addProductPackageDuration" class="flex flex-col gap-5">

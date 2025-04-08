@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
-import AlertComponent from '../admin/components/alerts/Alert.vue';
 import InputComponent from '@/components/form/Input.vue';
 import FileInputComponent from '@/components/form/FileInput.vue';
 
@@ -50,16 +49,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- START : MESSAGE AND ERROR -->
-  <template v-if="authStore.message || authStore.error">
-    <AlertComponent
-      :message="authStore.message"
-      :error="authStore.error"
-      @close-alert="authStore.resetMessageState()"
-    />
-  </template>
-  <!-- END : MESSAGE AND ERROR -->
-
   <div class="flex h-[2000px] flex-col gap-5 px-24 py-0">
     <!-- START : PROFILE -->
     <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">

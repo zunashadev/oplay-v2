@@ -3,16 +3,19 @@ import { ref, onMounted, watch, watchEffect, nextTick } from 'vue';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
 
+// Stores
 import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
 
+// Components
 import AddProductPackageModalComponent from '../components/modals/AddProductPackageModal.vue';
 import AddProductPackageDurationModalComponent from '../components/modals/AddProductPackageDurationModal.vue';
 import EditProductPackageModalComponent from '../components/modals/EditProductPackageModal.vue';
 import EditProductModalComponent from '../components/modals/EditProductModal.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 
+// Icons
 import CrossIcon from '@/components/icons/Cross.vue';
 import PlusIcon from '@/components/icons/Plus.vue';
 

@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { useProductStore } from '@/stores/productStore';
 
-import AlertComponent from '../components/alerts/Alert.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 import InputComponent from '@/components/form/Input.vue';
 import TextAreaComponent from '@/components/form/TextArea.vue';
@@ -32,16 +31,6 @@ const addProduct = async () => {
     <div class="bg-gray-800 px-3 py-3">
       <p class="text-lg font-medium">➕ Tambah Produk</p>
     </div>
-
-    <!-- START : MESSAGE AND ERROR -->
-    <template v-if="productStore.message || productStore.error">
-      <AlertComponent
-        :message="productStore.message"
-        :error="productStore.error"
-        @close-alert="productStore.resetMessageState()"
-      />
-    </template>
-    <!-- START : MESSAGE AND ERROR -->
 
     <div class="px-5 py-5">
       <form @submit.prevent="addProduct" class="flex flex-col gap-5">

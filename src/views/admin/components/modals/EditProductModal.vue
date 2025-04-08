@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import { useProductStore } from '@/stores/productStore';
 
 import DialogModalComponent from '@/components/modals/DialogModal.vue';
-import AlertComponent from '../alerts/Alert.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 import InputComponent from '@/components/form/Input.vue';
 import TextAreaComponent from '@/components/form/TextArea.vue';
@@ -75,16 +74,6 @@ const updateProduct = async () => {
 </script>
 
 <template>
-  <!-- START : MESSAGE AND ERROR -->
-  <template v-if="productStore.message || productStore.error">
-    <AlertComponent
-      :message="productStore.message"
-      :error="productStore.error"
-      @close-alert="productStore.resetMessageState()"
-    />
-  </template>
-  <!-- END : MESSAGE AND ERROR -->
-
   <DialogModalComponent ref="dialogModalRef" title="Edit Produk">
     <form @submit.prevent="updateProduct" class="flex flex-col gap-5">
       <div class="flex flex-col gap-2">

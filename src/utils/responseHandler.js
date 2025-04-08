@@ -1,3 +1,5 @@
+import { useToastStore } from '@/stores/toastStore';
+
 export const handleResponse = (
   state,
   type,
@@ -8,13 +10,27 @@ export const handleResponse = (
 ) => {
   if (!state || typeof state !== 'object') return;
 
-  // Harus pakai .value kalau state.message dan state.error adalah ref
+  const toast = useToastStore(); // 🧠 Panggil store toast
+
   if (type === 'error') {
-    state.message.value = customMessage || `Gagal ${operation}!`;
-    state.error.value = err?.message || 'Terjadi kesalahan!';
+    const msg = customMessage || `Gagal ${operation}!`;
+    const errMsg = err?.message || 'Terjadi kesalahan!';
+
+    // Set ref message & error di store (jika ada)
+    if (state.message) state.message.value = msg;
+    if (state.error) state.error.value = errMsg;
+
     if (err && logError) console.error(`Gagal ${operation}:`, err.message || err);
+
+    // Panggil toast
+    toast.showToast({ message: msg, error: errMsg });
   } else if (type === 'success') {
-    state.message.value = customMessage || `Berhasil ${operation}!`;
-    state.error.value = null;
+    const msg = customMessage || `Berhasil ${operation}!`;
+
+    if (state.message) state.message.value = msg;
+    if (state.error) state.error.value = null;
+
+    // Panggil toast
+    toast.showToast({ message: msg });
   }
 };

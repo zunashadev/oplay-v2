@@ -2,8 +2,12 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { RouterView } from 'vue-router';
 
+// Partials
 import SideBarPartial from '../partials/SideBar.vue';
 import NavBarPartial from '../partials/NavBar.vue';
+
+// Components
+import ToastListComponent from '@/components/toasts/ToastList.vue';
 
 // State untuk mengecek apakah user sudah scroll
 const isScrolled = ref(false);
@@ -31,6 +35,8 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <ToastListComponent />
+
   <div class="flex h-screen bg-black text-white">
     <!-- Sidebar -->
     <div class="h-screen w-full max-w-72 flex-none bg-black">

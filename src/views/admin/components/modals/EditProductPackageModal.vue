@@ -7,7 +7,6 @@ import DialogModalComponent from '@/components/modals/DialogModal.vue';
 import InputComponent from '@/components/form/Input.vue';
 import SelectComponent from '@/components/form/Select.vue';
 import CheckBoxComponent from '@/components/form/CheckBox.vue';
-import AlertComponent from '../alerts/Alert.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 
 // START : MODAL
@@ -96,16 +95,6 @@ const updateProductPackage = async () => {
 </script>
 
 <template>
-  <!-- START : MESSAGE AND ERROR -->
-  <template v-if="productPackageStore.message || productPackageStore.error">
-    <AlertComponent
-      :message="productPackageStore.message"
-      :error="productPackageStore.error"
-      @close-alert="productPackageStore.resetMessageState()"
-    />
-  </template>
-  <!-- END : MESSAGE AND ERROR -->
-
   <DialogModalComponent ref="dialogModalRef" title="Edit Paket Produk">
     <form @submit.prevent="updateProductPackage" class="flex flex-col gap-2">
       <!-- Dropdown Pilih Produk -->
