@@ -113,7 +113,7 @@ const goToDetail = (slug) => {
                             <span
                               v-if="pkg.discount_type === 'percentage'"
                               class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                              >{{ pkg.discount_value }}%</span
+                              >-{{ pkg.discount_value }}%</span
                             >
                           </div>
                         </template>

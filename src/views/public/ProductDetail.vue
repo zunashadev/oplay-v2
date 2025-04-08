@@ -1,16 +1,19 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
 import { useProductStore } from '@/stores/productStore';
 import { useOrderStore } from '@/stores/orderStore';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
+import ConfirmOrderModalComponent from './components/modals/ConfirmOrderModal.vue';
 
 import BoxOpenSolidIcon from '@/components/icons/BoxOpenSolid.vue';
 
 const route = useRoute();
+const authStore = useAuthStore();
 const productStore = useProductStore();
 const orderStore = useOrderStore();
 
@@ -45,22 +48,31 @@ const totalPrice = computed(() => {
   return finalPrice * selectedDuration.value.value;
 });
 
-// Fungsi Pemesanan
-const addOrder = async () => {
-  if (!product || !selectedPackage || !selectedDuration)
-    return alert('Terdapat data yang belum terisi');
+// Modal Konfirmasi Pesanan
+const confirmOrderModalRef = ref(null);
 
-  await orderStore.addOrder(
-    product.value,
-    selectedPackage.value,
-    selectedDuration.value,
-    totalPrice.value,
-    'pending',
-  );
-};
+function openConfirmOrderModal() {
+  console.log(selectedPackage.value);
+
+  if (!product.value || !selectedPackage.value || !selectedDuration.value)
+    return alert('Harap pilih paket dan durasi terlebih dahulu');
+
+  confirmOrderModalRef.value.openModal({
+    product: product.value,
+    pkg: selectedPackage.value,
+    duration: selectedDuration.value,
+    totalPrice: totalPrice.value,
+  });
+}
+
+function closeConfirmOrderModal() {
+  confirmOrderModalRef.value.closeModal();
+}
 </script>
 
 <template>
+  <ConfirmOrderModalComponent ref="confirmOrderModalRef" />
+
   <div class="flex min-h-screen flex-col gap-8 px-24 py-6">
     <!-- START : DETAIL PRODUCT -->
     <div v-if="product" class="flex w-full gap-5">
@@ -130,7 +142,7 @@ const addOrder = async () => {
                         <span
                           v-if="pkg.discount_type === 'percentage'"
                           class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                          >{{ pkg.discount_value }}%</span
+                          >-{{ pkg.discount_value }}%</span
                         >
                       </div>
                     </template>
@@ -195,9 +207,17 @@ const addOrder = async () => {
           <p>{{ formatRupiah(totalPrice) }}</p>
         </div>
         <!-- Buat Pesanan -->
-        <ButtonComponent @click="addOrder" variant="solid" textColor="black"
-          >Buat Pesanan</ButtonComponent
+        <ButtonComponent
+          v-if="!authStore.isAuthenticated"
+          variant="solid"
+          textColor="black"
+          disabled=""
         >
+          Buat Pesanan
+        </ButtonComponent>
+        <ButtonComponent v-else @click="openConfirmOrderModal()" variant="solid" textColor="black">
+          Buat Pesanan
+        </ButtonComponent>
       </div>
       <!-- END : RIGHT -->
     </div>

@@ -5,22 +5,36 @@ import { useAuthStore } from '@/stores/authStore';
 
 import AppsIcon from '@/components/icons/Apps.vue';
 import BoxesIcon from '@/components/icons/Boxes.vue';
+import OrderHistoryIcon from '@/components/icons/OrderHistory.vue';
 import UsersIcon from '@/components/icons/Users.vue';
 import CircleUserIcon from '@/components/icons/CircleUser.vue';
+import CreditCardIcon from '@/components/icons/CreditCard.vue';
 
 import LogOutIcon from '@/components/icons/LogOut.vue';
 
 // Data menu
 const menuItems = ref([
   { name: 'Beranda', link: 'AdminDashboardHome', icon: markRaw(AppsIcon) },
+  // Total order hari ini/bulan ini, total pendapatan, order terakhir, produk terlaris, stok akun tersisa
   {
     name: 'Produk',
+    icon: markRaw(BoxesIcon),
     submenu: [
-      { name: 'Produk', link: 'AdminDashboardProducts', icon: markRaw(BoxesIcon) },
-      // { name: 'Category', link: '' },
+      { name: 'Daftar Produk', link: 'AdminDashboardProducts' },
+      { name: 'Kategori', link: '' },
+      { name: 'Akun', link: '' },
     ],
   },
-  { name: 'User', link: 'AdminDashboardUsers', icon: markRaw(UsersIcon) },
+  {
+    name: 'Pesanan',
+    icon: markRaw(OrderHistoryIcon),
+    submenu: [
+      { name: 'Daftar Pesanan', link: '' },
+      { name: 'Metode Pembayaran', link: '' },
+    ],
+  },
+
+  { name: 'Pengguna', link: 'AdminDashboardUsers', icon: markRaw(UsersIcon) },
   { name: 'Profil', link: 'AdminDashboardProfile', icon: markRaw(CircleUserIcon) },
 ]);
 
@@ -60,7 +74,12 @@ const handleLogout = async () => {
             <summary
               class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-800"
             >
-              <span class="text-sm font-medium">{{ menu.name }}</span>
+              <div class="flex items-center gap-3 text-sm font-medium">
+                <component :is="menu.icon" class="size-4" />
+                <span>
+                  {{ menu.name }}
+                </span>
+              </div>
 
               <span class="shrink-0 transition duration-300 group-open:-rotate-180">
                 <svg
@@ -89,7 +108,10 @@ const handleLogout = async () => {
                         : 'text-white hover:bg-gray-800',
                     ]"
                   >
-                    <component :is="sub.icon" class="size-4" />
+                    <div
+                      class="size-1 rounded-full"
+                      :class="[route.name === sub.link ? 'bg-black' : 'bg-white']"
+                    ></div>
                     <span>
                       {{ sub.name }}
                     </span>

@@ -33,7 +33,7 @@ onUnmounted(() => {
 <template>
   <div class="flex h-screen bg-black text-white">
     <!-- Sidebar -->
-    <div class="h-screen w-full max-w-64 flex-none bg-black">
+    <div class="h-screen w-full max-w-72 flex-none bg-black">
       <SideBarPartial />
     </div>
 

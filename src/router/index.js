@@ -97,6 +97,16 @@ const router = createRouter({
             requiredRoles: ['customer'],
           },
         },
+        {
+          path: 'payment',
+          name: 'CustomerPayment',
+          component: () => import('../views/customer/Payment.vue'),
+          meta: {
+            title: 'Customer Payment',
+            requiresAuth: true,
+            requiredRoles: ['customer'],
+          },
+        },
       ],
     },
     // Admin
@@ -109,7 +119,7 @@ const router = createRouter({
           name: 'AdminDashboardHome',
           component: () => import('../views/admin/Home.vue'),
           meta: {
-            title: 'Admin Dashboard',
+            title: 'Beranda',
             requiresAuth: true,
             requiredRoles: ['admin'],
           },
@@ -119,7 +129,7 @@ const router = createRouter({
           name: 'AdminDashboardProducts',
           component: () => import('../views/admin/Products.vue'),
           meta: {
-            title: 'Admin Produk Dashboard',
+            title: 'Daftar Produk',
             requiresAuth: true,
             requiredRoles: ['admin'],
           },
@@ -129,7 +139,7 @@ const router = createRouter({
           name: 'AdminDashboardUsers',
           component: () => import('../views/admin/Users.vue'),
           meta: {
-            title: 'Admin Manajemen Pengguna',
+            title: 'Daftar Pengguna',
             requiresAuth: true,
             requiredRoles: ['admin'],
           },
@@ -139,7 +149,7 @@ const router = createRouter({
           name: 'AdminDashboardProfile',
           component: () => import('../views/admin/Profile.vue'),
           meta: {
-            title: 'Admin Profile Pengguna',
+            title: 'Profile Pengguna',
             requiresAuth: true,
             requiredRoles: ['admin'],
           },

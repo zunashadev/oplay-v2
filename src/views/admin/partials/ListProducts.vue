@@ -217,11 +217,11 @@ const deleteProductPackageDuration = async (id) => {
                           >
                             Nilai Diskon :
                             <span v-if="pkg.discount_type == 'fixed_amount'">
-                              {{ formatRupiah(pkg.discount_value) }}
+                              -{{ formatRupiah(pkg.discount_value) }}
                             </span>
 
                             <span v-if="pkg.discount_type == 'percentage'">
-                              {{ pkg.discount_value }}%
+                              -{{ pkg.discount_value }}%
                             </span>
                           </p>
                           <!-- Harga Akhir -->
