@@ -109,7 +109,7 @@ const handleLogout = async () => {
                 Gunakan
               </button>
             </div>
-            <p class="text-3xl font-semibold">Rp.500.000</p>
+            <p class="text-3xl font-semibold">Rp.500.000x</p>
           </div>
         </div>
       </div>
