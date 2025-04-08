@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted, watch, watchEffect, nextTick } from 'vue';
+import { formatRupiah } from '@/utils/format';
+import { calculateFinalPrice } from '@/utils/priceCalculator';
+
 import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
@@ -202,16 +205,39 @@ const deleteProductPackageDuration = async (id) => {
                     </div>
                     <div class="flex w-full flex-col gap-6 text-gray-400">
                       <div class="flex flex-col gap-2">
-                        <p class="text-sm font-normal">Harga Normal : Rp{{ pkg.price }}</p>
-                        <p
-                          v-if="pkg.discount_type && pkg.discount_value"
-                          class="text-sm font-semibold text-red-500"
-                        >
-                          Nilai Diskon :
-                          <span v-if="pkg.discount_type == 'fixed_amount'">Rp.</span
-                          >{{ pkg.discount_value
-                          }}<span v-if="pkg.discount_type == 'percentage'">%</span>
+                        <!-- Harga Normal -->
+                        <p class="text-sm font-normal">
+                          Harga Normal : {{ formatRupiah(pkg.price) }}
                         </p>
+                        <template v-if="pkg.discount_type && pkg.discount_value">
+                          <!-- Nilai Diskon -->
+                          <p
+                            v-if="pkg.discount_type && pkg.discount_value"
+                            class="text-sm font-normal text-red-500"
+                          >
+                            Nilai Diskon :
+                            <span v-if="pkg.discount_type == 'fixed_amount'">
+                              {{ formatRupiah(pkg.discount_value) }}
+                            </span>
+
+                            <span v-if="pkg.discount_type == 'percentage'">
+                              {{ pkg.discount_value }}%
+                            </span>
+                          </p>
+                          <!-- Harga Akhir -->
+                          <p class="text-lightning-yellow-400 text-sm font-normal">
+                            Harga Akhir :
+                            {{
+                              formatRupiah(
+                                calculateFinalPrice(
+                                  pkg.price,
+                                  pkg.discount_type,
+                                  pkg.discount_value,
+                                ),
+                              )
+                            }}
+                          </p>
+                        </template>
                       </div>
 
                       <div class="flex items-center gap-3">
@@ -257,7 +283,7 @@ const deleteProductPackageDuration = async (id) => {
                     </div>
                   </div>
                   <div class="flex flex-none flex-col gap-1">
-                    <ButtonComponent
+                    <!-- <ButtonComponent
                       type="button"
                       variant="solid"
                       size="sm"
@@ -265,7 +291,7 @@ const deleteProductPackageDuration = async (id) => {
                       textColor="black"
                     >
                       Atur Sebagai Terlaris 🔥
-                    </ButtonComponent>
+                    </ButtonComponent> -->
                     <ButtonComponent
                       @click="openEditProductPackageModal(pkg.id)"
                       type="button"
