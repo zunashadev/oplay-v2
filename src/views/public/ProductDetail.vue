@@ -66,7 +66,7 @@ const addOrder = async () => {
     <div v-if="product" class="flex w-full gap-5">
       <!-- START : LEFT -->
       <div class="flex w-2/3 flex-col gap-5">
-        <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-5">
           <img
             v-if="product.image_url"
             :src="product.image_url"
@@ -80,7 +80,7 @@ const addOrder = async () => {
             </p>
           </div>
         </div>
-        <p>{{ product.description }}</p>
+        <p class="text-sm font-normal text-white">{{ product.description }}</p>
       </div>
       <!-- END : LEFT -->
 
@@ -151,40 +151,53 @@ const addOrder = async () => {
         <!-- Pilih Durasi -->
         <div class="flex flex-col gap-3">
           <p class="text-sm text-gray-400">Pilih durasi :</p>
-          <template
-            v-if="
-              selectedPackage &&
-              selectedPackage.product_package_durations &&
-              selectedPackage.product_package_durations.length
-            "
-          >
-            <div class="grid grid-cols-2 gap-2">
-              <template
-                v-for="duration in selectedPackage.product_package_durations"
-                :key="duration.id"
-              >
-                <div
-                  @click="selectDuration(duration)"
-                  class="rounded-lg px-4 py-2 text-center hover:cursor-pointer"
-                  :class="[
-                    selectedDuration?.id === duration.id
-                      ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                      : 'bg-gray-800',
-                  ]"
+
+          <template v-if="!selectedPackage">
+            <p class="text-sm font-normal text-gray-600">Pilih paket untuk melihat durasi</p>
+          </template>
+          <template v-else>
+            <template
+              v-if="
+                !selectedPackage.product_package_durations ||
+                !selectedPackage.product_package_durations.length
+              "
+            >
+              <p class="text-sm font-normal text-gray-600">
+                Mohon maaf, untuk saat ini pilihan durasi belum tersedia
+              </p>
+            </template>
+            <template v-else>
+              <div class="grid grid-cols-2 gap-2">
+                <template
+                  v-for="duration in selectedPackage.product_package_durations"
+                  :key="duration.id"
                 >
-                  <p class="text-sm">{{ duration.name }}</p>
-                </div>
-              </template>
-            </div>
+                  <div
+                    @click="selectDuration(duration)"
+                    class="rounded-lg px-4 py-2 text-center hover:cursor-pointer"
+                    :class="[
+                      selectedDuration?.id === duration.id
+                        ? 'outline-lightning-yellow-400 bg-gray-900 outline'
+                        : 'bg-gray-800',
+                    ]"
+                  >
+                    <p class="text-sm">{{ duration.name }}</p>
+                  </div>
+                </template>
+              </div>
+            </template>
           </template>
         </div>
+
         <!-- Total Harga -->
         <div class="flex items-center justify-between">
           <p>Total Harga :</p>
           <p>{{ formatRupiah(totalPrice) }}</p>
         </div>
         <!-- Buat Pesanan -->
-        <ButtonComponent @click="addOrder" variant="solid">Buat Pesanan</ButtonComponent>
+        <ButtonComponent @click="addOrder" variant="solid" textColor="black"
+          >Buat Pesanan</ButtonComponent
+        >
       </div>
       <!-- END : RIGHT -->
     </div>

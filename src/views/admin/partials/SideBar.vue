@@ -1,22 +1,27 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, markRaw } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+
+import AppsIcon from '@/components/icons/Apps.vue';
+import BoxesIcon from '@/components/icons/Boxes.vue';
+import UsersIcon from '@/components/icons/Users.vue';
+import CircleUserIcon from '@/components/icons/CircleUser.vue';
 
 import LogOutIcon from '@/components/icons/LogOut.vue';
 
 // Data menu
 const menuItems = ref([
-  { name: 'Home', link: 'AdminDashboardHome' },
+  { name: 'Beranda', link: 'AdminDashboardHome', icon: markRaw(AppsIcon) },
   {
-    name: 'Products',
+    name: 'Produk',
     submenu: [
-      { name: 'Products', link: 'AdminDashboardProducts' },
+      { name: 'Produk', link: 'AdminDashboardProducts', icon: markRaw(BoxesIcon) },
       // { name: 'Category', link: '' },
     ],
   },
-  { name: 'Users', link: 'AdminDashboardUsers' },
-  { name: 'Profile', link: 'AdminDashboardProfile' },
+  { name: 'User', link: 'AdminDashboardUsers', icon: markRaw(UsersIcon) },
+  { name: 'Profil', link: 'AdminDashboardProfile', icon: markRaw(CircleUserIcon) },
 ]);
 
 const authStore = useAuthStore();
@@ -37,11 +42,17 @@ const handleLogout = async () => {
 <template>
   <div class="flex h-screen flex-col justify-between border-e border-gray-800 bg-gray-900">
     <div class="px-4 py-6">
-      <span
-        class="grid h-10 w-32 place-content-center rounded-lg bg-gray-800 text-lg font-bold text-white"
-      >
-        🍅 OPLAY
-      </span>
+      <!-- START : BRAND -->
+      <div class="flex">
+        <RouterLink
+          :to="{ name: 'PublicHome' }"
+          class="flex items-center space-x-1 px-2 sm:space-x-2"
+        >
+          <img src="/app-logo.png" class="h-6 w-auto" />
+          <p class="text-xl font-semibold text-white sm:text-2xl">OPLAY</p>
+        </RouterLink>
+      </div>
+      <!-- END : BRAND -->
 
       <ul class="mt-6 space-y-1">
         <li v-for="(menu, index) in menuItems" :key="index">
@@ -67,17 +78,22 @@ const handleLogout = async () => {
               </span>
             </summary>
 
-            <ul class="mt-2 space-y-1 px-4">
+            <ul class="mt-2 space-y-1 ps-4">
               <li v-for="(sub, subIndex) in menu.submenu" :key="subIndex">
                 <RouterLink :to="{ name: sub.link }">
-                  <span
-                    class="block rounded-lg px-4 py-2 text-sm font-medium transition-all"
+                  <div
+                    class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-all"
                     :class="[
-                      route.name === sub.link ? 'bg-gray-600' : 'text-white hover:bg-gray-800',
+                      route.name === sub.link
+                        ? 'bg-lightning-yellow-400 text-black'
+                        : 'text-white hover:bg-gray-800',
                     ]"
                   >
-                    {{ sub.name }}
-                  </span>
+                    <component :is="sub.icon" class="size-4" />
+                    <span>
+                      {{ sub.name }}
+                    </span>
+                  </div>
                 </RouterLink>
               </li>
             </ul>
@@ -85,10 +101,17 @@ const handleLogout = async () => {
 
           <RouterLink v-else :to="{ name: menu.link }">
             <span
-              class="block rounded-lg px-4 py-2 text-sm font-medium transition-all"
-              :class="[route.name === menu.link ? 'bg-gray-600' : 'text-white hover:bg-gray-800']"
+              class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-all"
+              :class="[
+                route.name === menu.link
+                  ? 'bg-lightning-yellow-400 text-black'
+                  : 'text-white hover:bg-gray-800',
+              ]"
             >
-              {{ menu.name }}
+              <component :is="menu.icon" class="size-4" />
+              <span>
+                {{ menu.name }}
+              </span>
             </span>
           </RouterLink>
         </li>
