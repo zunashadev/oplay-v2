@@ -1,7 +1,18 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
+
+// Stores
 import { useAuthStore } from '@/stores/authStore';
+
+// Components
+import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
+import InputComponent from '@/components/form/Input.vue';
+import ButtonComponent from '@/components/buttons/Button.vue';
+
+// Icons
+import EyeIcon from '@/components/icons/Eye.vue';
+import EyeCrossedIcon from '@/components/icons/EyeCrossed.vue';
 
 // Inisialisasi store dan router
 const authStore = useAuthStore();
@@ -11,6 +22,9 @@ const route = useRoute();
 // State lokal
 const email = ref('');
 const password = ref('');
+
+// Tampilkan Password
+const showPassword = ref(false);
 
 // Fungsi Login
 const handleLogin = async () => {
@@ -29,79 +43,106 @@ const handleLogin = async () => {
       router.push('/');
     }
   } catch (error) {
-    // Error sudah di-handle di store,
-    // authStore.error akan otomatis terisi
-    console.error('Login gagal');
+    // Opsional, pesan error sudah di handle pada store
   }
 };
+
+onMounted(() => {
+  authStore.resetMessageState();
+});
 </script>
 
 <template>
-  <div class="bg-blue-charcoal-950 w-full max-w-xl rounded-lg px-6 py-8 shadow-lg">
-    <div class="space-y-12">
-      <div class="space-y-2">
-        <h1 class="text-4xl font-semibold">Login</h1>
-        <p class="text-base font-normal text-gray-500">
-          Klo bukan admin, tolong jangan kesini! Ngapain juga disini 😜
-        </p>
-      </div>
+  <!-- START : LOADER -->
+  <div
+    v-if="authStore.loading"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs"
+  >
+    <WaveLoaderComponent />
+  </div>
+  <!-- END : LOADER -->
 
-      <!-- Loading Indicator -->
-      <div v-if="authStore.loading" class="text-yellow-500">Sedang memproses...</div>
-      <!-- Error Message -->
-      <p v-if="authStore.error" class="text-red-500">{{ authStore.error }}</p>
+  <div class="relative flex min-h-screen w-full items-center justify-center px-5 py-5">
+    <!-- START : LOGO BRAND -->
+    <div class="absolute top-5 left-5 flex">
+      <RouterLink
+        :to="{ name: 'PublicHome' }"
+        class="flex items-center space-x-1 px-2 sm:space-x-2"
+      >
+        <img src="/app-logo.png" class="h-6 w-auto" />
+        <p class="text-xl font-semibold text-white sm:text-2xl">OPLAY</p>
+      </RouterLink>
+    </div>
+    <!-- END : LOGO BRAND -->
 
-      <div class="space-y-8">
-        <!-- Input Form -->
-        <div class="space-y-4">
-          <!-- Email -->
-          <div class="">
-            <label for="email" class="block text-sm font-normal">Email</label>
-            <div class="mt-2">
-              <input
-                v-model="email"
-                type="email"
-                autocomplete="email"
-                placeholder="Masukkan email"
-                class="outline-blue-charcoal-900 focus:outline-lightning-yellow-400 block w-full rounded-md bg-black px-3 py-1.5 text-base font-normal text-white outline-1 -outline-offset-1 placeholder:text-gray-600 focus:outline-2 focus:-outline-offset-2"
-              />
-            </div>
-          </div>
-
-          <!-- Password -->
-          <div class="">
-            <label for="password" class="block text-sm font-normal">Password</label>
-            <div class="mt-2">
-              <input
-                v-model="password"
-                type="password"
-                placeholder="Masukkan password"
-                class="outline-blue-charcoal-900 focus:outline-lightning-yellow-400 block w-full rounded-md bg-black px-3 py-1.5 text-base font-normal text-white outline-1 -outline-offset-1 placeholder:text-gray-600 focus:outline-2 focus:-outline-offset-2"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Login Button -->
-        <div class="flex flex-col items-center space-y-3">
-          <button
-            @click="handleLogin"
-            type="button"
-            class="bg-lightning-yellow-400 hover:bg-lightning-yellow-500 focus:bg-lightning-yellow-600 inline-flex w-full items-center justify-center gap-x-2 rounded-xl border border-transparent px-4 py-3 text-sm font-medium text-black transition-all hover:cursor-pointer focus:outline-hidden disabled:pointer-events-none disabled:opacity-50"
-          >
-            Login
-          </button>
-          <p class="text-sm text-gray-500">
-            Belum punya akun?
-            <RouterLink
-              :to="{ name: 'AuthRegister' }"
-              class="hover:text-lightning-yellow-400 underline transition-all hover:cursor-pointer"
-            >
-              klik disini untuk register
-            </RouterLink>
+    <!-- START : LOGIN FORM -->
+    <div class="w-full max-w-xl rounded-xl bg-gray-900 px-1 pt-1 shadow-lg">
+      <div class="bg-blue-charcoal-950 space-y-12 rounded-xl px-6 py-8">
+        <div class="space-y-2">
+          <h1 class="text-4xl font-semibold">Login</h1>
+          <p class="text-base font-normal text-gray-500">
+            Silahkan login menggunakan akun yang sudah terdaftar
           </p>
         </div>
+
+        <!-- Error Message -->
+        <p v-if="authStore.message" class="text-red-500">{{ authStore.error }}</p>
+        <p v-if="authStore.error" class="text-red-500">{{ authStore.error }}</p>
+
+        <form @submit.prevent="handleLogin" class="space-y-8">
+          <!-- Input Form -->
+          <div class="space-y-4">
+            <!-- Email -->
+            <div class="flex flex-col gap-2">
+              <label for="email" class="block text-sm font-normal text-gray-500">Email</label>
+              <InputComponent v-model="email" type="email" placeholder="Masukkan email" required />
+            </div>
+
+            <!-- Password -->
+            <div class="flex flex-col gap-2">
+              <label for="password" class="block text-sm font-normal text-gray-500">Password</label>
+              <InputComponent
+                v-model="password"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="Masukkan password"
+                iconPlacement="end"
+                required
+              >
+                <template #icon-end>
+                  <div @click="showPassword = !showPassword">
+                    <EyeIcon v-if="!showPassword" class="size-4" />
+                    <EyeCrossedIcon v-else class="size-4" />
+                  </div>
+                </template>
+              </InputComponent>
+            </div>
+          </div>
+
+          <!-- Login Button -->
+          <div class="flex flex-col items-center space-y-3">
+            <ButtonComponent
+              :disabled="authStore.loading"
+              type="submit"
+              textColor="black"
+              class="w-full"
+            >
+              Login
+            </ButtonComponent>
+          </div>
+        </form>
+      </div>
+      <div class="rounded-xl bg-gray-900 px-5 py-5 text-center">
+        <p class="text-sm text-gray-500">
+          Belum punya akun?
+          <RouterLink
+            :to="{ name: 'AuthRegister' }"
+            class="hover:text-lightning-yellow-400 underline transition-all hover:cursor-pointer"
+          >
+            klik disini untuk register
+          </RouterLink>
+        </p>
       </div>
     </div>
+    <!-- END : LOGIN FORM -->
   </div>
 </template>

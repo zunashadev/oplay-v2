@@ -7,35 +7,47 @@ import { handleResponse } from '@/utils/responseHandler';
 import { storageService } from '@/utils/storageService';
 
 export const useAuthStore = defineStore('authStore', () => {
+  /**========================================================================
+   *    STATE & COMPUTED
+   *========================================================================**/
+
   // State
   const user = ref(null);
   const session = ref(null);
   const profile = ref(null);
-  const allProfiles = ref([]);
+  const profiles = ref([]);
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);
 
-  // Computed Properties
+  // Computed
   const isAuthenticated = computed(() => !!user.value);
   const userName = computed(() => profile.value?.name || 'Guest');
   const userRole = computed(() => profile.value?.role || 'guest');
   const userAvatar = computed(() => profile.value?.avatar_url || '');
 
-  // Fungsi : Reset authentication state
+  /**========================================================================
+   *    UTILITY FUNCTIONS
+   *========================================================================**/
+
+  // Reset authentication state
   const resetAuthState = () => {
     user.value = null;
     session.value = null;
     profile.value = null;
   };
 
-  // Fungsi : Reset message and error state
+  // Reset message dan error state
   const resetMessageState = () => {
     message.value = null;
     error.value = null;
   };
 
-  // Fungsi : Upload avatar ke Supabase Storage
+  /**========================================================================
+   *    AVATAR / FILE HANDLING
+   *========================================================================**/
+
+  // Upload avatar ke Supabase Storage
   const uploadAvatar = async (file) => {
     if (!file) return null;
 
@@ -57,7 +69,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Hapus avatar dari Supabase Storage
+  // Hapus avatar dari Supabase Storage
   const deleteAvatar = async (imageUrl) => {
     if (!imageUrl) return null;
 
@@ -75,56 +87,14 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Fetch user profile
-  const fetchUserProfile = async () => {
-    if (!user.value) return;
+  /**========================================================================
+   *    AUTH METHODS
+   *========================================================================**/
 
-    try {
-      const { data, error: fetchError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.value.id)
-        .single();
-
-      if (fetchError || !data) {
-        throw fetchError ?? new Error('Profil pengguna tidak ditemukan');
-      }
-
-      profile.value = data;
-      return data;
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil profil pengguna', err);
-      throw err;
-    }
-  };
-
-  // Fungsi : Fetch All Profiles
-  const fetchAllProfiles = async () => {
-    loading.value = true;
-    resetMessageState();
-
-    try {
-      const { data, error: fetchError } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (fetchError) throw fetchError;
-
-      allProfiles.value = data;
-      handleResponse({ message, error }, 'success', 'mengambil semua profil');
-      return data;
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil semua profil', err);
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  // Fungsi : Login
+  // Login
   const login = async (email, password) => {
     if (!email || !password) {
-      const err = new Error('Email dan password diperlukan');
+      const err = new Error('Email dan password diperlukan!');
       handleResponse({ message, error }, 'error', 'login', err);
       throw err;
     }
@@ -153,10 +123,17 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Register
-  const register = async (email, password, name, username, avatar_url) => {
+  // Register
+  const register = async (
+    email,
+    password,
+    name,
+    username,
+    avatar_url,
+    referral_username = null,
+  ) => {
     if (!email || !password || !name || !username) {
-      const err = new Error('Email, password, name, dan username diperlukan');
+      const err = new Error('Email, password, name, dan username diperlukan!');
       handleResponse({ message, error }, 'error', 'mendaftar', err);
       throw err;
     }
@@ -165,21 +142,88 @@ export const useAuthStore = defineStore('authStore', () => {
     resetMessageState();
 
     try {
+      // Step 1: Register user dengan Supabase Auth
       const { data, error: registerError } = await supabase.auth.signUp({ email, password });
       if (registerError) throw registerError;
+
+      console.log('Pengguna berhasil dibuat:', data.user);
 
       user.value = data.user;
       session.value = data.session;
 
-      const { error: profileError } = await supabase
+      let referrer_id = null;
+
+      // Step 2: Cek referral username jika ada
+      if (referral_username) {
+        const { data: referrer, error: referrerError } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('username', referral_username)
+          .single();
+
+        if (referrerError || !referrer) {
+          console.warn('Referral username tidak ditemukan:', referral_username);
+        } else {
+          referrer_id = referrer.id;
+        }
+      }
+
+      // Step 3: Siapkan data profil
+      const profilePayload = {
+        id: data.user.id,
+        name,
+        username,
+        avatar_url,
+        role: 'customer',
+        referral_code: username, // Referral code = username pengguna ini
+        ...(referrer_id && { referrer_id }), // Tambahkan hanya jika ada
+      };
+
+      console.log('Membuat profil dengan payload:', profilePayload);
+
+      // Step 4: Buat profil di database dan langsung ambil data yang dibuat
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .insert([{ id: data.user.id, name, username, avatar_url, role: 'customer' }]);
+        .insert([profilePayload])
+        .select();
+
+      console.log('Hasil pembuatan profil:', { profileData, profileError });
 
       if (profileError) throw profileError;
 
-      await fetchUserProfile();
-      handleResponse({ message, error }, 'success', 'mendaftar');
+      // Step 5: Gunakan data profil yang baru dibuat (tanpa perlu fetch ulang)
+      if (profileData && profileData.length > 0) {
+        profile.value = profileData[0];
+        console.log('Profil yang diambil setelah pembuatan:', profile.value);
+
+        handleResponse({ message, error }, 'success', 'mendaftar');
+        return profileData[0];
+      } else {
+        // Jika tidak ada data yang dikembalikan dari insert, coba fetch
+        console.log('Tidak ada data profil yang dikembalikan saat insert, mencoba fetch...');
+
+        // Tambahkan delay untuk memastikan database sudah diupdate
+        await new Promise((resolve) => setTimeout(resolve, 800));
+
+        // Fetch profil
+        try {
+          const fetchedProfile = await fetchUserProfile();
+          if (fetchedProfile) {
+            console.log('Berhasil mengambil profil setelah delay:', fetchedProfile);
+            return fetchedProfile;
+          } else {
+            throw new Error('Tidak dapat mengambil profil pengguna setelah registrasi');
+          }
+        } catch (fetchErr) {
+          console.error('Gagal mengambil profil setelah registrasi:', fetchErr);
+          // Jika gagal fetch, kita tetap memiliki user auth tapi tidak profil
+          // Bisa coba logout dan minta user login kembali
+          await logout();
+          throw new Error('Gagal membuat profil pengguna. Silakan coba login kembali.');
+        }
+      }
     } catch (err) {
+      console.error('Error registrasi:', err);
       handleResponse({ message, error }, 'error', 'mendaftar', err);
       throw err;
     } finally {
@@ -187,7 +231,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Logout
+  // Logout
   const logout = async () => {
     loading.value = true;
     resetMessageState();
@@ -206,7 +250,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Update data pengguna (email / password)
+  // Update data user (email / password)
   const updateUser = async (newEmail, newPassword) => {
     if (!user.value) {
       const err = new Error('Pengguna tidak terautentikasi');
@@ -246,7 +290,78 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Method Update Profile
+  /**========================================================================
+   *    PROFILE METHODS
+   *========================================================================**/
+
+  // Fetch user profile
+  const fetchUserProfile = async () => {
+    if (!user.value) return null;
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.value.id)
+        .maybeSingle(); // Gunakan maybeSingle alih-alih single
+
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      if (!data) {
+        console.warn('Profil belum tersedia, menunggu...');
+        // Tunggu sedikit lebih lama dan coba lagi
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const { data: retryData, error: retryError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.value.id)
+          .maybeSingle();
+
+        if (retryError) throw retryError;
+
+        if (!retryData) {
+          throw new Error('Profil pengguna tidak ditemukan setelah percobaan ulang');
+        }
+
+        profile.value = retryData;
+        return retryData;
+      }
+
+      profile.value = data;
+      return data;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengambil profil pengguna', err);
+      throw err;
+    }
+  };
+
+  // Fetch All Profiles
+  const fetchAllProfiles = async () => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (fetchError) throw fetchError;
+
+      profiles.value = data;
+      handleResponse({ message, error }, 'success', 'mengambil semua profil');
+      return data;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengambil semua profil', err);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // Method Update Profile
   const updateProfile = async (updatedData, newAvatarFile = null) => {
     if (!user.value) {
       const err = new Error('Pengguna tidak terautentikasi');
@@ -291,7 +406,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Update Role Pengguna (admin only atau di dashboard user list)
+  // Update Role Pengguna (admin only atau di dashboard user list)
   const updateUserRole = async (userId, newRole) => {
     if (!userId || !newRole) {
       const err = new Error('User ID dan role baru diperlukan');
@@ -312,10 +427,10 @@ export const useAuthStore = defineStore('authStore', () => {
 
       if (updateError) throw updateError;
 
-      // Update list allProfiles agar sinkron
-      const index = allProfiles.value.findIndex((user) => user.id === userId);
+      // Update list profiles agar sinkron
+      const index = profiles.value.findIndex((user) => user.id === userId);
       if (index !== -1) {
-        allProfiles.value[index].role = newRole;
+        profiles.value[index].role = newRole;
       }
 
       handleResponse({ message, error }, 'success', 'memperbarui role pengguna');
@@ -328,7 +443,11 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fungsi : Get Current Session
+  /**========================================================================
+   *    SESSION MANAGEMENT
+   *========================================================================**/
+
+  // Get Current Session
   const getCurrentSession = async () => {
     try {
       const {
@@ -370,10 +489,15 @@ export const useAuthStore = defineStore('authStore', () => {
     if (event === 'SIGNED_IN') {
       user.value = currentSession?.user || null;
       session.value = currentSession || null;
-      // fetchUserProfile();
-      fetchUserProfile().catch((err) => {
-        console.error('Failed to fetch profile after auth state change:', err);
-      });
+
+      // Tambahkan delay sebelum mencoba fetch profil
+      setTimeout(() => {
+        fetchUserProfile().catch((err) => {
+          console.error('Failed to fetch profile after auth state change:', err);
+          // Bisa tambahkan logic untuk handle kasus ketika profil tidak ditemukan
+          // misalnya redirect ke halaman untuk melengkapi profil
+        });
+      }, 800); // Berikan delay yang cukup agar database terupdate
     } else if (event === 'SIGNED_OUT') {
       resetAuthState();
     }
@@ -384,7 +508,7 @@ export const useAuthStore = defineStore('authStore', () => {
     user,
     session,
     profile,
-    allProfiles,
+    profiles,
     loading,
     message,
     error,

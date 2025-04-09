@@ -1,7 +1,18 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
+
+// Stores
 import { useAuthStore } from '@/stores/authStore';
+
+// Components
+import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
+import InputComponent from '@/components/form/Input.vue';
+import ButtonComponent from '@/components/buttons/Button.vue';
+
+// Icons
+import EyeIcon from '@/components/icons/Eye.vue';
+import EyeCrossedIcon from '@/components/icons/EyeCrossed.vue';
 
 // Inisialisasi store dan router
 const authStore = useAuthStore();
@@ -9,15 +20,42 @@ const router = useRouter();
 const route = useRoute();
 
 // State lokal
-const name = ref(null);
-const username = ref(null);
+const name = ref('');
+const username = ref('');
 const email = ref('');
 const password = ref('');
+const refferalCode = ref('');
+
+const confirmPassword = ref('');
+const confirmPasswordError = ref('');
+
+// Tampilkan Password
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 // Fungsi Register
 const handleRegister = async () => {
+  confirmPasswordError.value = '';
+
+  if (!password.value || !confirmPassword.value) {
+    confirmPasswordError.value = 'Password tidak boleh kosong';
+    return;
+  }
+
+  if (password.value !== confirmPassword.value) {
+    confirmPasswordError.value = 'Password tidak cocok';
+    return;
+  }
+
   try {
-    await authStore.register(email.value, password.value, name.value, username.value);
+    await authStore.register(
+      email.value,
+      password.value,
+      name.value,
+      username.value,
+      null,
+      refferalCode.value,
+    );
 
     // Redirect ke halaman sebelumnya atau dashboard
     const redirect = route.query.redirect;
@@ -31,105 +69,166 @@ const handleRegister = async () => {
       router.push('/');
     }
   } catch (error) {
-    // Error sudah di-handle di store
-    console.error('Registrasi gagal');
-    console.log(error);
+    // Opsional, pesan error sudah di handle pada store
   }
 };
+
+onMounted(() => {
+  authStore.resetMessageState();
+});
 </script>
 
 <template>
-  <div class="bg-blue-charcoal-950 w-full max-w-xl rounded-lg px-6 py-8 shadow-lg">
-    <div class="space-y-12">
-      <div class="space-y-2">
-        <h1 class="text-4xl font-semibold">Register</h1>
-        <p class="text-base font-normal text-gray-500">
-          Klo bukan admin, tolong jangan kesini! Ngapain juga disini 😜
-        </p>
-      </div>
+  <!-- START : LOADER -->
+  <div
+    v-if="authStore.loading"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs"
+  >
+    <WaveLoaderComponent />
+  </div>
+  <!-- END : LOADER -->
 
-      <!-- Loading Indicator -->
-      <div v-if="authStore.loading" class="text-yellow-500">Sedang memproses...</div>
-      <!-- Error Message -->
-      <p v-if="authStore.error" class="text-red-500">{{ authStore.error }}</p>
+  <div class="relative flex min-h-screen w-full items-center justify-center px-5 py-5">
+    <!-- START : LOGO BRAND -->
+    <div class="absolute top-5 left-5 flex">
+      <RouterLink
+        :to="{ name: 'PublicHome' }"
+        class="flex items-center space-x-1 px-2 sm:space-x-2"
+      >
+        <img src="/app-logo.png" class="h-6 w-auto" />
+        <p class="text-xl font-semibold text-white sm:text-2xl">OPLAY</p>
+      </RouterLink>
+    </div>
+    <!-- END : LOGO BRAND -->
 
-      <div class="space-y-8">
-        <!-- Input Form -->
-        <div class="space-y-4">
-          <!-- Name -->
-          <div class="">
-            <label for="name" class="block text-sm font-normal">Nama</label>
-            <div class="mt-2">
-              <input
+    <!-- START : REGISTER FORM -->
+    <div class="w-full max-w-xl rounded-xl bg-gray-900 px-1 pt-1 shadow-lg">
+      <div class="bg-blue-charcoal-950 space-y-12 rounded-xl px-6 py-8">
+        <div class="space-y-2">
+          <h1 class="text-4xl font-semibold">Register</h1>
+          <p class="text-base font-normal text-gray-500">
+            Silahkan buat akun baru apabila anda belum memiliki akun
+          </p>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div v-if="authStore.loading" class="text-yellow-500">Sedang memproses...</div>
+        <!-- Error Message -->
+        <p v-if="authStore.error" class="text-red-500">{{ authStore.error }}</p>
+
+        <form @submit.prevent="handleRegister" class="space-y-8">
+          <!-- Input Form -->
+          <div class="space-y-4">
+            <!-- Name -->
+            <div class="flex flex-col gap-2">
+              <label for="name" class="block text-sm font-normal text-gray-500">Nama Lengkap</label>
+              <InputComponent
                 v-model="name"
                 type="text"
-                placeholder="Masukkan nama"
-                class="outline-blue-charcoal-900 focus:outline-lightning-yellow-400 block w-full rounded-md bg-black px-3 py-1.5 text-base font-normal text-white outline-1 -outline-offset-1 placeholder:text-gray-600 focus:outline-2 focus:-outline-offset-2"
+                placeholder="Masukkan nama lengkap"
+                required
               />
             </div>
-          </div>
 
-          <!-- Username -->
-          <div class="">
-            <label for="username" class="block text-sm font-normal">Username</label>
-            <div class="mt-2">
-              <input
+            <!-- Username -->
+            <div class="flex flex-col gap-2">
+              <label for="username" class="block text-sm font-normal text-gray-500">Username</label>
+              <InputComponent
                 v-model="username"
                 type="text"
                 placeholder="Masukkan username"
-                class="outline-blue-charcoal-900 focus:outline-lightning-yellow-400 block w-full rounded-md bg-black px-3 py-1.5 text-base font-normal text-white outline-1 -outline-offset-1 placeholder:text-gray-600 focus:outline-2 focus:-outline-offset-2"
+                required
               />
             </div>
-          </div>
 
-          <!-- Email -->
-          <div class="">
-            <label for="email" class="block text-sm font-normal">Email</label>
-            <div class="mt-2">
-              <input
-                v-model="email"
-                type="email"
-                autocomplete="email"
-                placeholder="Masukkan email"
-                class="outline-blue-charcoal-900 focus:outline-lightning-yellow-400 block w-full rounded-md bg-black px-3 py-1.5 text-base font-normal text-white outline-1 -outline-offset-1 placeholder:text-gray-600 focus:outline-2 focus:-outline-offset-2"
-              />
+            <!-- Email -->
+            <div class="flex flex-col gap-2">
+              <label for="email" class="block text-sm font-normal text-gray-500">Email</label>
+              <InputComponent v-model="email" type="email" placeholder="Masukkan email" required />
             </div>
-          </div>
 
-          <!-- Password -->
-          <div class="">
-            <label for="password" class="block text-sm font-normal">Password</label>
-            <div class="mt-2">
-              <input
+            <!-- Password -->
+            <div class="flex flex-col gap-2">
+              <label for="password" class="block text-sm font-normal text-gray-500">Password</label>
+              <InputComponent
                 v-model="password"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
                 placeholder="Masukkan password"
-                class="outline-blue-charcoal-900 focus:outline-lightning-yellow-400 block w-full rounded-md bg-black px-3 py-1.5 text-base font-normal text-white outline-1 -outline-offset-1 placeholder:text-gray-600 focus:outline-2 focus:-outline-offset-2"
+                iconPlacement="end"
+                required
+              >
+                <template #icon-end>
+                  <div @click="showPassword = !showPassword">
+                    <EyeIcon v-if="!showPassword" class="size-4" />
+                    <EyeCrossedIcon v-else class="size-4" />
+                  </div>
+                </template>
+              </InputComponent>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="flex flex-col gap-2">
+              <label for="confirm-password" class="block text-sm font-normal text-gray-500"
+                >Konfirmasi Password</label
+              >
+              <InputComponent
+                v-model="confirmPassword"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                placeholder="Ulangi password"
+                iconPlacement="end"
+                :error="!!confirmPasswordError"
+                required
+              >
+                <template #icon-end>
+                  <div @click="showConfirmPassword = !showConfirmPassword">
+                    <EyeIcon v-if="!showConfirmPassword" class="size-4" />
+                    <EyeCrossedIcon v-else class="size-4" />
+                  </div>
+                </template>
+              </InputComponent>
+              <p v-if="confirmPasswordError" class="text-sm text-red-500">
+                {{ confirmPasswordError }}
+              </p>
+            </div>
+
+            <!-- Refferal Code -->
+            <div class="flex flex-col gap-2">
+              <label for="refferal-code" class="block text-sm font-normal text-gray-500">
+                Kode Refferal (Opsional)
+              </label>
+              <InputComponent
+                v-model="refferalCode"
+                type="text"
+                placeholder="Masukkan kode refferal"
               />
             </div>
           </div>
-        </div>
 
-        <!-- Register Button -->
-        <div class="flex flex-col items-center space-y-3">
-          <button
-            @click="handleRegister"
-            type="button"
-            class="bg-lightning-yellow-400 hover:bg-lightning-yellow-500 focus:bg-lightning-yellow-600 inline-flex w-full items-center justify-center gap-x-2 rounded-xl border border-transparent px-4 py-3 text-sm font-medium text-black transition-all hover:cursor-pointer focus:outline-hidden disabled:pointer-events-none disabled:opacity-50"
-          >
-            Register
-          </button>
-          <p class="text-sm text-gray-500">
-            Sudah punya akun?
-            <RouterLink
-              :to="{ name: 'AuthLogin' }"
-              class="hover:text-lightning-yellow-400 underline transition-all hover:cursor-pointer"
+          <!-- Register Button -->
+          <div class="flex flex-col items-center space-y-3">
+            <ButtonComponent
+              :disabled="authStore.loading"
+              type="submit"
+              textColor="black"
+              class="w-full"
             >
-              klik disini untuk login
-            </RouterLink>
-          </p>
-        </div>
+              Register
+            </ButtonComponent>
+          </div>
+        </form>
+      </div>
+      <div class="rounded-xl bg-gray-900 px-5 py-5 text-center">
+        <p class="text-sm text-gray-500">
+          Sudah punya akun?
+          <RouterLink
+            :to="{ name: 'AuthLogin' }"
+            class="hover:text-lightning-yellow-400 underline transition-all hover:cursor-pointer"
+          >
+            klik disini untuk login
+          </RouterLink>
+        </p>
       </div>
     </div>
+    <!-- END : REGISTER FORM -->
   </div>
 </template>

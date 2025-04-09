@@ -42,7 +42,7 @@ const roles = [
           </thead>
           <tbody>
             <tr
-              v-for="user in authStore.allProfiles"
+              v-for="user in authStore.profiles"
               :key="user.id"
               class="border-b border-gray-800 bg-gray-900 hover:bg-gray-800"
             >
