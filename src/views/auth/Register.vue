@@ -26,6 +26,7 @@ const email = ref('');
 const password = ref('');
 const refferalCode = ref('');
 
+// Konfirmasi Password
 const confirmPassword = ref('');
 const confirmPasswordError = ref('');
 
@@ -36,11 +37,6 @@ const showConfirmPassword = ref(false);
 // Fungsi Register
 const handleRegister = async () => {
   confirmPasswordError.value = '';
-
-  if (!password.value || !confirmPassword.value) {
-    confirmPasswordError.value = 'Password tidak boleh kosong';
-    return;
-  }
 
   if (password.value !== confirmPassword.value) {
     confirmPasswordError.value = 'Password tidak cocok';
@@ -159,8 +155,14 @@ onMounted(() => {
               >
                 <template #icon-end>
                   <div @click="showPassword = !showPassword">
-                    <EyeIcon v-if="!showPassword" class="size-4" />
-                    <EyeCrossedIcon v-else class="size-4" />
+                    <EyeIcon
+                      v-if="!showPassword"
+                      class="hover:text-lightning-yellow-400 size-4 transition-all"
+                    />
+                    <EyeCrossedIcon
+                      v-else
+                      class="hover:text-lightning-yellow-400 size-4 transition-all"
+                    />
                   </div>
                 </template>
               </InputComponent>
@@ -181,8 +183,14 @@ onMounted(() => {
               >
                 <template #icon-end>
                   <div @click="showConfirmPassword = !showConfirmPassword">
-                    <EyeIcon v-if="!showConfirmPassword" class="size-4" />
-                    <EyeCrossedIcon v-else class="size-4" />
+                    <EyeIcon
+                      v-if="!showConfirmPassword"
+                      class="hover:text-lightning-yellow-400 size-4 transition-all"
+                    />
+                    <EyeCrossedIcon
+                      v-else
+                      class="hover:text-lightning-yellow-400 size-4 transition-all"
+                    />
                   </div>
                 </template>
               </InputComponent>

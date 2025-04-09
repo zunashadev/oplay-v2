@@ -30,7 +30,10 @@ onMounted(() => {
     >
       <div class="flex items-center justify-between">
         <p class="text-sm font-medium">{{ message }}</p>
-        <button @click="closeAlert" class="rounded-md p-1 transition hover:bg-white/10">
+        <button
+          @click="closeAlert"
+          class="rounded-md p-1 transition hover:cursor-pointer hover:bg-white/20"
+        >
           <CrossIcon class="size-5" />
         </button>
       </div>

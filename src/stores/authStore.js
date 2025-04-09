@@ -124,6 +124,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   // Register
+  // ! Saat ini, ketika sudah sampai tahap pembuatan profile dan gagal, user akan tetap dibuat (ini perlu diperbaiki)
   const register = async (
     email,
     password,
@@ -142,18 +143,20 @@ export const useAuthStore = defineStore('authStore', () => {
     resetMessageState();
 
     try {
-      // Step 1: Register user dengan Supabase Auth
-      const { data, error: registerError } = await supabase.auth.signUp({ email, password });
-      if (registerError) throw registerError;
+      // Validasi username unik sebelum sign up
+      const { data: existingUsername } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', username)
+        .maybeSingle();
 
-      console.log('Pengguna berhasil dibuat:', data.user);
-
-      user.value = data.user;
-      session.value = data.session;
+      if (existingUsername) {
+        throw new Error(`Username "${username}" sudah digunakan`);
+      }
 
       let referrer_id = null;
 
-      // Step 2: Cek referral username jika ada
+      // Validasi referral username sebelum sign up
       if (referral_username) {
         const { data: referrer, error: referrerError } = await supabase
           .from('profiles')
@@ -162,13 +165,22 @@ export const useAuthStore = defineStore('authStore', () => {
           .single();
 
         if (referrerError || !referrer) {
-          console.warn('Referral username tidak ditemukan:', referral_username);
+          throw new Error(`Kode referral "${referral_username}" tidak ditemukan`);
         } else {
           referrer_id = referrer.id;
         }
       }
 
-      // Step 3: Siapkan data profil
+      // Register user dengan Supabase Auth
+      const { data, error: registerError } = await supabase.auth.signUp({ email, password });
+      if (registerError) throw registerError;
+
+      console.log('Pengguna berhasil dibuat:', data.user);
+
+      user.value = data.user;
+      session.value = data.session;
+
+      // Siapkan data profil
       const profilePayload = {
         id: data.user.id,
         name,
@@ -181,7 +193,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
       console.log('Membuat profil dengan payload:', profilePayload);
 
-      // Step 4: Buat profil di database dan langsung ambil data yang dibuat
+      // Buat profil di database dan langsung ambil data yang dibuat
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .insert([profilePayload])
@@ -191,7 +203,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
       if (profileError) throw profileError;
 
-      // Step 5: Gunakan data profil yang baru dibuat (tanpa perlu fetch ulang)
+      // Gunakan data profil yang baru dibuat (tanpa perlu fetch ulang)
       if (profileData && profileData.length > 0) {
         profile.value = profileData[0];
         console.log('Profil yang diambil setelah pembuatan:', profile.value);
