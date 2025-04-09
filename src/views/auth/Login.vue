@@ -77,7 +77,7 @@ onMounted(() => {
 
     <!-- START : LOGIN FORM -->
     <div class="w-full max-w-xl rounded-xl bg-gray-900 px-1 pt-1 shadow-lg">
-      <div class="bg-blue-charcoal-950 space-y-12 rounded-xl px-6 py-8">
+      <div class="bg-blue-charcoal-950 space-y-8 rounded-xl px-6 py-8">
         <div class="space-y-2">
           <h1 class="text-4xl font-semibold">Login</h1>
           <p class="text-base font-normal text-gray-500">
@@ -86,8 +86,12 @@ onMounted(() => {
         </div>
 
         <!-- Error Message -->
-        <p v-if="authStore.message" class="text-red-500">{{ authStore.error }}</p>
-        <p v-if="authStore.error" class="text-red-500">{{ authStore.error }}</p>
+        <template v-if="authStore.error">
+          <div class="flex flex-col gap-1 rounded-md bg-red-500/10 p-3">
+            <p class="text-sm font-medium text-red-500">{{ authStore.message }}</p>
+            <p class="text-xs text-red-500">{{ authStore.error }}</p>
+          </div>
+        </template>
 
         <form @submit.prevent="handleLogin" class="space-y-8">
           <!-- Input Form -->
