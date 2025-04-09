@@ -124,6 +124,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   // Register
+  // ? Kode lumayan panjang karena untuk memastikan registrasi tidak terjadi error
   // ! Saat ini, ketika sudah sampai tahap pembuatan profile dan gagal, user akan tetap dibuat (ini perlu diperbaiki)
   const register = async (
     email,
@@ -143,20 +144,18 @@ export const useAuthStore = defineStore('authStore', () => {
     resetMessageState();
 
     try {
-      // Validasi username unik sebelum sign up
+      // Validasi username unik
       const { data: existingUsername } = await supabase
         .from('profiles')
         .select('id')
         .eq('username', username)
         .maybeSingle();
 
-      if (existingUsername) {
-        throw new Error(`Username "${username}" sudah digunakan`);
-      }
+      if (existingUsername) throw new Error(`Username "${username}" sudah digunakan`);
 
+      // Validasi referral username (apakah ada)
       let referrer_id = null;
 
-      // Validasi referral username sebelum sign up
       if (referral_username) {
         const { data: referrer, error: referrerError } = await supabase
           .from('profiles')
@@ -206,6 +205,7 @@ export const useAuthStore = defineStore('authStore', () => {
       // Gunakan data profil yang baru dibuat (tanpa perlu fetch ulang)
       if (profileData && profileData.length > 0) {
         profile.value = profileData[0];
+
         console.log('Profil yang diambil setelah pembuatan:', profile.value);
 
         handleResponse({ message, error }, 'success', 'mendaftar');
@@ -214,12 +214,13 @@ export const useAuthStore = defineStore('authStore', () => {
         // Jika tidak ada data yang dikembalikan dari insert, coba fetch
         console.log('Tidak ada data profil yang dikembalikan saat insert, mencoba fetch...');
 
-        // Tambahkan delay untuk memastikan database sudah diupdate
+        // Delay untuk memastikan database sudah diupdate
         await new Promise((resolve) => setTimeout(resolve, 800));
 
         // Fetch profil
         try {
           const fetchedProfile = await fetchUserProfile();
+
           if (fetchedProfile) {
             console.log('Berhasil mengambil profil setelah delay:', fetchedProfile);
             return fetchedProfile;
@@ -228,8 +229,10 @@ export const useAuthStore = defineStore('authStore', () => {
           }
         } catch (fetchErr) {
           console.error('Gagal mengambil profil setelah registrasi:', fetchErr);
+
           // Jika gagal fetch, kita tetap memiliki user auth tapi tidak profil
           // Bisa coba logout dan minta user login kembali
+
           await logout();
           throw new Error('Gagal membuat profil pengguna. Silakan coba login kembali.');
         }
@@ -263,6 +266,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   // Update data user (email / password)
+  // ! Ini masih error
   const updateUser = async (newEmail, newPassword) => {
     if (!user.value) {
       const err = new Error('Pengguna tidak terautentikasi');
@@ -289,7 +293,6 @@ export const useAuthStore = defineStore('authStore', () => {
 
       if (updateError) throw updateError;
 
-      // Perbarui state user lokal
       user.value = data.user;
 
       handleResponse({ message, error }, 'success', 'memperbarui data pengguna');
@@ -323,6 +326,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
       if (!data) {
         console.warn('Profil belum tersedia, menunggu...');
+
         // Tunggu sedikit lebih lama dan coba lagi
         await new Promise((resolve) => setTimeout(resolve, 1000));
 

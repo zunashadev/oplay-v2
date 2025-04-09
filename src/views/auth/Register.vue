@@ -98,8 +98,8 @@ onMounted(() => {
     <!-- END : LOGO BRAND -->
 
     <!-- START : REGISTER FORM -->
-    <div class="w-full max-w-xl rounded-xl bg-gray-900 px-1 pt-1 shadow-lg">
-      <div class="bg-blue-charcoal-950 space-y-8 rounded-xl px-6 py-8">
+    <div class="w-full max-w-xl rounded-xl bg-gray-800 px-1 pt-1 shadow-lg">
+      <div class="space-y-8 rounded-xl bg-gray-900 px-6 py-8">
         <div class="space-y-2">
           <h1 class="text-4xl font-semibold">Register</h1>
           <p class="text-base font-normal text-gray-500">
@@ -228,7 +228,7 @@ onMounted(() => {
           </div>
         </form>
       </div>
-      <div class="rounded-xl bg-gray-900 px-5 py-5 text-center">
+      <div class="rounded-xl bg-gray-800 px-5 py-3 text-center">
         <p class="text-sm text-gray-500">
           Sudah punya akun?
           <RouterLink
