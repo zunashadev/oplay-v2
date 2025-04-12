@@ -84,31 +84,33 @@ function closeConfirmOrderModal() {
   <!-- END : Loading -> Page -->
 
   <template v-else>
-    <div class="flex flex-col gap-8 px-24 py-6">
-      <!-- START : DETAIL PRODUCT -->
-      <div v-if="product" class="flex w-full gap-5">
-        <!-- START : LEFT -->
-        <div class="flex w-2/3 flex-col gap-5">
-          <div class="flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-5">
+    <div class="flex flex-col gap-8 px-6 py-6 sm:px-12">
+      <!-- START : Detail Produk -->
+      <div v-if="product" class="flex w-full flex-col gap-5 sm:flex-row">
+        <!-- START : Left -->
+        <div class="flex w-full flex-col gap-5 sm:w-2/3">
+          <div class="flex items-center gap-2 rounded-xl bg-gray-900 px-3 py-3 sm:px-5 sm:py-5">
             <img
               v-if="product.image_url"
               :src="product.image_url"
               alt="Produk"
-              class="max-h-16 w-fit"
+              class="max-h-10 w-fit sm:max-h-16"
             />
             <div class="flex items-center gap-4">
-              <p class="text-4xl font-semibold">{{ product.name }}</p>
-              <p class="bg-lightning-yellow-400 w-fit rounded-sm px-3 py-0.5 text-sm text-black">
+              <p class="text-base font-semibold sm:text-4xl">{{ product.name }}</p>
+              <p
+                class="bg-lightning-yellow-400 w-fit rounded-sm px-3 py-0.5 text-xs text-black sm:text-sm"
+              >
                 {{ product.category }}
               </p>
             </div>
           </div>
           <p class="text-sm font-normal text-white">{{ product.description }}</p>
         </div>
-        <!-- END : LEFT -->
+        <!-- END : Left -->
 
-        <!-- START : RIGHT -->
-        <div class="flex w-1/3 flex-col gap-5 rounded-lg bg-gray-900 px-5 py-5">
+        <!-- START : Right -->
+        <div class="flex w-full flex-col gap-5 rounded-lg bg-gray-900 px-5 py-5 sm:w-1/3">
           <p class="text-xl font-medium">📋 Buat Pesanan</p>
           <!-- Pilih Paket -->
           <div class="flex flex-col gap-3">
@@ -241,13 +243,13 @@ function closeConfirmOrderModal() {
             Buat Pesanan
           </ButtonComponent>
         </div>
-        <!-- END : RIGHT -->
+        <!-- END : Right -->
       </div>
-      <!-- END : DETAIL PRODUCT -->
+      <!-- END : Detail Produk -->
 
-      <!-- START : LOADING -->
+      <!-- START : Loading -->
       <div v-else>Loading...</div>
-      <!-- END : LOADING -->
+      <!-- END : Loading -->
     </div>
   </template>
 </template>
