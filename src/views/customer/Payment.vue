@@ -12,27 +12,33 @@ import { useOrderStore } from '@/stores/orderStore';
 import ButtonComponent from '@/components/buttons/Button.vue';
 import FileInputComponent from '@/components/form/FileInput.vue';
 
+import PaymentSuccessModalComponent from './components/modals/PaymentSuccessModal.vue';
+
 const route = useRoute();
 const router = useRouter();
 
 const orderStore = useOrderStore();
 
-const showSuccessModal = ref(false);
+// Payment Success Modal
+const paymentSuccessModalRef = ref(null);
 
-const redirectToOrders = () => {
-  router.push('/customer'); // Atau bisa ke `/orders/${orderStore.currentOrder.id}`
-};
+function openPaymentSuccessModal() {
+  paymentSuccessModalRef.value.openModal();
+}
+
+function closePaymentSuccessModal() {
+  paymentSuccessModalRef.value.closeModal();
+}
 
 onMounted(async () => {
   const orderId = route.query.orderId;
   if (orderId) {
     await orderStore.fetchOrderById(orderId);
 
-    // Cek bukti pembayaran/status (pilih salah satu), jika sudah maka jangan beri akses atau munculkan modal pemberitahuian dan redirect
     const order = orderStore.currentOrder;
 
-    if (order?.status === 'sukses') {
-      showSuccessModal.value = true;
+    if (order?.payment_proof_image_url !== null && order?.payment_proof_image_url.length > 0) {
+      openPaymentSuccessModal();
     }
   }
 });
@@ -58,6 +64,8 @@ const handleSubmitPaymentProof = async () => {
 </script>
 
 <template>
+  <PaymentSuccessModalComponent ref="paymentSuccessModalRef" />
+
   <div class="flex flex-col gap-8 px-24 pb-12">
     <template v-if="orderStore.loading">
       <div>LOADING...</div>

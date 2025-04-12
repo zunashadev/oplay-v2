@@ -3,6 +3,7 @@ import { ref, watch, onMounted, watchEffect, inject, defineExpose } from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 
 const isOpen = ref(false);
+const emit = defineEmits(['close']);
 
 function openModal() {
   isOpen.value = true;
@@ -10,6 +11,7 @@ function openModal() {
 
 function closeModal() {
   isOpen.value = false;
+  emit('close');
 }
 
 defineExpose({ openModal, closeModal });
