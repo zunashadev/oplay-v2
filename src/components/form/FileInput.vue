@@ -44,7 +44,7 @@ watch(
 </script>
 
 <template>
-  <div class="relative w-full">
+  <div class="relative">
     <label class="block w-full">
       <span class="sr-only">Choose file</span>
       <input

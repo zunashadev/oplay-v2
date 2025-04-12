@@ -19,7 +19,7 @@ const menuItems = ref([
 
 <template>
   <nav class="w-full sm:px-12 sm:pt-4 md:px-20 md:pt-6">
-    <div class="bg-gray-600/25 px-4 py-3 shadow-md backdrop-blur-sm sm:rounded-full">
+    <div class="bg-gray-900/25 px-4 py-3 shadow-md backdrop-blur-sm sm:rounded-full">
       <div class="flex items-center justify-between">
         <!-- START : BRAND -->
         <div class="flex w-60 justify-start">

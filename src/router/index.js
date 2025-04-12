@@ -135,6 +135,16 @@ const router = createRouter({
           },
         },
         {
+          path: 'orders',
+          name: 'AdminDashboardOrders',
+          component: () => import('../views/admin/Orders.vue'),
+          meta: {
+            title: 'Daftar Pesanan',
+            requiresAuth: true,
+            requiredRoles: ['admin'],
+          },
+        },
+        {
           path: 'users',
           name: 'AdminDashboardUsers',
           component: () => import('../views/admin/Users.vue'),

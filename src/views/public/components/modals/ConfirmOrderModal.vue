@@ -40,13 +40,17 @@ defineExpose({ openModal, closeModal });
 
 // Start : ...
 const addOrder = async () => {
-  // Jangan lupa arahkan ke halaman pembayaran
-
-  await orderStore.addOrder(product.value, pkg.value, duration.value, totalPrice.value, 'pending');
+  const newOrder = await orderStore.addOrder(
+    product.value,
+    pkg.value,
+    duration.value,
+    totalPrice.value,
+    'pending',
+  );
 
   closeModal();
 
-  router.push({ name: 'CustomerPayment' });
+  router.push({ name: 'CustomerPayment', query: { orderId: newOrder?.id } });
 };
 // End : ...
 </script>
@@ -54,6 +58,7 @@ const addOrder = async () => {
 <template>
   <DialogModalComponent ref="dialogModalRef" title="Konfirmasi Pesanan">
     <div class="flex flex-col gap-5">
+      <!-- START : Produk -->
       <div class="flex items-center gap-5">
         <img v-if="product.image_url" :src="product.image_url" alt="Produk" class="max-h-12" />
         <div class="flex flex-col gap-1">
@@ -64,6 +69,11 @@ const addOrder = async () => {
           <p class="text-sm text-gray-400">{{ duration.name }}</p>
         </div>
       </div>
+      <!-- END : Produk -->
+
+      <hr class="rounded-full border-gray-800" />
+
+      <!-- START : Detail Pesanan -->
       <div class="flex flex-col gap-5">
         <div class="flex flex-col gap-1">
           <!-- Harga Normal -->
@@ -101,6 +111,8 @@ const addOrder = async () => {
           </div>
         </div>
 
+        <hr class="rounded-full border-gray-800" />
+
         <!-- Total Harga -->
         <div class="flex items-center justify-between">
           <p class="text-sm font-normal text-gray-400">Total Harga</p>
@@ -109,6 +121,7 @@ const addOrder = async () => {
           </p>
         </div>
       </div>
+      <!-- END : Detail Pesanan -->
 
       <div class="flex">
         <ButtonComponent

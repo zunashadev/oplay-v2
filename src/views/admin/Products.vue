@@ -4,17 +4,19 @@ import ListProductsPartial from './partials/ListProducts.vue';
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
-    <!-- START : ADD PRODUCT -->
+  <div class="flex flex-col gap-5">
+    <!-- START : Add Product -->
     <div class="w-full">
       <AddProductPartial />
     </div>
-    <!-- END : ADD PRODUCT -->
+    <!-- END : Add Product -->
 
-    <hr class="border-gray-200" />
+    <hr class="border-gray-800" />
 
-    <!-- START : LIST PRODUCTS -->
-    <ListProductsPartial />
-    <!-- END : LIST PRODUCTS -->
+    <!-- START : List Products -->
+    <div class="w-full">
+      <ListProductsPartial />
+    </div>
+    <!-- END : List Products -->
   </div>
 </template>

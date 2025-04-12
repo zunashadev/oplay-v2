@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**========================================================================
-   *    AVATAR / FILE HANDLING
+   *    FILE HANDLING
    *========================================================================**/
 
   // Upload avatar ke Supabase Storage
@@ -184,6 +184,7 @@ export const useAuthStore = defineStore('authStore', () => {
         id: data.user.id,
         name,
         username,
+        email,
         avatar_url,
         role: 'customer',
         referral_code: username, // Referral code = username pengguna ini

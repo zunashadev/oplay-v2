@@ -15,7 +15,7 @@ const props = defineProps({
   size: {
     type: String,
     default: 'md',
-    validator: (value) => ['sm', 'md', 'lg'].includes(value),
+    validator: (value) => ['xs', 'sm', 'md', 'lg'].includes(value),
   },
   color: {
     type: String,
@@ -47,9 +47,10 @@ const props = defineProps({
 });
 
 const sizeClasses = {
-  sm: 'px-3 py-2 text-xs',
-  md: 'px-4 py-3 text-sm',
-  lg: 'px-5 py-4 text-base',
+  xs: 'px-2 py-1 text-sm',
+  sm: 'px-3 py-1.5 text-sm',
+  md: 'px-4 py-2 text-base',
+  lg: 'px-5 py-2.5 text-base',
 };
 
 const colorMap = computed(() => {
