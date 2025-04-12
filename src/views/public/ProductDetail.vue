@@ -97,7 +97,7 @@ function closeConfirmOrderModal() {
               class="max-h-10 w-fit sm:max-h-16"
             />
             <div class="flex items-center gap-4">
-              <p class="text-base font-semibold sm:text-4xl">{{ product.name }}</p>
+              <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
               <p
                 class="bg-lightning-yellow-400 w-fit rounded-sm px-3 py-0.5 text-xs text-black sm:text-sm"
               >
