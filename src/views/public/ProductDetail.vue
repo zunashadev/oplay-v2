@@ -94,7 +94,7 @@ function closeConfirmOrderModal() {
               v-if="product.image_url"
               :src="product.image_url"
               alt="Produk"
-              class="max-h-10 w-fit sm:max-h-16"
+              class="max-h-12 w-fit sm:max-h-16"
             />
             <div class="flex items-center gap-4">
               <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
