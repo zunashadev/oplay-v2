@@ -28,16 +28,16 @@ const goToDetail = (slug) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8 px-24 py-6">
+  <div class="flex flex-col gap-8 px-6 py-6 sm:px-12">
     <!-- START : Filter -->
     <!-- <div>Filter</div> -->
     <!-- END : Filter -->
 
     <!-- START : List Product -->
     <div
-      class="grid w-full gap-5"
+      class="grid w-full"
       :class="{
-        'grid-cols-4':
+        'grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4':
           productStore.loading || (productStore.products && productStore.products.length),
         'grid-cols-1 place-items-center':
           !productStore.loading && (!productStore.products || !productStore.products.length),
@@ -45,7 +45,7 @@ const goToDetail = (slug) => {
     >
       <!-- Loading -->
       <template v-if="productStore.loading">
-        <ProductCardLoadingSkeletonComponent v-for="n in 4" :key="n" />
+        <ProductCardLoadingSkeletonComponent v-for="n in 10" :key="n" />
       </template>
 
       <!-- Produk -->
