@@ -35,17 +35,19 @@ import ButtonComponent from '@/components/buttons/Button.vue';
     <!-- END : Jumlah Refferal -->
 
     <!-- START : Saldo -->
-    <div class="flex w-full flex-1 items-center justify-between rounded-xl bg-gray-900 px-5 py-5">
+    <div
+      class="flex w-full flex-1 flex-col items-center justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5 sm:flex-row"
+    >
       <!-- Left -->
-      <div class="flex items-center gap-3">
-        <img src="/images/money-bag.png" class="h-8 w-auto" />
-        <p class="font-medium text-white">Saldo</p>
+      <div class="flex w-full items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="/images/money-bag.png" class="h-8 w-auto" />
+          <p class="font-medium text-white">Saldo</p>
+        </div>
+        <p class="text-lightning-yellow-400 text-xl font-medium">Rp. 12.000</p>
       </div>
       <!-- Right -->
-      <div class="flex items-center gap-5">
-        <p class="text-lightning-yellow-400 text-xl font-medium">Rp. 12.000</p>
-        <ButtonComponent textColor="black" size="sm">Gunakan</ButtonComponent>
-      </div>
+      <ButtonComponent textColor="black" size="sm" class="w-full sm:w-min">Gunakan</ButtonComponent>
     </div>
     <!-- END : Saldo -->
   </div>
