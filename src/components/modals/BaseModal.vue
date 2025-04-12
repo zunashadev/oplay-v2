@@ -1,16 +1,19 @@
 <script setup>
 import { ref, watch, onMounted, watchEffect, inject, defineExpose } from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
+import emitter from '@/utils/eventBus';
 
 const isOpen = ref(false);
 const emit = defineEmits(['close']);
 
 function openModal() {
   isOpen.value = true;
+  emitter.emit('modal:open'); // 🔊 Kirim sinyal
 }
 
 function closeModal() {
   isOpen.value = false;
+  emitter.emit('modal:close'); // 🔊 Kirim sinyal
   emit('close');
 }
 

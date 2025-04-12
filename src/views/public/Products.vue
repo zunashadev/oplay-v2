@@ -28,7 +28,7 @@ const goToDetail = (slug) => {
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col gap-8 px-24 py-6">
+  <div class="flex flex-col gap-8 px-24 py-6">
     <!-- START : Filter -->
     <!-- <div>Filter</div> -->
     <!-- END : Filter -->

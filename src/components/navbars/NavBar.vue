@@ -2,7 +2,11 @@
 import { ref, computed } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 
+// Stores
 import { useAuthStore } from '@/stores/authStore';
+
+// Components
+import NavBarProfilePopoverComponent from './NavBarProfilePopover.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -19,7 +23,7 @@ const menuItems = ref([
 
 <template>
   <nav class="w-full sm:px-12 sm:pt-4 md:px-20 md:pt-6">
-    <div class="bg-gray-900/25 px-4 py-3 shadow-md backdrop-blur-sm sm:rounded-full">
+    <div class="bg-black/25 px-4 py-3 shadow-md backdrop-blur-sm sm:rounded-full">
       <div class="flex items-center justify-between">
         <!-- START : BRAND -->
         <div class="flex w-60 justify-start">
@@ -53,32 +57,14 @@ const menuItems = ref([
 
         <!-- START : AUTH -->
         <div class="flex w-60 justify-end">
-          <div v-if="authStore.isAuthenticated" class="flex flex-col space-y-3">
-            <div class="flex w-full items-center gap-3">
-              <div class="w-full">
-                <p class="text-end text-xs">
-                  <strong class="block font-medium text-white">{{ authStore.userName }}</strong>
-                  <strong class="block font-normal text-gray-400">{{ authStore.userRole }}</strong>
-                </p>
-              </div>
-
-              <RouterLink :to="{ name: 'AdminDashboardHome' }" class="flex-none">
-                <img
-                  v-if="authStore.profile && authStore.profile?.avatar_url"
-                  alt="User Avatar"
-                  :src="authStore.profile.avatar_url"
-                  class="size-10 rounded-full object-cover"
-                />
-                <img
-                  v-else
-                  alt="User Avatar"
-                  src="/images/avatar.jpg"
-                  class="size-10 rounded-full object-cover"
-                />
-              </RouterLink>
-            </div>
-          </div>
-          <div v-else>
+          <!-- Authenticated -->
+          <template v-if="authStore.isAuthenticated">
+            <!-- START : Profile Popover -->
+            <NavBarProfilePopoverComponent />
+            <!-- END : Profile Popover -->
+          </template>
+          <!-- Not Authenticated -->
+          <template v-else>
             <div class="flex items-center gap-2">
               <RouterLink :to="{ name: 'AuthRegister' }">
                 <button
@@ -97,7 +83,7 @@ const menuItems = ref([
                 </button>
               </RouterLink>
             </div>
-          </div>
+          </template>
         </div>
         <!-- END : AUTH -->
       </div>
