@@ -86,9 +86,9 @@ function closeConfirmOrderModal() {
   <template v-else>
     <div class="flex flex-col gap-8 px-6 py-6 sm:px-12">
       <!-- START : Detail Produk -->
-      <div v-if="product" class="flex w-full flex-col gap-5 sm:flex-row">
+      <div v-if="product" class="flex w-full flex-col gap-5 md:flex-row">
         <!-- START : Left -->
-        <div class="flex w-full flex-col gap-5 sm:w-2/3">
+        <div class="flex w-full flex-col gap-5 md:w-2/3">
           <div class="flex items-center gap-3 rounded-xl bg-gray-900 px-3 py-3 sm:px-5 sm:py-5">
             <img
               v-if="product.image_url"
@@ -110,7 +110,7 @@ function closeConfirmOrderModal() {
         <!-- END : Left -->
 
         <!-- START : Right -->
-        <div class="flex w-full flex-col gap-5 rounded-lg bg-gray-900 px-5 py-5 sm:w-1/3">
+        <div class="flex w-full flex-col gap-5 rounded-lg bg-gray-900 px-5 py-5 md:w-1/3">
           <p class="text-xl font-medium">📋 Buat Pesanan</p>
           <!-- Pilih Paket -->
           <div class="flex flex-col gap-3">

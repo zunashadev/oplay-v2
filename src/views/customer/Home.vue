@@ -18,9 +18,9 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-5 px-24 pb-12">
     <!-- START : ... -->
-    <div class="w-full">
+    <!-- <div class="w-full">
       <UserProfilePartial />
-    </div>
+    </div> -->
     <!-- END : ... -->
 
     <!-- START : Overview -->
