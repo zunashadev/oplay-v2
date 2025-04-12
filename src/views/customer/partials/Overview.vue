@@ -3,7 +3,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
 </script>
 
 <template>
-  <div class="flex w-full items-stretch gap-5">
+  <div class="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:gap-5">
     <!-- START : Jumlah Akun Aktif -->
     <div class="flex w-full flex-1 items-center justify-between rounded-xl bg-gray-900 px-5 py-5">
       <!-- Left -->
