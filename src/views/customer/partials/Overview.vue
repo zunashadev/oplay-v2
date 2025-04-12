@@ -36,7 +36,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
 
     <!-- START : Saldo -->
     <div
-      class="flex w-full flex-1 flex-col items-center justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5 sm:flex-row"
+      class="flex w-full flex-1 flex-col items-center justify-between gap-4 rounded-xl bg-gray-900 px-5 py-5 sm:flex-row sm:gap-3"
     >
       <!-- Left -->
       <div class="flex w-full items-center justify-between">
