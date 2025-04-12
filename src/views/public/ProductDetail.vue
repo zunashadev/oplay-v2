@@ -89,14 +89,14 @@ function closeConfirmOrderModal() {
       <div v-if="product" class="flex w-full flex-col gap-5 sm:flex-row">
         <!-- START : Left -->
         <div class="flex w-full flex-col gap-5 sm:w-2/3">
-          <div class="flex items-center gap-2 rounded-xl bg-gray-900 px-3 py-3 sm:px-5 sm:py-5">
+          <div class="flex items-center gap-3 rounded-xl bg-gray-900 px-3 py-3 sm:px-5 sm:py-5">
             <img
               v-if="product.image_url"
               :src="product.image_url"
               alt="Produk"
-              class="max-h-12 w-fit sm:max-h-16"
+              class="max-h-16 w-fit sm:max-h-16"
             />
-            <div class="flex items-center gap-4">
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
               <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
               <p
                 class="bg-lightning-yellow-400 w-fit rounded-sm px-3 py-0.5 text-xs text-black sm:text-sm"
