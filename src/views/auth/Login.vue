@@ -53,14 +53,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- START : LOADER -->
-  <div
-    v-if="authStore.loading"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs"
-  >
-    <WaveLoaderComponent />
-  </div>
-  <!-- END : LOADER -->
+  <!-- START : Loading -> Page -->
+  <template v-if="authStore.loading">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs">
+      <WaveLoaderComponent />
+    </div>
+  </template>
+  <!-- END : Loading -> Page -->
 
   <div class="relative flex min-h-screen w-full items-center justify-center px-5 py-5">
     <!-- START : LOGO BRAND -->
