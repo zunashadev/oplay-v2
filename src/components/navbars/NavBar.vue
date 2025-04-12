@@ -1,32 +1,20 @@
 <script setup>
-import { ref, computed } from 'vue';
-import { RouterLink, useRouter, useRoute } from 'vue-router';
-
 // Stores
 import { useAuthStore } from '@/stores/authStore';
 
 // Components
-import NavBarProfilePopoverComponent from './NavBarProfilePopover.vue';
+import NavbarMenuComponent from './NavbarMenu.vue';
+import NavBarProfileComponent from './NavBarProfile.vue';
 
-const router = useRouter();
-const route = useRoute();
 const authStore = useAuthStore();
-
-// START : MENU
-const menuItems = ref([
-  { name: 'Beranda', link: 'PublicHome' },
-  { name: 'Produk', link: 'PublicProducts' },
-  { name: 'FAQ', link: 'PublicFAQ' },
-]);
-// END : MENU
 </script>
 
 <template>
   <nav class="w-full sm:px-12 sm:pt-4 md:px-20 md:pt-6">
     <div class="bg-black/25 px-4 py-3 shadow-md backdrop-blur-sm sm:rounded-full">
       <div class="flex items-center justify-between">
-        <!-- START : BRAND -->
-        <div class="flex w-60 justify-start">
+        <!-- START : Brand -->
+        <div class="order-2 ml-3 flex w-60 justify-start md:order-1 md:ml-0">
           <RouterLink
             :to="{ name: 'PublicHome' }"
             class="flex items-center space-x-1 px-2 sm:space-x-2"
@@ -35,32 +23,20 @@ const menuItems = ref([
             <p class="text-xl font-semibold text-white sm:text-2xl">OPLAY</p>
           </RouterLink>
         </div>
-        <!-- END : BRAND -->
+        <!-- END : Brand -->
 
-        <!-- START : MENU CONTENT -->
-        <div class="flex items-center gap-2">
-          <div v-for="(menu, index) in menuItems" :key="index">
-            <RouterLink
-              :to="{ name: menu.link }"
-              class="hover:text-lightning-yellow-400 px-4 py-1.5 font-medium transition-all hover:cursor-pointer"
-              :class="
-                route.name === menu.link
-                  ? 'rounded-2xl bg-white/10 text-white'
-                  : 'rounded-md text-white'
-              "
-            >
-              {{ menu.name }}
-            </RouterLink>
-          </div>
+        <!-- START : Menu -->
+        <div class="order-1 md:order-2">
+          <NavbarMenuComponent />
         </div>
-        <!-- END : MENU CONTENT -->
+        <!-- END : Menu -->
 
-        <!-- START : AUTH -->
-        <div class="flex w-60 justify-end">
+        <!-- START : Auth -->
+        <div class="order-3 flex w-60 justify-end">
           <!-- Authenticated -->
           <template v-if="authStore.isAuthenticated">
             <!-- START : Profile Popover -->
-            <NavBarProfilePopoverComponent />
+            <NavBarProfileComponent />
             <!-- END : Profile Popover -->
           </template>
           <!-- Not Authenticated -->
@@ -85,7 +61,7 @@ const menuItems = ref([
             </div>
           </template>
         </div>
-        <!-- END : AUTH -->
+        <!-- END : Auth -->
       </div>
     </div>
   </nav>
