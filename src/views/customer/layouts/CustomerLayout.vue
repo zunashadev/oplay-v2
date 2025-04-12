@@ -13,7 +13,7 @@ import NavBarPartial from '@/components/navbars/NavBar.vue';
     <!-- END : NAVBAR -->
 
     <!-- START : MAIN CONTENT -->
-    <div class="pt-28">
+    <div class="pt-20 sm:pt-28">
       <RouterView />
     </div>
     <!-- END : MAIN CONTENT -->

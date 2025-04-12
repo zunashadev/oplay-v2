@@ -17,6 +17,12 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-5 px-6 pb-12 sm:px-12">
+    <!-- START : Notification ... -->
+    <div class="w-full">
+      <NotificationPartial />
+    </div>
+    <!-- END : Notification -->
+
     <!-- START : ... -->
     <!-- <div class="w-full">
       <UserProfilePartial />
@@ -28,12 +34,6 @@ onMounted(() => {
       <OverviewPartial />
     </div>
     <!-- END : Overview -->
-
-    <!-- START : Notification ... -->
-    <div class="w-full">
-      <NotificationPartial />
-    </div>
-    <!-- END : Notification -->
 
     <!-- START : ... -->
     <div class="w-full">
