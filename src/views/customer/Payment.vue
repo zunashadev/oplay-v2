@@ -87,33 +87,33 @@ onMounted(async () => {
 
     <template v-else>
       <template v-if="orderStore.currentOrder">
-        <div class="flex flex-col gap-10 sm:gap-16">
+        <div class="flex flex-col gap-10 sm:gap-12">
           <!-- START : Nominal Yang Harus Dibayar -->
-          <div
-            class="border-lightning-yellow-400 flex flex-col items-center gap-2 rounded-xl border bg-gray-900 px-5 py-5"
-          >
-            <p>Nominal yang harus dibayar:</p>
-            <p class="text-lightning-yellow-400 text-4xl font-semibold">
-              {{ formatRupiah(orderStore.currentOrder.total_price) }}
-            </p>
-          </div>
-          <!-- END : Nominal Yang Harus Dibayar -->
-
-          <!-- START : Cara Pembayaran -->
-          <div
-            class="bg-lightning-yellow-400/25 border-lightning-yellow-400 rounded-lg border px-3 py-3"
-          >
-            <div class="flex gap-3">
-              <div class="flex-none">
-                <TriangleWarningIcon class="text-lightning-yellow-400 size-5" />
-              </div>
-              <p class="text-lightning-yellow-400 text-xs">
-                Pilih salah satu metode pembayaran, lalu kirim bukti pembayaran melalui form yang
-                disediakan di bawah .
+          <div class="flex flex-col gap-3">
+            <div
+              class="border-lightning-yellow-400 flex flex-col items-center gap-2 rounded-xl border bg-gray-900 px-5 py-5"
+            >
+              <p>Nominal yang harus dibayar:</p>
+              <p class="text-lightning-yellow-400 text-4xl font-semibold">
+                {{ formatRupiah(orderStore.currentOrder.total_price) }}
               </p>
             </div>
+            <div
+              class="bg-lightning-yellow-400/25 border-lightning-yellow-400 rounded-lg border px-3 py-3"
+            >
+              <div class="flex gap-3">
+                <div class="flex-none">
+                  <TriangleWarningIcon class="text-lightning-yellow-400 size-5" />
+                </div>
+                <p class="text-lightning-yellow-400 text-xs">
+                  Pilih salah satu metode pembayaran, lalu kirim bukti pembayaran melalui form yang
+                  disediakan di bawah .
+                </p>
+              </div>
+            </div>
           </div>
-          <!-- END : Cara Pembayaran -->
+
+          <!-- END : Nominal Yang Harus Dibayar -->
 
           <!-- START : Daftar Metode Pembayaran -->
           <div class="flex flex-col gap-5">
