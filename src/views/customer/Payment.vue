@@ -101,7 +101,7 @@ onMounted(async () => {
             <div
               class="bg-lightning-yellow-400/25 border-lightning-yellow-400 rounded-lg border px-3 py-3"
             >
-              <div class="flex gap-3">
+              <div class="flex items-center gap-3">
                 <div class="flex-none">
                   <TriangleWarningIcon class="text-lightning-yellow-400 size-5" />
                 </div>
