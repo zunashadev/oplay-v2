@@ -8,10 +8,12 @@ import { usePaymentMethodStore } from '@/stores/paymentMethodStore';
 import ButtonComponent from '@/components/buttons/Button.vue';
 import InputComponent from '@/components/form/Input.vue';
 import FileInputComponent from '@/components/form/FileInput.vue';
+import SelectComponent from '@/components/form/Select.vue';
 import TableComponent from '@/components/tables/Table.vue';
 
 // Icons
 import EyeSolidIcon from '@/components/icons/EyeSolid.vue';
+import PenSquareSolidIcon from '@/components/icons/PenSquareSolid.vue';
 import TrashSolidIcon from '@/components/icons/TrashSolid.vue';
 
 const paymentMethodStore = usePaymentMethodStore();
@@ -24,6 +26,12 @@ const account_number = ref(null);
 const qr_code_file = ref(null);
 const logo_file = ref(null);
 const is_active = ref(true);
+
+const paymentMethodTypes = [
+  { label: 'E-wallet', value: 'e-wallet' },
+  { label: 'Bank', value: 'bank' },
+  { label: 'Qris', value: 'qris' },
+];
 
 const addPaymentMethod = async () => {
   if (!name.value || !type.value || !account_name.value || !logo_file.value)
@@ -58,14 +66,11 @@ onMounted(() => {
 });
 
 const paymentMethodTableColums = [
-  { label: 'Nama', key: 'name' },
+  { label: 'Nama', key: 'custom-name' }, // Custom
   { label: 'Tipe', key: 'type' },
   { label: 'Nama Akun', key: 'account_name' },
   { label: 'Nomor Akun', key: 'account_number' },
-
   { label: 'QR Code', key: 'custom-qr-code', align: 'center' }, // Custom
-  { label: 'Logo', key: 'custom-logo', align: 'center' }, // Custom
-
   { label: 'Action', key: 'action', align: 'right' }, // Custom
 ];
 // END : Menampilkan Daftar Metode Pembayaran
@@ -93,12 +98,11 @@ const paymentMethodTableColums = [
               required
             />
             <!-- Tipe -->
-            <InputComponent
+            <SelectComponent
               v-model="type"
-              label="Tipe"
-              placeholder="Masukkan tipe metode pembayaran"
-              required
-            />
+              :options="paymentMethodTypes"
+              placeholder="Pilih jenis metode pembayaran"
+            ></SelectComponent>
             <!-- Nama Akun -->
             <InputComponent
               v-model="account_name"
@@ -129,25 +133,23 @@ const paymentMethodTableColums = [
     <!-- START : Daftar Metode Pembayaran -->
     <div>
       <TableComponent :columns="paymentMethodTableColums" :data="paymentMethodStore.paymentMethods">
+        <!-- Nama -->
+        <template #cell-custom-name="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="flex-none">
+              <img v-if="row.logo_image_url" :src="row.logo_image_url" alt="Logo" class="max-h-8" />
+            </div>
+            <p class="text-base font-medium">{{ row.name }}</p>
+          </div>
+        </template>
         <!-- QR Code -->
         <template #cell-custom-qr-code="{ row }">
-          <div class="flex-none">
+          <div class="flex flex-none items-center justify-center">
             <img
               v-if="row.qr_code_image_url"
               :src="row.qr_code_image_url"
               alt="QR Code"
-              class="size-10 rounded-full object-cover"
-            />
-          </div>
-        </template>
-        <!-- Logo -->
-        <template #cell-custom-logo="{ row }">
-          <div class="flex-none">
-            <img
-              v-if="row.logo_image_url"
-              :src="row.logo_image_url"
-              alt="Logo"
-              class="size-10 rounded-full object-cover"
+              class="max-h-10"
             />
           </div>
         </template>
@@ -156,6 +158,9 @@ const paymentMethodTableColums = [
           <div class="flex justify-end gap-2">
             <ButtonComponent size="xs" textColor="black" color="green">
               <EyeSolidIcon class="size-4" />
+            </ButtonComponent>
+            <ButtonComponent size="xs" textColor="black" color="lightning-yellow">
+              <PenSquareSolidIcon class="size-4" />
             </ButtonComponent>
             <ButtonComponent
               @click="paymentMethodStore.deletePaymentMethod(row.id)"

@@ -21,7 +21,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
   const error = ref(null);
 
   //   Computed
-  //   ...
+  // ...
 
   /**========================================================================
    *    UTILITY FUNCTIONS
@@ -31,6 +31,11 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
   const resetMessageState = () => {
     message.value = null;
     error.value = null;
+  };
+
+  //   Get Payment Methods by Type
+  const filterPaymentMethodsByType = (type) => {
+    return paymentMethods.value.filter((pm) => pm.type === type);
   };
 
   /**========================================================================
@@ -294,6 +299,9 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     paymentMethod,
 
     resetMessageState,
+
+    filterPaymentMethodsByType,
+
     fetchPaymentMethods,
     fetchPaymentMethodById,
     addPaymentMethod,

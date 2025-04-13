@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { formatRupiah } from '@/utils/format';
@@ -7,6 +7,7 @@ import { calculateFinalPrice } from '@/utils/priceCalculator';
 
 // Stores
 import { useOrderStore } from '@/stores/orderStore';
+import { usePaymentMethodStore } from '@/stores/paymentMethodStore';
 
 // Components
 import ButtonComponent from '@/components/buttons/Button.vue';
@@ -18,6 +19,13 @@ const route = useRoute();
 const router = useRouter();
 
 const orderStore = useOrderStore();
+const paymentMethodStore = usePaymentMethodStore();
+
+const eWalletPaymentMethods = computed(() =>
+  paymentMethodStore.filterPaymentMethodsByType('e-wallet'),
+);
+const bankPaymentMethods = computed(() => paymentMethodStore.filterPaymentMethodsByType('bank'));
+const qrisPaymentMethods = computed(() => paymentMethodStore.filterPaymentMethodsByType('qris'));
 
 // Payment Success Modal
 const paymentSuccessModalRef = ref(null);
@@ -29,19 +37,6 @@ function openPaymentSuccessModal() {
 function closePaymentSuccessModal() {
   paymentSuccessModalRef.value.closeModal();
 }
-
-onMounted(async () => {
-  const orderId = route.query.orderId;
-  if (orderId) {
-    await orderStore.fetchOrderById(orderId);
-
-    const order = orderStore.currentOrder;
-
-    if (order?.payment_proof_image_url !== null && order?.payment_proof_image_url.length > 0) {
-      openPaymentSuccessModal();
-    }
-  }
-});
 
 // Unggah Bukti Pembayaran
 const file = ref(null);
@@ -61,6 +56,22 @@ const handleSubmitPaymentProof = async () => {
     file.value = null;
   }
 };
+
+// On Mounted
+onMounted(async () => {
+  const orderId = route.query.orderId;
+  if (orderId) {
+    await orderStore.fetchOrderById(orderId);
+
+    const order = orderStore.currentOrder;
+
+    if (order?.payment_proof_image_url !== null && order?.payment_proof_image_url.length > 0) {
+      openPaymentSuccessModal();
+    }
+  }
+
+  paymentMethodStore.fetchPaymentMethods();
+});
 </script>
 
 <template>
@@ -92,62 +103,99 @@ const handleSubmitPaymentProof = async () => {
             <!--  -->
             <div class="flex flex-col gap-3">
               <!-- E-Wallet -->
-              <div class="flex flex-col gap-3">
-                <p class="text-base font-medium text-gray-500">E-Wallet</p>
-                <div
-                  class="flex justify-between rounded-xl border border-gray-800 bg-gray-900 px-5 py-3"
-                >
-                  <div class="flex items-center gap-3">
-                    <div>LOGO</div>
-                    <p>Link Aja</p>
+              <template v-if="eWalletPaymentMethods && eWalletPaymentMethods.length">
+                <div class="flex flex-col gap-3">
+                  <p class="text-base font-medium text-gray-500">E-Wallet</p>
+                  <div
+                    v-for="item in eWalletPaymentMethods"
+                    :key="item.id"
+                    class="flex justify-between rounded-xl border border-gray-800 bg-gray-900 px-5 py-3"
+                  >
+                    <div class="flex items-center gap-3">
+                      <div class="flex-none">
+                        <img
+                          v-if="item.logo_image_url"
+                          :src="item.logo_image_url"
+                          alt="Logo"
+                          class="max-h-6"
+                        />
+                      </div>
+                      <p class="text-sm">{{ item.name }}</p>
+                    </div>
+                    <div>
+                      <p class="flex gap-2 text-sm">
+                        {{ item.account_number }}
+                        <span class="text-sm text-gray-500">({{ item.account_name }})</span>
+                      </p>
+                    </div>
                   </div>
-                  <p>081906157620</p>
                 </div>
-                <div
-                  class="flex justify-between rounded-xl border border-gray-800 bg-gray-900 px-5 py-3"
-                >
-                  <div class="flex items-center gap-3">
-                    <div>LOGO</div>
-                    <p>Dana</p>
-                  </div>
-                  <p>081906157620</p>
-                </div>
-              </div>
+              </template>
+
               <!-- Bank -->
-              <div class="flex flex-col gap-3">
-                <p class="text-base font-medium text-gray-500">Bank</p>
-                <div
-                  class="flex justify-between rounded-xl border border-gray-800 bg-gray-900 px-5 py-3"
-                >
-                  <div class="flex items-center gap-3">
-                    <div>LOGO</div>
-                    <p>Mandiri (a/n FAISHAL AMMAR DWI WIJAYA)</p>
+              <template v-if="bankPaymentMethods && bankPaymentMethods.length">
+                <div class="flex flex-col gap-3">
+                  <p class="text-base font-medium text-gray-500">Bank</p>
+                  <div
+                    v-for="item in bankPaymentMethods"
+                    :key="item.id"
+                    class="flex justify-between rounded-xl border border-gray-800 bg-gray-900 px-5 py-3"
+                  >
+                    <div class="flex items-center gap-3">
+                      <div class="flex-none">
+                        <img
+                          v-if="item.logo_image_url"
+                          :src="item.logo_image_url"
+                          alt="Logo"
+                          class="max-h-6"
+                        />
+                      </div>
+                      <p class="text-sm">{{ item.name }}</p>
+                    </div>
+                    <div>
+                      <p class="flex gap-2 text-sm">
+                        {{ item.account_number }}
+                        <span class="text-sm text-gray-500">({{ item.account_name }})</span>
+                      </p>
+                    </div>
                   </div>
-                  <p>1431432413jhkjhkh</p>
                 </div>
-                <div
-                  class="flex justify-between rounded-xl border border-gray-800 bg-gray-900 px-5 py-3"
-                >
-                  <div class="flex items-center gap-3">
-                    <div>LOGO</div>
-                    <p>Mandiri (a/n FAISHAL AMMAR DWI WIJAYA)</p>
-                  </div>
-                  <p>1431432413jhkjhkh</p>
-                </div>
-              </div>
+              </template>
+
               <!-- QRIS -->
-              <div class="flex flex-col gap-3">
-                <p class="text-base font-medium text-gray-500">QRIS</p>
-                <div
-                  class="flex justify-between rounded-xl border border-gray-800 bg-gray-900 px-5 py-3"
-                >
-                  <div class="flex items-center gap-3">
-                    <!-- <div>LOGO</div> -->
-                    <p>Ini belum tau</p>
+              <template v-if="qrisPaymentMethods && qrisPaymentMethods.length">
+                <div class="flex flex-col gap-3">
+                  <p class="text-base font-medium text-gray-500">QRIS</p>
+                  <div
+                    v-for="item in qrisPaymentMethods"
+                    :key="item.id"
+                    class="flex justify-between rounded-xl border border-gray-800 bg-gray-900 px-5 py-3"
+                  >
+                    <div class="flex items-center gap-3">
+                      <div class="flex-none">
+                        <img
+                          v-if="item.logo_image_url"
+                          :src="item.logo_image_url"
+                          alt="Logo"
+                          class="max-h-6"
+                        />
+                      </div>
+                      <p class="text-sm">{{ item.name }}</p>
+                    </div>
+                    <div class="flex flex-col items-center gap-3">
+                      <div class="flex-none">
+                        <img
+                          v-if="item.qr_code_image_url"
+                          :src="item.qr_code_image_url"
+                          alt="Logo"
+                          class="max-h-24"
+                        />
+                      </div>
+                      <p class="text-sm text-gray-500">({{ item.account_name }}</p>
+                    </div>
                   </div>
-                  <!-- <p>1431432413jhkjhkh</p> -->
                 </div>
-              </div>
+              </template>
             </div>
           </div>
           <!--  -->
