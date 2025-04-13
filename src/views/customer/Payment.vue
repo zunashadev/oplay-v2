@@ -85,7 +85,7 @@ onMounted(async () => {
     <template v-else>
       <template v-if="orderStore.currentOrder">
         <div class="flex flex-col gap-10 sm:gap-16">
-          <!--  -->
+          <!-- START : Nominal Yang Harus Dibayar -->
           <div
             class="border-lightning-yellow-400 flex flex-col items-center gap-2 rounded-xl border bg-gray-900 px-5 py-5"
           >
@@ -94,7 +94,20 @@ onMounted(async () => {
               {{ formatRupiah(orderStore.currentOrder.total_price) }}
             </p>
           </div>
-          <!--  -->
+          <!-- END : Nominal Yang Harus Dibayar -->
+
+          <!-- START : Cara Pembayaran -->
+          <div
+            class="bg-lightning-yellow-400/25 border-lightning-yellow-400 rounded-lg border px-3 py-3"
+          >
+            <p class="text-lightning-yellow-400 text-xs">
+              Pilih salah satu metode pembayaran, lalu kirim bukti pembayaran melalui form yang
+              disediakan di bawah .
+            </p>
+          </div>
+          <!-- END : Cara Pembayaran -->
+
+          <!-- START : Daftar Metode Pembayaran -->
           <div class="flex flex-col gap-5">
             <!--  -->
             <div class="flex items-center gap-3">
@@ -199,7 +212,9 @@ onMounted(async () => {
               </template>
             </div>
           </div>
-          <!--  -->
+          <!-- END : Daftar Metode Pembayaran -->
+
+          <!-- START : Unggah Bukti Pembayaran -->
           <div class="flex flex-col gap-5">
             <!--  -->
             <div class="flex items-center gap-3">
@@ -229,6 +244,7 @@ onMounted(async () => {
               Bayar nanti dan kembali ke halaman produk
             </p>
           </div>
+          <!-- END : Unggah Bukti Pembayaran -->
         </div>
       </template>
       <template v-else>
