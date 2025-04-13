@@ -177,7 +177,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     account_number = null,
     qr_code_file = null,
     logo_file = null,
-    is_active,
+    is_active = true,
   ) => {
     loading.value = true;
     resetMessageState();
@@ -192,6 +192,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       //   Upload gambar QR Code
       let qr_code_image_url = null;
       if (qr_code_file) {
+        console.log('mulai upload qr code');
         qr_code_image_url = await uploadQRCodeImage(qr_code_file);
         if (!qr_code_image_url) return;
       }
@@ -199,6 +200,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       //   Upload gambar Logo
       let logo_image_url = null;
       if (logo_file) {
+        console.log('mulai upload logo');
         logo_image_url = await uploadLogoImage(logo_file);
         if (!logo_image_url) return;
       }
@@ -232,6 +234,57 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     }
   };
 
+  //   Delete Payment Method
+  const deletePaymentMethod = async (id) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      // Ambil data payment method berdasarkan ID
+      const { data: paymentMethod, error: fetchError } = await supabase
+        .from('payment_methods')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Hapus gambar QR Code jika ada
+      if (paymentMethod?.qr_code_image_url) {
+        const QRCodeImageDeleted = await deleteQRCodeImage(paymentMethod.qr_code_image_url);
+
+        if (!QRCodeImageDeleted) {
+          console.error('Gagal menghapus gambar QR Code, metode pembayaran tidak akan dihapus.');
+          return;
+        }
+      }
+
+      // Hapus gambar Logo jika ada
+      if (paymentMethod?.logo_image_url) {
+        const logoImageDeleted = await deleteLogoImage(paymentMethod.logo_image_url);
+
+        if (!logoImageDeleted) {
+          console.error('Gagal menghapus gambar Logo, metode pembayaran tidak akan dihapus.');
+          return;
+        }
+      }
+
+      // Hapus metode pembayaran dari database
+      const { error: deleteError } = await supabase.from('payment_methods').delete().eq('id', id);
+
+      if (deleteError) throw deleteError;
+
+      // Hapus metode pembayaran dari state lokal
+      paymentMethods.value = paymentMethods.value.filter((pm) => pm.id !== id);
+
+      handleResponse({ message, error }, 'success', 'menghapus metode pembayaran');
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'menghapus metode pembayaran', err);
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     loading,
     message,
@@ -244,5 +297,6 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     fetchPaymentMethods,
     fetchPaymentMethodById,
     addPaymentMethod,
+    deletePaymentMethod,
   };
 });

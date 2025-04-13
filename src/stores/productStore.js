@@ -228,6 +228,7 @@ export const useProductStore = defineStore('productStore', () => {
 
     try {
       // Ambil produk berdasarkan ID
+      // ! bagian select coba dipertimbangin lagi, hanya butuh image_url atau butuh semua data
       const { data: product, error: fetchError } = await supabase
         .from('products')
         .select('image_url')

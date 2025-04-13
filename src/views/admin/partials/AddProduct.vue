@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue';
+
+// Stores
 import { useProductStore } from '@/stores/productStore';
 
+// Components
 import ButtonComponent from '@/components/buttons/Button.vue';
 import InputComponent from '@/components/form/Input.vue';
 import TextAreaComponent from '@/components/form/TextArea.vue';
@@ -16,6 +19,7 @@ const file = ref(null);
 
 const addProduct = async () => {
   if (!name.value || !category.value || !file.value) return alert('Isi semua field!');
+
   await productStore.addProduct(name.value, category.value, description.value, file.value);
 
   // Reset Form
@@ -34,15 +38,25 @@ const addProduct = async () => {
 
     <div class="px-5 py-5">
       <form @submit.prevent="addProduct" class="flex flex-col gap-5">
-        <div class="flex flex-col gap-2">
-          <!-- Name -->
-          <InputComponent v-model="name" placeholder="Masukkan nama produk" required />
-          <!-- Category -->
-          <InputComponent v-model="category" placeholder="Masukkan kategori produk" required />
-          <!-- Description -->
-          <TextAreaComponent v-model="description" placeholder="Masukkan deskripsi" required />
+        <div class="flex flex-col gap-5">
+          <!-- Nama -->
+          <InputComponent v-model="name" label="Nama" placeholder="Masukkan nama produk" required />
+          <!-- Kategori -->
+          <InputComponent
+            v-model="category"
+            label="Kategori"
+            placeholder="Masukkan kategori produk"
+            required
+          />
+          <!-- Deskripsi -->
+          <TextAreaComponent
+            v-model="description"
+            label="Deskripsi"
+            placeholder="Masukkan deskripsi"
+            required
+          />
           <!-- File -->
-          <FileInputComponent v-model="file" required class="mt-3" />
+          <FileInputComponent v-model="file" label="Logo Produk" required />
         </div>
 
         <ButtonComponent type="submit" variant="solid" textColor="black">

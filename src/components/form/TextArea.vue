@@ -1,6 +1,10 @@
 <script setup>
 defineProps({
   modelValue: String,
+  label: {
+    type: String,
+    default: '',
+  },
   placeholder: {
     type: String,
     default: 'Enter your message...',
@@ -32,6 +36,13 @@ const emit = defineEmits(['update:modelValue']);
 
 <template>
   <div class="relative w-full">
+    <!-- Label -->
+    <label v-if="label" class="mb-1 block text-sm text-gray-500">
+      {{ label }}
+      <span v-if="required" class="text-red-500">*</span>
+    </label>
+
+    <!-- Text Area -->
     <textarea
       :rows="rows"
       :placeholder="placeholder"

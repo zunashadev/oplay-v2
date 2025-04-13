@@ -145,6 +145,16 @@ const router = createRouter({
           },
         },
         {
+          path: 'payment-methods',
+          name: 'AdminDashboardPaymentMethods',
+          component: () => import('../views/admin/PaymentMethods.vue'),
+          meta: {
+            title: 'Metode Pembayaran',
+            requiresAuth: true,
+            requiredRoles: ['admin'],
+          },
+        },
+        {
           path: 'users',
           name: 'AdminDashboardUsers',
           component: () => import('../views/admin/Users.vue'),

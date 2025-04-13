@@ -3,6 +3,10 @@ import { ref, watch } from 'vue';
 
 const props = defineProps({
   modelValue: File,
+  label: {
+    type: String,
+    default: '',
+  },
   accept: {
     type: String,
     default: '',
@@ -28,6 +32,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const inputRef = ref(null);
 
+const inputId = `file-input-${Math.random().toString(36).substr(2, 9)}`;
+
 function handleChange(event) {
   const file = event.target.files?.[0] || null;
   emit('update:modelValue', file);
@@ -45,6 +51,13 @@ watch(
 
 <template>
   <div class="relative">
+    <!-- Label -->
+    <label v-if="label" :for="inputId" class="mb-1 block text-sm text-gray-500">
+      {{ label }}
+      <span v-if="required" class="text-red-500">*</span>
+    </label>
+
+    <!-- File Input -->
     <label class="block w-full">
       <span class="sr-only">Choose file</span>
       <input

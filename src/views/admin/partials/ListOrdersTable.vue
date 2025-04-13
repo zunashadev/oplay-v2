@@ -12,7 +12,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
 import SelectComponent from '@/components/form/Select.vue';
 
 // Icons
-import EyeIcon from '@/components/icons/Eye.vue';
+import EyeSolidIcon from '@/components/icons/EyeSolid.vue';
 import TrashSolidIcon from '@/components/icons/TrashSolid.vue';
 
 const orderStore = useOrderStore();
@@ -191,8 +191,8 @@ const status = [
           Delete
         </button> -->
         <div class="flex gap-2">
-          <ButtonComponent size="xs" textColor="black" color="lightning-yellow">
-            <EyeIcon class="size-4" />
+          <ButtonComponent size="xs" textColor="black" color="green">
+            <EyeSolidIcon class="size-4" />
           </ButtonComponent>
           <ButtonComponent
             @click="orderStore.deleteOrder(row.id)"

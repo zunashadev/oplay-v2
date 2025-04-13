@@ -1,6 +1,10 @@
 <script setup>
 defineProps({
   modelValue: [String, Number],
+  label: {
+    type: String,
+    default: '',
+  },
   placeholder: {
     type: String,
     default: 'Input',
@@ -37,6 +41,12 @@ const emit = defineEmits(['update:modelValue']);
 
 <template>
   <div class="relative w-full">
+    <!-- Label -->
+    <label v-if="label" class="mb-1 block text-sm text-gray-500">
+      {{ label }}
+      <span v-if="required" class="text-red-500">*</span>
+    </label>
+
     <!-- Slot untuk icon di kiri -->
     <div
       v-if="iconPlacement === 'start'"

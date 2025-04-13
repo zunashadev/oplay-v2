@@ -30,7 +30,7 @@ const menuItems = ref([
     icon: markRaw(OrderHistoryIcon),
     submenu: [
       { name: 'Daftar Pesanan', link: 'AdminDashboardOrders' },
-      { name: 'Metode Pembayaran', link: '' },
+      { name: 'Metode Pembayaran', link: 'AdminDashboardPaymentMethods' },
     ],
   },
 
