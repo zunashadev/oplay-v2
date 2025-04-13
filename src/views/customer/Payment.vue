@@ -169,7 +169,7 @@ onMounted(async () => {
                   <div
                     v-for="item in qrisPaymentMethods"
                     :key="item.id"
-                    class="flex flex-col justify-between gap-2 rounded-xl border border-gray-800 bg-gray-900 px-5 py-3 sm:flex-row"
+                    class="flex flex-col justify-between gap-5 rounded-xl border border-gray-800 bg-gray-900 px-5 py-3 sm:flex-row"
                   >
                     <div class="flex items-center gap-3">
                       <div class="flex-none">
