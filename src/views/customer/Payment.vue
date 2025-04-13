@@ -81,9 +81,10 @@ onMounted(async () => {
     <template v-if="orderStore.loading">
       <div>LOADING...</div>
     </template>
+
     <template v-else>
       <template v-if="orderStore.currentOrder">
-        <div class="flex flex-col gap-16">
+        <div class="flex flex-col gap-10 sm:gap-16">
           <!--  -->
           <div
             class="border-lightning-yellow-400 flex flex-col items-center gap-2 rounded-xl border bg-gray-900 px-5 py-5"
