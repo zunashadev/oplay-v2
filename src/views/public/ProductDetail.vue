@@ -248,7 +248,10 @@ function closeConfirmOrderModal() {
       <!-- END : Detail Produk -->
 
       <!-- START : Loading -->
-      <div v-else>Loading...</div>
+      <!-- ! Perlu diperhatikan lagi -->
+      <div v-else>
+        <p>Maaf, terdapat kesalahan dalam memuat data produk :(</p>
+      </div>
       <!-- END : Loading -->
     </div>
   </template>

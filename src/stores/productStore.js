@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import { supabase } from '@/lib/supabase';
+
 import { useAuthStore } from './authStore';
 import { handleResponse } from '@/utils/responseHandler';
 import { generateSlug } from '@/utils/slug';
@@ -9,6 +10,7 @@ import { storageService } from '@/utils/storageService';
 
 export const useProductStore = defineStore('productStore', () => {
   const products = ref([]);
+
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);

@@ -16,6 +16,7 @@ export const useAuthStore = defineStore('authStore', () => {
   const session = ref(null);
   const profile = ref(null);
   const profiles = ref([]);
+
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);

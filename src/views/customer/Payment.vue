@@ -66,7 +66,7 @@ const handleSubmitPaymentProof = async () => {
 <template>
   <PaymentSuccessModalComponent ref="paymentSuccessModalRef" />
 
-  <div class="flex flex-col gap-8 px-24 pb-12">
+  <div class="flex flex-col gap-8 px-6 pb-12 sm:px-12 md:px-24">
     <template v-if="orderStore.loading">
       <div>LOADING...</div>
     </template>

@@ -97,7 +97,6 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'error', 'mengambil semua data pesanan', err);
     } finally {
       loading.value = false;
-      console.log(orders.value);
     }
   };
 
