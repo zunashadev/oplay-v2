@@ -15,6 +15,9 @@ import FileInputComponent from '@/components/form/FileInput.vue';
 
 import PaymentSuccessModalComponent from './components/modals/PaymentSuccessModal.vue';
 
+// Icons
+import TriangleWarningIcon from '@/components/icons/TriangleWarning.vue';
+
 const route = useRoute();
 const router = useRouter();
 
@@ -100,10 +103,15 @@ onMounted(async () => {
           <div
             class="bg-lightning-yellow-400/25 border-lightning-yellow-400 rounded-lg border px-3 py-3"
           >
-            <p class="text-lightning-yellow-400 text-xs">
-              Pilih salah satu metode pembayaran, lalu kirim bukti pembayaran melalui form yang
-              disediakan di bawah .
-            </p>
+            <div class="flex gap-3">
+              <div class="flex-none">
+                <TriangleWarningIcon class="text-lightning-yellow-400 size-5" />
+              </div>
+              <p class="text-lightning-yellow-400 text-xs">
+                Pilih salah satu metode pembayaran, lalu kirim bukti pembayaran melalui form yang
+                disediakan di bawah .
+              </p>
+            </div>
           </div>
           <!-- END : Cara Pembayaran -->
 
