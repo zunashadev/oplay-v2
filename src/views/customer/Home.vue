@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 px-6 pb-12 sm:px-12">
+  <div class="flex flex-col gap-6 px-3 pb-12 sm:px-12">
     <div class="flex flex-col gap-3">
       <!-- START : Notification ... -->
       <div class="w-full">
