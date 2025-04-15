@@ -112,7 +112,6 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-
           <!-- END : Nominal Yang Harus Dibayar -->
 
           <!-- START : Daftar Metode Pembayaran -->

@@ -6,6 +6,7 @@ import { useAuthStore } from './authStore';
 
 import { handleResponse } from '@/utils/responseHandler';
 import { storageService } from '@/utils/storageService';
+import { sendTelegramNotification } from '@/utils/telegramService';
 
 export const useOrderStore = defineStore('orderStore', () => {
   /**========================================================================
@@ -193,6 +194,20 @@ export const useOrderStore = defineStore('orderStore', () => {
       if (insertError) throw insertError;
 
       orders.value.unshift(data);
+
+      // START : Kirim Notifikasi Bot Telegram
+      const botTelegramNotificationPayload = {
+        customer_name: useAuthStore().profile?.name || 'Nama user tidak ditemukan',
+        customer_username: useAuthStore().profile?.username || 'Username tidak ditemukan',
+        product_name: product.name,
+        price: total_price,
+        status: status,
+      };
+
+      const jwtToken = useAuthStore().session?.access_token; // Ambil JWT token dari store auth
+
+      await sendTelegramNotification(botTelegramNotificationPayload, jwtToken);
+      // END : Kirim Notifikasi Bot Telegram
 
       handleResponse({ message, error }, 'success', 'menambahkan pesanan');
       return data;
