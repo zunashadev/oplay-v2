@@ -38,7 +38,7 @@ onMounted(() => {
         <div class="flex flex-col overflow-hidden rounded-xl">
           <!-- START : Top -->
           <div
-            class="flex flex-col gap-5 bg-gray-800 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
+            class="flex flex-col gap-3 bg-gray-800 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
           >
             <!-- App -->
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
