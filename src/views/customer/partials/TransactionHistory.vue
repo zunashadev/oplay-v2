@@ -41,7 +41,7 @@ onMounted(() => {
             class="flex flex-col gap-5 bg-gray-800 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
           >
             <!-- App -->
-            <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
               <!--  -->
               <div class="flex w-60">
                 <div class="flex items-center gap-3">
