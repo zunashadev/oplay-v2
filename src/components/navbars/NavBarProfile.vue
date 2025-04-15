@@ -56,7 +56,7 @@ const handleLogout = async () => {
       leave-from-class="translate-y-0 opacity-100"
       leave-to-class="translate-y-[-10px] opacity-0"
     >
-      <PopoverPanel class="absolute right-0 z-50 mt-5 w-screen max-w-60 transform">
+      <PopoverPanel class="absolute top-12 right-0 z-50 mt-5 w-screen max-w-60 transform">
         <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5">
           <div class="relative bg-gray-800">
             <div class="flex flex-col px-3 py-3">

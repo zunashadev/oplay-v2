@@ -22,8 +22,8 @@ const menuItems = ref([
 
 <template>
   <!-- START : Responsive : Mobile -->
-  <div class="relative block md:hidden">
-    <Popover class="relative flex-none">
+  <div class="block md:hidden">
+    <Popover class="relative flex flex-none items-center">
       <!-- Button -->
       <PopoverButton class="hover:cursor-pointer focus-visible:outline-none">
         <div class="">
@@ -41,7 +41,7 @@ const menuItems = ref([
         leave-to-class="translate-y-[-10px] opacity-0"
       >
         <PopoverPanel
-          class="fixed top-20 right-5 left-5 z-50 transform rounded-lg bg-gray-800 px-5 py-8 text-center shadow-lg"
+          class="fixed top-20 right-12 left-12 z-50 transform rounded-lg bg-gray-800 px-5 py-8 text-center shadow-lg"
         >
           <div class="flex flex-col items-center gap-3">
             <div v-for="(menu, index) in menuItems" :key="index" class="flex w-full">
