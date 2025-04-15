@@ -152,7 +152,7 @@ onMounted(() => {
               <!-- Lihat Bukti Pembayaran -->
               <template v-if="order?.payment_proof_image_url">
                 <a :href="order.payment_proof_image_url" target="_blank" rel="noopener" class="">
-                  <ButtonComponent variant="solid" size="xs" textColor="black">
+                  <ButtonComponent variant="solid" size="sm" textColor="black" class="w-full">
                     <FileUploadIcon class="size-5" />
                     <span>Lihat Bukti Pembayaran</span>
                   </ButtonComponent>
@@ -163,7 +163,7 @@ onMounted(() => {
                 <RouterLink :to="{ name: 'CustomerPayment', query: { orderId: order?.id } }">
                   <ButtonComponent
                     variant="solid"
-                    size="xs"
+                    size="sm"
                     color="green"
                     textColor="black"
                     class="w-full"
@@ -174,7 +174,7 @@ onMounted(() => {
                 </RouterLink>
               </template>
               <!-- Lihat Akun -->
-              <ButtonComponent variant="solid" size="xs" textColor="black">
+              <ButtonComponent variant="solid" size="sm" textColor="black">
                 <EyeIcon class="size-5" />
                 <span>Lihat Akun</span>
               </ButtonComponent>
