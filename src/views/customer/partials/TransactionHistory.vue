@@ -147,8 +147,8 @@ onMounted(() => {
           </div>
           <!-- END : Top -->
           <!-- START : Bottom -->
-          <div class="flex justify-end bg-gray-700 px-5 py-3">
-            <div class="flex items-center gap-2">
+          <div class="flex justify-center bg-gray-700 px-5 py-3 sm:justify-end">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
               <!-- Lihat Bukti Pembayaran -->
               <template v-if="order?.payment_proof_image_url">
                 <a :href="order.payment_proof_image_url" target="_blank" rel="noopener">
