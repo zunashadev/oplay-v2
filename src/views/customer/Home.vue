@@ -17,25 +17,25 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-6 px-3 pb-12 sm:px-12">
-    <div class="flex flex-col gap-3">
-      <!-- START : Notification ... -->
-      <div class="w-full">
-        <NotificationPartial />
-      </div>
-      <!-- END : Notification -->
+    <!-- START : Notification ... -->
+    <div class="w-full">
+      <NotificationPartial />
+    </div>
+    <!-- END : Notification -->
 
-      <!-- START : ... -->
-      <!-- <div class="w-full">
+    <!-- START : ... -->
+    <!-- <div class="w-full">
       <UserProfilePartial />
     </div> -->
-      <!-- END : ... -->
+    <!-- END : ... -->
 
-      <!-- START : Overview -->
-      <div class="w-full">
-        <OverviewPartial />
-      </div>
-      <!-- END : Overview -->
+    <!-- START : Overview -->
+    <div class="w-full">
+      <OverviewPartial />
     </div>
+    <!-- END : Overview -->
+
+    <hr class="rounded-full border-gray-900" />
 
     <div class="flex flex-col gap-3">
       <!-- START : ... -->
