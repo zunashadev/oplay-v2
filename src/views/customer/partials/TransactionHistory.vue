@@ -22,6 +22,7 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
+    <!-- START : Title & Filter -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="bg-lightning-yellow-400 h-6 w-1 rounded-md"></div>
@@ -29,11 +30,18 @@ onMounted(() => {
       </div>
       <div>tools</div>
     </div>
+    <!-- END : Title & Filter -->
+
+    <!-- START : Transaction History -->
     <div class="flex flex-col gap-2">
       <template v-for="order in orderStore.orders" :key="order.id">
-        <div class="flex flex-col overflow-hidden rounded-xl bg-gray-800">
-          <div class="flex items-center justify-between px-5 py-5">
-            <div class="flex items-center gap-5">
+        <div class="flex flex-col overflow-hidden rounded-xl">
+          <!-- START : Top -->
+          <div
+            class="flex flex-col gap-5 bg-gray-800 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
+          >
+            <!-- App -->
+            <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
               <!--  -->
               <div class="flex w-60">
                 <div class="flex items-center gap-3">
@@ -117,7 +125,7 @@ onMounted(() => {
               </div>
             </div>
             <!-- Status -->
-            <div class="flex w-24 flex-col items-end gap-1">
+            <div class="flex w-24 flex-col gap-1 sm:items-end">
               <p class="text-sm font-normal text-gray-500">Status</p>
               <template v-if="order.status">
                 <p
@@ -137,6 +145,8 @@ onMounted(() => {
               </template>
             </div>
           </div>
+          <!-- END : Top -->
+          <!-- START : Bottom -->
           <div class="flex justify-end bg-gray-700 px-5 py-3">
             <div class="flex items-center gap-2">
               <!-- Lihat Bukti Pembayaran -->
@@ -164,8 +174,10 @@ onMounted(() => {
               </ButtonComponent>
             </div>
           </div>
+          <!-- END : Bottom -->
         </div>
       </template>
     </div>
+    <!-- END : Transaction History -->
   </div>
 </template>

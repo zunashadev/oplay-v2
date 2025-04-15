@@ -19,6 +19,7 @@ import NavBarPartial from '@/components/navbars/NavBar.vue';
     <!-- END : MAIN CONTENT -->
 
     <!-- START : FOOTER -->
+    <!-- ! Belum bikin footer -->
     <!-- END : FOOTER -->
   </div>
 </template>
