@@ -16,35 +16,39 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-10 px-6 pb-12 sm:px-12">
-    <!-- START : Notification ... -->
-    <div class="w-full">
-      <NotificationPartial />
-    </div>
-    <!-- END : Notification -->
+  <div class="flex flex-col gap-6 px-6 pb-12 sm:px-12">
+    <div class="flex flex-col gap-3">
+      <!-- START : Notification ... -->
+      <div class="w-full">
+        <NotificationPartial />
+      </div>
+      <!-- END : Notification -->
 
-    <!-- START : ... -->
-    <!-- <div class="w-full">
+      <!-- START : ... -->
+      <!-- <div class="w-full">
       <UserProfilePartial />
     </div> -->
-    <!-- END : ... -->
+      <!-- END : ... -->
 
-    <!-- START : Overview -->
-    <div class="w-full">
-      <OverviewPartial />
+      <!-- START : Overview -->
+      <div class="w-full">
+        <OverviewPartial />
+      </div>
+      <!-- END : Overview -->
     </div>
-    <!-- END : Overview -->
 
-    <!-- START : ... -->
-    <div class="w-full">
-      <ActiveAccountListPartial />
-    </div>
-    <!-- END : ... -->
+    <div class="flex flex-col gap-3">
+      <!-- START : ... -->
+      <div class="w-full">
+        <ActiveAccountListPartial />
+      </div>
+      <!-- END : ... -->
 
-    <!-- START : Riwayat Transaksi -->
-    <div class="w-full">
-      <TransactionHistoryPartial />
+      <!-- START : Riwayat Transaksi -->
+      <div class="w-full">
+        <TransactionHistoryPartial />
+      </div>
+      <!-- END : Riwayat Transaksi -->
     </div>
-    <!-- END : Riwayat Transaksi -->
   </div>
 </template>
