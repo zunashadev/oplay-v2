@@ -148,10 +148,10 @@ onMounted(() => {
           <!-- END : Top -->
           <!-- START : Bottom -->
           <div class="flex justify-center bg-gray-700 px-5 py-3 sm:justify-end">
-            <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div class="flex w-full flex-col gap-2 sm:w-fit sm:flex-row sm:items-center">
               <!-- Lihat Bukti Pembayaran -->
               <template v-if="order?.payment_proof_image_url">
-                <a :href="order.payment_proof_image_url" target="_blank" rel="noopener">
+                <a :href="order.payment_proof_image_url" target="_blank" rel="noopener" class="">
                   <ButtonComponent variant="solid" size="xs" textColor="black">
                     <FileUploadIcon class="size-5" />
                     <span>Lihat Bukti Pembayaran</span>
@@ -161,7 +161,13 @@ onMounted(() => {
               <!-- Unggah Bukti Pembayaran -->
               <template v-else>
                 <RouterLink :to="{ name: 'CustomerPayment', query: { orderId: order?.id } }">
-                  <ButtonComponent variant="solid" size="xs" color="green" textColor="black">
+                  <ButtonComponent
+                    variant="solid"
+                    size="xs"
+                    color="green"
+                    textColor="black"
+                    class="w-full"
+                  >
                     <FileUploadIcon class="size-5" />
                     <span>Unggah Bukti Pembayaran</span>
                   </ButtonComponent>
