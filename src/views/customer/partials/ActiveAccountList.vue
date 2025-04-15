@@ -7,7 +7,7 @@
         <div class="bg-lightning-yellow-400 h-6 w-1 rounded-md"></div>
         <p class="text-xl font-medium">Daftar Akun Aktif</p>
       </div>
-      <div>tools</div>
+      <!-- <div>tools</div> -->
     </div>
     <div>TABLE / LIST AKUN AKTIF</div>
   </div>
