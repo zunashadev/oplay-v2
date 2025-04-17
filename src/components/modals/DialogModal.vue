@@ -13,7 +13,7 @@ defineProps({
   },
 });
 
-// START : MODAL
+// START : Modal
 const baseModalRef = ref(null);
 
 function openModal() {
@@ -25,14 +25,14 @@ function closeModal() {
 }
 
 defineExpose({ openModal, closeModal });
-// END : MODAL
+// END : Modal
 </script>
 
 <template>
   <BaseModalComponent ref="baseModalRef">
     <div class="flex w-full max-w-xl bg-gray-900 text-white">
       <div class="flex w-xl flex-col">
-        <!-- Start : Header -->
+        <!-- START : Header -->
         <div class="flex items-center justify-between bg-gray-800 px-6 py-5">
           <p class="text-xl font-medium">{{ title }}</p>
           <div
@@ -42,13 +42,13 @@ defineExpose({ openModal, closeModal });
             <CrossIcon class="size-6" />
           </div>
         </div>
-        <!-- End : Header -->
+        <!-- END : Header -->
 
-        <!-- Start : Content -->
+        <!-- START : Content -->
         <div class="px-6 py-6">
           <slot />
         </div>
-        <!-- End : Content -->
+        <!-- END : Content -->
       </div>
     </div>
   </BaseModalComponent>

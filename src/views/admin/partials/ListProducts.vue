@@ -9,11 +9,14 @@ import { useProductPackageStore } from '@/stores/productPackageStore';
 import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
 
 // Components
+import ButtonComponent from '@/components/buttons/Button.vue';
 import AddProductPackageModalComponent from '../components/modals/AddProductPackageModal.vue';
 import AddProductPackageDurationModalComponent from '../components/modals/AddProductPackageDurationModal.vue';
 import EditProductPackageModalComponent from '../components/modals/EditProductPackageModal.vue';
 import EditProductModalComponent from '../components/modals/EditProductModal.vue';
-import ButtonComponent from '@/components/buttons/Button.vue';
+import DeleteProductModalComponent from '../components/modals/DeleteProductModal.vue';
+import DeleteProductPackageModalComponent from '../components/modals/DeleteProductPackageModal.vue';
+import DeleteProductPackageDurationComponent from '../components/modals/DeleteProductPackageDuration.vue';
 
 // Icons
 import CrossIcon from '@/components/icons/Cross.vue';
@@ -35,13 +38,11 @@ function openEditProductModal(productId) {
   editProductModalRef.value.openModal(productId);
 }
 
-function closeEditProductModal() {
-  editProductModalRef.value.closeModal();
-}
-
 // Delete Product
-const deleteProduct = async (id) => {
-  await productStore.deleteProduct(id);
+const deleteProductModalRef = ref(null);
+
+const openDeleteProductModal = async (id) => {
+  deleteProductModalRef.value.openModal(id);
 };
 
 // Add Package
@@ -56,10 +57,6 @@ function openAddProductPackageModal(productId) {
   addProductPackageModalRef.value.openModal(productId);
 }
 
-function closeAddProductPackageModal() {
-  addProductPackageModalRef.value.closeModal();
-}
-
 // Edit Package
 const editProductPackageModalRef = ref(null);
 
@@ -67,17 +64,15 @@ function openEditProductPackageModal(packageId) {
   editProductPackageModalRef.value.openModal(packageId);
 }
 
-function closeEditProductPackageModal() {
-  editProductPackageModalRef.value.closeModal();
-}
-
 // Delete Package
-const deleteProductPackage = async (id) => {
-  await productPackageStore.deleteProductPackage(id);
+const deleteProductPackageModalRef = ref(null);
+
+const openDeleteProductPackageModal = async (id) => {
+  deleteProductPackageModalRef.value.openModal(id);
 };
 
 // Add Duration
-const addDurationModalRef = ref(null);
+const addProductPackageDurationModalRef = ref(null);
 
 function openAddDurationModal(productId, productPackageId) {
   if (!productId || !productPackageId) {
@@ -85,28 +80,32 @@ function openAddDurationModal(productId, productPackageId) {
     return;
   }
 
-  addDurationModalRef.value.openModal(productId, productPackageId);
-}
-
-function closeAddDurationModal() {
-  addDurationModalRef.value.closeModal();
+  addProductPackageDurationModalRef.value.openModal(productId, productPackageId);
 }
 
 // Delete Duration
-const deleteProductPackageDuration = async (id) => {
-  await productPackageDurationStore.deleteProductPackageDuration(id);
+const deleteProductPackageDurationModalRef = ref(null);
+
+const openDeleteProductPackageDurationModal = async (id) => {
+  deleteProductPackageDurationModalRef.value.openModal(id);
 };
 </script>
 
 <template>
   <!-- Edit Product -->
   <EditProductModalComponent ref="editProductModalRef" />
+  <!-- Delete Product -->
+  <DeleteProductModalComponent ref="deleteProductModalRef" />
   <!-- Add Package -->
   <AddProductPackageModalComponent ref="addProductPackageModalRef" />
   <!-- Edit Package -->
   <EditProductPackageModalComponent ref="editProductPackageModalRef" />
+  <!-- Delete Package -->
+  <DeleteProductPackageModalComponent ref="deleteProductPackageModalRef" />
   <!-- Add Duration -->
-  <AddProductPackageDurationModalComponent ref="addDurationModalRef" />
+  <AddProductPackageDurationModalComponent ref="addProductPackageDurationModalRef" />
+  <!-- Delete Duration -->
+  <DeleteProductPackageDurationComponent ref="deleteProductPackageDurationModalRef" />
 
   <div class="flex flex-col gap-5">
     <!-- START : HEADER -->
@@ -141,7 +140,7 @@ const deleteProductPackageDuration = async (id) => {
               Edit
             </ButtonComponent>
             <ButtonComponent
-              @click="deleteProduct(product.id)"
+              @click="openDeleteProductModal(product.id)"
               type="button"
               variant="solid"
               size="sm"
@@ -264,7 +263,7 @@ const deleteProductPackageDuration = async (id) => {
                                   <p>{{ duration.name }}</p>
                                 </div>
                                 <div
-                                  @click="deleteProductPackageDuration(duration.id)"
+                                  @click="openDeleteProductPackageDurationModal(duration.id)"
                                   class="absolute right-0.5 rounded-full p-0.5 text-black transition-all hover:cursor-pointer hover:bg-red-600 hover:text-white"
                                 >
                                   <CrossIcon class="size-3" />
@@ -306,7 +305,7 @@ const deleteProductPackageDuration = async (id) => {
                       Edit
                     </ButtonComponent>
                     <ButtonComponent
-                      @click="deleteProductPackage(pkg.id)"
+                      @click="openDeleteProductPackageModal(pkg.id)"
                       type="button"
                       variant="solid"
                       size="sm"
