@@ -86,7 +86,7 @@ function handleCancel() {
         <!-- Start : Button -->
         <div class="flex justify-end px-6 py-5">
           <div class="flex gap-3">
-            <ButtonComponent @click="handleCancel" variant="outline">
+            <ButtonComponent @click="handleCancel" variant="ghost" color="gray">
               {{ cancelText }}
             </ButtonComponent>
             <ButtonComponent v-if="danger" @click="handleConfirm" color="red">

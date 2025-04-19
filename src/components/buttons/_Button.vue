@@ -252,6 +252,7 @@ const colorMap = computed(() => {
 });
 
 const buttonClasses = computed(() => {
+  const baseClasses = 'disabled:opacity-50 disabled:pointer-events-none';
   const color = colorMap.value;
 
   // Handle custom text color
@@ -271,14 +272,15 @@ const buttonClasses = computed(() => {
     link: `border border-transparent ${props.textColor ? customText : color.text} ${color.hoverText} focus:outline-hidden ${color.focusText} ${color.darkText} ${color.darkHoverText} ${color.darkFocusText}`,
   };
 
-  return `${variantClasses[props.variant]} ${sizeClasses[props.size]}`;
+  // return `${variantClasses[props.variant]} ${baseClasses}`;
+  return `${variantClasses[props.variant]} ${sizeClasses[props.size]} ${baseClasses}`;
 });
 </script>
 
 <template>
   <button
     :type="type"
-    class="inline-flex items-center justify-center gap-x-2 rounded-lg font-medium transition-all hover:cursor-pointer disabled:pointer-events-none disabled:opacity-50"
+    class="inline-flex items-center justify-center gap-x-2 rounded-lg font-medium transition-all hover:cursor-pointer"
     :class="buttonClasses"
     :disabled="disabled"
   >

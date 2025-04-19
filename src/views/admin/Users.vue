@@ -2,18 +2,37 @@
 import { onMounted } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 
+// Components
 import SelectComponent from '@/components/form/Select.vue';
+
+// Icons
+import EyeSolidIcon from '@/components/icons/EyeSolid.vue';
+import TrashSolidIcon from '@/components/icons/TrashSolid.vue';
 
 const authStore = useAuthStore();
 
 onMounted(() => {
-  authStore.fetchAllProfiles();
+  authStore.fetchAllUsers();
 });
+
+// START : TABLE
+import TableComponent from '@/components/tables/Table.vue';
+
+const columns = [
+  { label: 'Avatar', key: 'custom-profile-avatar' },
+  { label: 'Nama', key: 'custom-profile-name' },
+  { label: 'Username', key: 'profile.username' },
+  { label: 'Referral', key: 'profile.referral_code' },
+  { label: 'Email', key: 'email' },
+  { label: 'Role', key: 'custom-profile-role', align: 'center' },
+  { label: 'Actions', key: 'actions', align: 'right' },
+];
 
 const roles = [
   { id: 'admin', name: 'Admin' },
   { id: 'customer', name: 'Customer' },
 ];
+// END : TABLE
 </script>
 
 <template>
@@ -25,56 +44,52 @@ const roles = [
     <!-- END : ... -->
 
     <!-- START : USERS TABLE -->
-    <div class="rounded-2xl bg-gray-900 px-5 py-5">
-      <div class="relative overflow-x-auto sm:rounded-lg">
-        <table class="w-full text-left text-sm text-gray-400">
-          <thead class="bg-gray-800 text-xs text-white uppercase">
-            <tr>
-              <th scope="col" class="px-6 py-3">Avatar</th>
-              <th scope="col" class="px-6 py-3">Name</th>
-              <th scope="col" class="px-6 py-3">Username</th>
-              <th scope="col" class="px-6 py-3">Email</th>
-              <th scope="col" class="px-6 py-3">Role</th>
-              <th scope="col" class="px-6 py-3">
-                <span class="sr-only">Edit</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="user in authStore.profiles"
-              :key="user.id"
-              class="border-b border-gray-800 bg-gray-900 hover:bg-gray-800"
+    <div class="rounded-xl bg-gray-900 px-5 py-5">
+      <TableComponent :columns="columns" :data="authStore.users">
+        <!-- Avatar -->
+        <template #cell-custom-profile-avatar="{ row }">
+          <div class="flex-none">
+            <img
+              :src="row.profile.avatar_url || '/images/avatar.jpg'"
+              alt="Produk"
+              class="size-10 rounded-full object-cover"
+            />
+          </div>
+        </template>
+        <!-- Name -->
+        <template #cell-custom-profile-name="{ row }">
+          <p class="text-lightning-yellow-400">{{ row.profile.name }}</p>
+        </template>
+        <!-- Role -->
+        <template #cell-custom-profile-role="{ row }">
+          <div class="flex w-max">
+            <SelectComponent
+              class="w-full"
+              v-model="row.profile.role"
+              @update:modelValue="(newRole) => authStore.updateUserRole(row.id, newRole)"
+              :options="roles"
+              labelKey="name"
+              valueKey="id"
+              placeholder="Pilih role"
+              required
             >
-              <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-gray-900">
-                <img
-                  alt="User Avatar"
-                  :src="user.avatar_url || '/images/avatar.jpg'"
-                  class="size-10 rounded-full object-cover"
-                />
-              </th>
-              <td class="px-6 py-4">{{ user.name }}</td>
-              <td class="px-6 py-4">{{ user.username }}</td>
-              <td class="px-6 py-4">--Email</td>
-              <td class="px-6 py-4">
-                <SelectComponent
-                  v-model="user.role"
-                  @update:modelValue="(newRole) => authStore.updateUserRole(user.id, newRole)"
-                  :options="roles"
-                  labelKey="name"
-                  valueKey="id"
-                  placeholder="Pilih role"
-                  required
-                >
-                </SelectComponent>
-              </td>
-              <td class="px-6 py-4 text-right">
-                <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            </SelectComponent>
+          </div>
+        </template>
+        <!-- Actions -->
+        <template #cell-actions="{ row }">
+          <div class="flex items-center gap-3">
+            <div class="group hover:cursor-pointer">
+              <EyeSolidIcon
+                class="size-5 text-green-500 transition-all group-hover:text-green-600"
+              />
+            </div>
+            <div class="group hover:cursor-pointer">
+              <TrashSolidIcon class="size-5 text-red-500 transition-all group-hover:text-red-600" />
+            </div>
+          </div>
+        </template>
+      </TableComponent>
     </div>
     <!-- END : USERS TABLE -->
   </div>

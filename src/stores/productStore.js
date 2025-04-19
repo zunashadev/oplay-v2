@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from './authStore';
 import { handleResponse } from '@/utils/responseHandler';
 import { generateSlug } from '@/utils/slug';
-import { storageService } from '@/utils/storageService';
+import { storageService } from '@/services/storageService';
 
 export const useProductStore = defineStore('productStore', () => {
   const products = ref([]);

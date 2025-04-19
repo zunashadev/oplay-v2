@@ -4,7 +4,7 @@ import { ref, computed } from 'vue';
 import { supabase } from '@/lib/supabase';
 
 import { handleResponse } from '@/utils/responseHandler';
-import { storageService } from '@/utils/storageService';
+import { storageService } from '@/services/storageService';
 
 export const useAuthStore = defineStore('authStore', () => {
   /**========================================================================
@@ -12,10 +12,12 @@ export const useAuthStore = defineStore('authStore', () => {
    *========================================================================**/
 
   // State
-  const user = ref(null);
   const session = ref(null);
+
+  const user = ref(null);
   const profile = ref(null);
-  const profiles = ref([]);
+
+  const users = ref([]);
 
   const loading = ref(false);
   const message = ref(null);
@@ -185,7 +187,6 @@ export const useAuthStore = defineStore('authStore', () => {
         id: data.user.id,
         name,
         username,
-        email,
         avatar_url,
         role: 'customer',
         referral_code: username, // Referral code = username pengguna ini
@@ -262,6 +263,34 @@ export const useAuthStore = defineStore('authStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'logout', err);
       throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // Fecth All Users
+  const fetchAllUsers = async () => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const jwtToken = session?.value.access_token;
+
+      const res = await fetch('https://usiluuzsrawbybmslrml.supabase.co/functions/v1/list-users', {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Error ${res.status}: ${errText}`);
+      }
+
+      const { users: fetchedUsers } = await res.json();
+      users.value = fetchedUsers;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengambil semua pengguna', err);
     } finally {
       loading.value = false;
     }
@@ -356,29 +385,6 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  // Fetch All Profiles
-  const fetchAllProfiles = async () => {
-    loading.value = true;
-    resetMessageState();
-
-    try {
-      const { data, error: fetchError } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (fetchError) throw fetchError;
-
-      profiles.value = data;
-      handleResponse({ message, error }, 'success', 'mengambil semua profil');
-      return data;
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil semua profil', err);
-    } finally {
-      loading.value = false;
-    }
-  };
-
   // Method Update Profile
   const updateProfile = async (updatedData, newAvatarFile = null) => {
     if (!user.value) {
@@ -446,9 +452,9 @@ export const useAuthStore = defineStore('authStore', () => {
       if (updateError) throw updateError;
 
       // Update list profiles agar sinkron
-      const index = profiles.value.findIndex((user) => user.id === userId);
-      if (index !== -1) {
-        profiles.value[index].role = newRole;
+      const index = users.value.findIndex((user) => user.id === userId);
+      if (index !== -1 && users.value[index].profile) {
+        users.value[index].profile.role = newRole;
       }
 
       handleResponse({ message, error }, 'success', 'memperbarui role pengguna');
@@ -523,10 +529,10 @@ export const useAuthStore = defineStore('authStore', () => {
 
   return {
     // State
-    user,
     session,
+    user,
+    users,
     profile,
-    profiles,
     loading,
     message,
     error,
@@ -543,9 +549,9 @@ export const useAuthStore = defineStore('authStore', () => {
     logout,
     updateProfile,
     getCurrentSession,
-    fetchAllProfiles,
     resetMessageState,
     updateUser,
     updateUserRole,
+    fetchAllUsers,
   };
 });

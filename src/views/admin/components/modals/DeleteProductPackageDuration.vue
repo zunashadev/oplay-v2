@@ -56,7 +56,7 @@ function handleCancel() {
     danger
   >
     <template #icon>
-      <TriangleWarningIcon class="size-6 text-red-500" />
+      <TriangleWarningIcon class="size-8 text-red-500" />
     </template>
   </ConfirmModalComponent>
 </template>

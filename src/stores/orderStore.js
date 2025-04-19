@@ -5,8 +5,8 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from './authStore';
 
 import { handleResponse } from '@/utils/responseHandler';
-import { storageService } from '@/utils/storageService';
-import { sendTelegramNotification } from '@/utils/telegramService';
+import { storageService } from '@/services/storageService';
+import { sendTelegramNotification } from '@/services/telegramService';
 
 export const useOrderStore = defineStore('orderStore', () => {
   /**========================================================================
@@ -204,7 +204,7 @@ export const useOrderStore = defineStore('orderStore', () => {
         status: status,
       };
 
-      const jwtToken = useAuthStore().session?.access_token; // Ambil JWT token dari store auth
+      const jwtToken = useAuthStore().session?.access_token;
 
       await sendTelegramNotification(botTelegramNotificationPayload, jwtToken);
       // END : Kirim Notifikasi Bot Telegram

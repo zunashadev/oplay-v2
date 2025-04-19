@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 
 import { useAuthStore } from './authStore';
 import { handleResponse } from '@/utils/responseHandler';
-import { storageService } from '@/utils/storageService';
+import { storageService } from '@/services/storageService';
 
 export const usePaymentMethodStore = defineStore('paymentMethod', () => {
   /**========================================================================

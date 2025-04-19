@@ -58,7 +58,7 @@ const emit = defineEmits(['update:modelValue']);
       :required="required"
       :data-error="error"
       :data-success="success"
-      class="peer border-blue-charcoal-800 hover:border-lightning-yellow-400/50 focus:border-lightning-yellow-400 block w-full appearance-none rounded-md border bg-black px-2.5 py-2 text-sm text-white shadow-sm transition-all duration-300 ease-in outline-none placeholder:text-gray-500 hover:cursor-pointer focus:ring-0 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[error=true]:border-red-500 data-[success=true]:border-green-500"
+      class="peer border-blue-charcoal-800 hover:border-lightning-yellow-400/50 focus:border-lightning-yellow-400 block w-full appearance-none rounded-md border bg-black py-2 ps-2.5 pe-12 text-sm text-white shadow-sm transition-all duration-300 ease-in outline-none placeholder:text-gray-500 hover:cursor-pointer focus:ring-0 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[error=true]:border-red-500 data-[success=true]:border-green-500"
     >
       <option disabled value="">{{ placeholder }}</option>
       <option v-for="(option, index) in options" :key="index" :value="option[valueKey]">

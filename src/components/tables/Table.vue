@@ -34,12 +34,29 @@ const sortBy = (column) => {
   }
 };
 
+function getNestedValue(obj, path) {
+  return path.split('.').reduce((acc, key) => acc?.[key], obj);
+}
+
+// const sortedData = computed(() => {
+//   if (!props.sortable || !sortKey.value) return props.data;
+
+//   return [...props.data].sort((a, b) => {
+//     const aVal = a[sortKey.value];
+//     const bVal = b[sortKey.value];
+//     if (aVal < bVal) return sortOrder.value === 'asc' ? -1 : 1;
+//     if (aVal > bVal) return sortOrder.value === 'asc' ? 1 : -1;
+//     return 0;
+//   });
+// });
+
 const sortedData = computed(() => {
   if (!props.sortable || !sortKey.value) return props.data;
 
   return [...props.data].sort((a, b) => {
-    const aVal = a[sortKey.value];
-    const bVal = b[sortKey.value];
+    const aVal = getNestedValue(a, sortKey.value);
+    const bVal = getNestedValue(b, sortKey.value);
+
     if (aVal < bVal) return sortOrder.value === 'asc' ? -1 : 1;
     if (aVal > bVal) return sortOrder.value === 'asc' ? 1 : -1;
     return 0;
@@ -111,10 +128,10 @@ const sortedData = computed(() => {
                   <slot
                     :name="`cell-${column.key}`"
                     :row="row"
-                    :value="row[column.key]"
+                    :value="getNestedValue(row, column.key)"
                     :column="column"
                   >
-                    {{ row[column.key] }}
+                    {{ getNestedValue(row, column.key) }}
                   </slot>
                 </td>
               </tr>
