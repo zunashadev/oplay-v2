@@ -3,16 +3,17 @@ import { ref, onMounted } from 'vue';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
 
-// Stores
+// 📌 Stores
 import { useOrderStore } from '@/stores/orderStore';
 
-// Components
+// 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
 
-// Icons
+// 📌 Icons
 import FileUploadIcon from '@/components/icons/FileUpload.vue';
 import EyeIcon from '@/components/icons/Eye.vue';
 
+// 📌 ...
 const orderStore = useOrderStore();
 
 onMounted(() => {

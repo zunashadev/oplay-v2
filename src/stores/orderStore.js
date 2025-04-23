@@ -52,7 +52,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'success', 'mengunggah gambar');
       return publicUrl;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengunggah gambar', err);
+      handleResponse({ message, error }, 'error', 'mengunggah gambar', { err });
       return null;
     }
   };
@@ -70,7 +70,7 @@ export const useOrderStore = defineStore('orderStore', () => {
 
       return success;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus payment proof', err);
+      handleResponse({ message, error }, 'error', 'menghapus payment proof', { err });
       return null;
     }
   };
@@ -95,7 +95,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       orders.value = ordersData;
       handleResponse({ message, error }, 'success', 'mengambil semua data pesanan');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil semua data pesanan', err);
+      handleResponse({ message, error }, 'error', 'mengambil semua data pesanan', { err });
     } finally {
       loading.value = false;
     }
@@ -121,7 +121,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       orders.value = data;
       handleResponse({ message, error }, 'success', 'mengambil data pesanan');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil data pesanan', err);
+      handleResponse({ message, error }, 'error', 'mengambil data pesanan', { err });
     } finally {
       loading.value = false;
     }
@@ -145,7 +145,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'success', 'mengambil data pesanan berdasarkan id');
     } catch (err) {
       currentOrder.value = null;
-      handleResponse({ message, error }, 'error', 'mengambil data pesanan berdasarkan id', err);
+      handleResponse({ message, error }, 'error', 'mengambil data pesanan berdasarkan id', { err });
     } finally {
       loading.value = false;
     }
@@ -168,7 +168,7 @@ export const useOrderStore = defineStore('orderStore', () => {
 
       //   console.log(product.name);
 
-      // ....
+      // Insert ke Supabase
       const { data, error: insertError } = await supabase
         .from('orders')
         .insert([
@@ -212,7 +212,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'success', 'menambahkan pesanan');
       return data;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menambahkan pesanan', err);
+      handleResponse({ message, error }, 'error', 'menambahkan pesanan', { err });
       return null;
     } finally {
       loading.value = false;
@@ -247,7 +247,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'success', 'bukti pembayaran berhasil dikirim');
       return imageUrl;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengirim bukti pembayaran', err);
+      handleResponse({ message, error }, 'error', 'mengirim bukti pembayaran', { err });
       return null;
     } finally {
       loading.value = false;
@@ -258,7 +258,7 @@ export const useOrderStore = defineStore('orderStore', () => {
   const updateOrderStatus = async (orderId, newStatus) => {
     if (!orderId || !newStatus) {
       const err = new Error('Order ID dan status pesanan baru diperlukan');
-      handleResponse({ message, error }, 'error', 'memperbarui status pesanan', err);
+      handleResponse({ message, error }, 'error', 'memperbarui status pesanan', { err });
       throw err;
     }
 
@@ -283,7 +283,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'success', 'memperbarui status pesanan');
       return data;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'memperbarui status pesanan', err);
+      handleResponse({ message, error }, 'error', 'memperbarui status pesanan', { err });
       throw err;
     } finally {
       loading.value = false;
@@ -329,7 +329,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'success', 'menghapus pesanan');
       return true;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus pesanan', err);
+      handleResponse({ message, error }, 'error', 'menghapus pesanan', { err });
       return false;
     } finally {
       loading.value = false;

@@ -1,0 +1,54 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import { formatRupiah } from '@/utils/format';
+import { calculateFinalPrice } from '@/utils/priceCalculator';
+
+// 📌 Stores
+import { useRewardEventStore } from '@/stores/rewardEventStore';
+
+// 📌 Components
+import ButtonComponent from '@/components/buttons/Button.vue';
+
+// 📌 Icons
+import FileUploadIcon from '@/components/icons/FileUpload.vue';
+import EyeIcon from '@/components/icons/Eye.vue';
+
+// 📌 ...
+const rewardEventStore = useRewardEventStore();
+
+onMounted(() => {
+  rewardEventStore.fetchRewardEventsByUser();
+});
+</script>
+
+<template>
+  <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-lightning-yellow-400 h-6 w-1 rounded-md"></div>
+        <p class="text-xl font-medium">Daftar Hadiah</p>
+      </div>
+      <!-- <div>tools</div> -->
+    </div>
+    <div class="flex flex-col gap-3">
+      <template v-for="rewardEvent in rewardEventStore.rewardEvents" :key="rewardEvent.id">
+        <div class="flex items-center justify-between gap-3 rounded-lg bg-gray-800 px-5 py-2.5">
+          <div class="flex items-center gap-3">
+            <div class="flex-none">
+              <img src="/images/coin.png" class="h-8 w-auto" />
+            </div>
+            <div class="flex flex-col gap-0">
+              <p class="text-lightning-yellow-400 font-semibold">
+                + {{ formatRupiah(rewardEvent.amount) }}
+              </p>
+              <p class="text-sm text-gray-500">{{ rewardEvent.note }}</p>
+            </div>
+          </div>
+          <ButtonComponent variant="solid" size="sm" textColor="black">
+            <span>Claim</span>
+          </ButtonComponent>
+        </div>
+      </template>
+    </div>
+  </div>
+</template>

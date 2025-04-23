@@ -38,7 +38,7 @@ export const useProductStore = defineStore('productStore', () => {
       handleResponse({ message, error }, 'success', 'mengunggah gambar');
       return publicUrl;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengunggah gambar', err);
+      handleResponse({ message, error }, 'error', 'mengunggah gambar', { err });
       return null;
     }
   };
@@ -56,7 +56,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       return success;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus gambar', err);
+      handleResponse({ message, error }, 'error', 'menghapus gambar', { err });
       return null;
     }
   };
@@ -92,7 +92,7 @@ export const useProductStore = defineStore('productStore', () => {
           : [],
       }));
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil data produk', err);
+      handleResponse({ message, error }, 'error', 'mengambil data produk', { err });
     } finally {
       loading.value = false;
     }
@@ -131,7 +131,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       return product;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil detail produk', err);
+      handleResponse({ message, error }, 'error', 'mengambil detail produk', { err });
       return null;
     } finally {
       loading.value = false;
@@ -171,7 +171,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       return product;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil produk berdasarkan ID', err);
+      handleResponse({ message, error }, 'error', 'mengambil produk berdasarkan ID', { err });
       return null;
     } finally {
       loading.value = false;
@@ -215,7 +215,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       handleResponse({ message, error }, 'success', 'menambah produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menambah produk', err);
+      handleResponse({ message, error }, 'error', 'menambah produk', { err });
     } finally {
       loading.value = false;
     }
@@ -256,7 +256,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       handleResponse({ message, error }, 'success', 'menghapus produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus produk', err);
+      handleResponse({ message, error }, 'error', 'menghapus produk', { err });
     } finally {
       loading.value = false;
     }
@@ -310,7 +310,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       handleResponse({ message, error }, 'success', 'mengedit produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengedit produk', err);
+      handleResponse({ message, error }, 'error', 'mengedit produk', { err });
     } finally {
       loading.value = false;
     }

@@ -1,18 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useOrderStore } from '@/stores/orderStore';
 
 import UserProfilePartial from './partials/UserProfile.vue';
 import OverviewPartial from './partials/Overview.vue';
 import NotificationPartial from './partials/Notification.vue';
 import ActiveAccountListPartial from './partials/ActiveAccountList.vue';
 import TransactionHistoryPartial from './partials/TransactionHistory.vue';
-
-const orderStore = useOrderStore();
-
-onMounted(() => {
-  orderStore.fetchOrdersByUser();
-});
+import UserRewardsPartial from './partials/UserRewards.vue';
 </script>
 
 <template>
@@ -38,11 +32,19 @@ onMounted(() => {
     <hr class="rounded-full border-gray-900" />
 
     <div class="flex flex-col gap-3">
-      <!-- START : ... -->
-      <div class="w-full">
-        <ActiveAccountListPartial />
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <!-- START : ... -->
+        <div class="w-full flex-1/2">
+          <ActiveAccountListPartial />
+        </div>
+        <!-- END : ... -->
+
+        <!-- START : ... -->
+        <div class="w-full flex-1/2">
+          <UserRewardsPartial />
+        </div>
+        <!-- END : ... -->
       </div>
-      <!-- END : ... -->
 
       <!-- START : Riwayat Transaksi -->
       <div class="w-full">

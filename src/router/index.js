@@ -114,6 +114,7 @@ const router = createRouter({
       path: '/admin',
       component: () => import('../views/admin/layouts/AdminLayout.vue'),
       children: [
+        // Dashboard
         {
           path: '',
           name: 'AdminDashboardHome',
@@ -124,6 +125,7 @@ const router = createRouter({
             requiredRoles: ['admin'],
           },
         },
+        // Product
         {
           path: 'products',
           name: 'AdminDashboardProducts',
@@ -134,6 +136,7 @@ const router = createRouter({
             requiredRoles: ['admin'],
           },
         },
+        // Order
         {
           path: 'orders',
           name: 'AdminDashboardOrders',
@@ -154,6 +157,30 @@ const router = createRouter({
             requiredRoles: ['admin'],
           },
         },
+        // Wallet
+        // ...
+        // Reward
+        {
+          path: 'reward-configurations',
+          name: 'AdminDashboardRewardConfigurations',
+          component: () => import('../views/admin/RewardConfigurations.vue'),
+          meta: {
+            title: 'Konfigurasi Hadiah',
+            requiresAuth: true,
+            requiredRoles: ['admin'],
+          },
+        },
+        {
+          path: 'reward-histories',
+          name: 'AdminDashboardRewardHistories',
+          component: () => import('../views/admin/RewardHistories.vue'),
+          meta: {
+            title: 'Riwayat Hadiah',
+            requiresAuth: true,
+            requiredRoles: ['admin'],
+          },
+        },
+        // Users
         {
           path: 'users',
           name: 'AdminDashboardUsers',
@@ -164,6 +191,7 @@ const router = createRouter({
             requiredRoles: ['admin'],
           },
         },
+        // Profile
         {
           path: 'profile',
           name: 'AdminDashboardProfile',

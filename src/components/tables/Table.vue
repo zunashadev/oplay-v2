@@ -66,7 +66,7 @@ const sortedData = computed(() => {
 
 <template>
   <div class="flex flex-col">
-    <div class="-m-1.5 overflow-x-auto">
+    <div class="scrollbar-custom -m-1.5 overflow-x-auto">
       <div class="inline-block min-w-full p-1.5 align-middle">
         <div class="overflow-hidden">
           <table class="min-w-full divide-y divide-gray-500 overflow-hidden rounded-xl bg-gray-800">

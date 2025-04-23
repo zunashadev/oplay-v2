@@ -32,7 +32,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
       if (fetchError) throw fetchError;
       packages.value = data;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil data paket produk', err);
+      handleResponse({ message, error }, 'error', 'mengambil data paket produk', { err });
     } finally {
       loading.value = false;
     }
@@ -54,7 +54,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       return data;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil detail paket produk', err);
+      handleResponse({ message, error }, 'error', 'mengambil detail paket produk', { err });
       return null;
     } finally {
       loading.value = false;
@@ -121,7 +121,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       handleResponse({ message, error }, 'success', 'menambah paket produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menambah paket produk', err);
+      handleResponse({ message, error }, 'error', 'menambah paket produk', { err });
     } finally {
       loading.value = false;
     }
@@ -154,7 +154,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       handleResponse({ message, error }, 'success', 'menghapus paket produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus paket produk', err);
+      handleResponse({ message, error }, 'error', 'menghapus paket produk', { err });
     } finally {
       loading.value = false;
     }
@@ -215,7 +215,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       handleResponse({ message, error }, 'success', 'mengedit paket produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengedit paket produk', err);
+      handleResponse({ message, error }, 'error', 'mengedit paket produk', { err });
     } finally {
       loading.value = false;
     }

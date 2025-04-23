@@ -33,7 +33,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
       if (fetchError) throw fetchError;
       durations.value = data;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil data durasi paket produk', err);
+      handleResponse({ message, error }, 'error', 'mengambil data durasi paket produk', { err });
     } finally {
       loading.value = false;
     }
@@ -89,7 +89,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
 
       handleResponse({ message, error }, 'success', 'menambah durasi paket produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menambah durasi paket produk', err);
+      handleResponse({ message, error }, 'error', 'menambah durasi paket produk', { err });
     } finally {
       loading.value = false;
     }
@@ -124,7 +124,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
 
       handleResponse({ message, error }, 'success', 'menghapus durasi paket produk');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus durasi paket produk', err);
+      handleResponse({ message, error }, 'error', 'menghapus durasi paket produk', { err });
     } finally {
       loading.value = false;
     }

@@ -2,39 +2,38 @@
 import { ref, onMounted } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 
-// Stores
+// 📌 Stores
 import { useAuthStore } from '@/stores/authStore';
 
-// Components
+// 📌 Components
 import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
 import InputComponent from '@/components/form/Input.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 
-// Icons
+// 📌 Icons
 import EyeIcon from '@/components/icons/Eye.vue';
 import EyeCrossedIcon from '@/components/icons/EyeCrossed.vue';
 
-// Inisialisasi store dan router
+// 📌 Inisialisasi store dan router
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 
-// State lokal
+// 📌 State lokal
 const name = ref('');
 const username = ref('');
 const email = ref('');
 const password = ref('');
 const refferalCode = ref('');
 
-// Konfirmasi Password
 const confirmPassword = ref('');
 const confirmPasswordError = ref('');
 
-// Tampilkan Password
+// 📌 Tampilkan Password
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
-// Fungsi Register
+// 📌 Fungsi Register
 const handleRegister = async () => {
   confirmPasswordError.value = '';
 
@@ -53,7 +52,7 @@ const handleRegister = async () => {
       refferalCode.value,
     );
 
-    // Redirect ke halaman sebelumnya atau dashboard
+    // ℹ Redirect ke halaman sebelumnya atau dashboard
     const redirect = route.query.redirect;
     if (redirect) {
       router.push(redirect);
@@ -65,7 +64,7 @@ const handleRegister = async () => {
       router.push('/');
     }
   } catch (error) {
-    // Opsional, pesan error sudah di handle pada store
+    // ℹ Opsional, pesan error sudah di handle pada store
   }
 };
 

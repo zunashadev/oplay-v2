@@ -9,6 +9,7 @@ import OrderHistoryIcon from '@/components/icons/OrderHistory.vue';
 import UsersIcon from '@/components/icons/Users.vue';
 import CircleUserIcon from '@/components/icons/CircleUser.vue';
 import CreditCardIcon from '@/components/icons/CreditCard.vue';
+import GiftIcon from '@/components/icons/Gift.vue';
 
 import LogOutIcon from '@/components/icons/LogOut.vue';
 
@@ -33,7 +34,23 @@ const menuItems = ref([
       { name: 'Metode Pembayaran', link: 'AdminDashboardPaymentMethods' },
     ],
   },
-
+  {
+    name: 'Dompet',
+    icon: markRaw(CreditCardIcon),
+    submenu: [
+      { name: 'Riwayat Transaksi', link: '' },
+      { name: 'Sub Menu 2', link: '' },
+      { name: 'Sub Menu 3', link: '' },
+    ],
+  },
+  {
+    name: 'Hadiah',
+    icon: markRaw(GiftIcon),
+    submenu: [
+      { name: 'Konfigurasi', link: 'AdminDashboardRewardConfigurations' },
+      { name: 'Riwayat', link: 'AdminDashboardRewardHistories' },
+    ],
+  },
   { name: 'Pengguna', link: 'AdminDashboardUsers', icon: markRaw(UsersIcon) },
   { name: 'Profil', link: 'AdminDashboardProfile', icon: markRaw(CircleUserIcon) },
 ]);
@@ -55,8 +72,8 @@ const handleLogout = async () => {
 
 <template>
   <div class="flex h-screen flex-col justify-between border-e border-gray-800 bg-gray-900">
-    <div class="px-4 py-6">
-      <!-- START : BRAND -->
+    <!-- START : Header -->
+    <div class="border-b border-gray-800 px-4 py-6">
       <div class="flex">
         <RouterLink
           :to="{ name: 'PublicHome' }"
@@ -66,13 +83,16 @@ const handleLogout = async () => {
           <p class="text-xl font-semibold text-white sm:text-2xl">OPLAY</p>
         </RouterLink>
       </div>
-      <!-- END : BRAND -->
+    </div>
+    <!-- END : Header -->
 
-      <ul class="mt-6 space-y-1">
+    <!-- START : Menu -->
+    <div class="sidebar-scrollbar-custom flex-1 overflow-y-auto px-4 py-6">
+      <ul class="space-y-3">
         <li v-for="(menu, index) in menuItems" :key="index">
           <details v-if="menu.submenu" class="group [&_summary::-webkit-details-marker]:hidden">
             <summary
-              class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-800"
+              class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-3 text-white hover:bg-gray-800"
             >
               <div class="flex items-center gap-3 text-sm font-medium">
                 <component :is="menu.icon" class="size-4" />
@@ -101,7 +121,7 @@ const handleLogout = async () => {
               <li v-for="(sub, subIndex) in menu.submenu" :key="subIndex">
                 <RouterLink :to="{ name: sub.link }">
                   <div
-                    class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-all"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all"
                     :class="[
                       route.name === sub.link
                         ? 'bg-lightning-yellow-400 text-black'
@@ -123,7 +143,7 @@ const handleLogout = async () => {
 
           <RouterLink v-else :to="{ name: menu.link }">
             <span
-              class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-all"
+              class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all"
               :class="[
                 route.name === menu.link
                   ? 'bg-lightning-yellow-400 text-black'
@@ -139,7 +159,9 @@ const handleLogout = async () => {
         </li>
       </ul>
     </div>
+    <!-- END : Menu -->
 
+    <!-- START : Footer -->
     <div
       v-if="authStore.isAuthenticated"
       class="sticky inset-x-0 bottom-0 flex flex-col space-y-3 border-t border-gray-800 p-4"
@@ -170,5 +192,6 @@ const handleLogout = async () => {
         </button>
       </div>
     </div>
+    <!-- END : Footer -->
   </div>
 </template>

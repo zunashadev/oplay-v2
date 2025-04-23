@@ -7,8 +7,8 @@ import ButtonComponent from '@/components/buttons/Button.vue';
     <!-- START : Jumlah Akun Aktif -->
     <div class="flex w-full flex-1 items-center justify-between rounded-xl bg-gray-900 px-5 py-5">
       <!-- Left -->
-      <div class="flex items-center gap-3">
-        <img src="/images/apps.png" class="h-8 w-auto" />
+      <div class="flex items-center gap-4">
+        <img src="/images/apps.png" class="h-10 w-auto" />
         <p class="font-medium text-white">Akun Aktif</p>
       </div>
       <!-- Right -->
@@ -22,8 +22,8 @@ import ButtonComponent from '@/components/buttons/Button.vue';
     <!-- START : Jumlah Refferal -->
     <div class="flex w-full flex-1 items-center justify-between rounded-xl bg-gray-900 px-5 py-5">
       <!-- Left -->
-      <div class="flex items-center gap-3">
-        <img src="/images/referral.png" class="h-8 w-auto" />
+      <div class="flex items-center gap-4">
+        <img src="/images/referral.png" class="h-10 w-auto" />
         <p class="font-medium text-white">Jumlah Refferal</p>
       </div>
       <!-- Right -->
@@ -40,11 +40,11 @@ import ButtonComponent from '@/components/buttons/Button.vue';
     >
       <!-- Left -->
       <div class="flex w-full items-center justify-between">
-        <div class="flex items-center gap-3">
-          <img src="/images/money-bag.png" class="h-8 w-auto" />
+        <div class="flex items-center gap-4">
+          <img src="/images/money-bag.png" class="h-10 w-auto" />
           <p class="font-medium text-white">Saldo</p>
         </div>
-        <p class="text-lightning-yellow-400 text-xl font-medium">Rp. 12.000</p>
+        <p class="text-lightning-yellow-400 text-xl font-semibold">Rp. 12.000</p>
       </div>
       <!-- Right -->
       <ButtonComponent textColor="black" size="sm" class="w-full sm:w-min">Gunakan</ButtonComponent>

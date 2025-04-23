@@ -59,7 +59,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       handleResponse({ message, error }, 'success', 'mengunggah gambar QR Code');
       return publicUrl;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengunggah gambar QR Code', err);
+      handleResponse({ message, error }, 'error', 'mengunggah gambar QR Code', { err });
       return null;
     }
   };
@@ -77,7 +77,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
       return success;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus gambar QR Code', err);
+      handleResponse({ message, error }, 'error', 'menghapus gambar QR Code', { err });
       return null;
     }
   };
@@ -99,7 +99,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       handleResponse({ message, error }, 'success', 'mengunggah gambar Logo');
       return publicUrl;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengunggah gambar Logo', err);
+      handleResponse({ message, error }, 'error', 'mengunggah gambar Logo', { err });
       return null;
     }
   };
@@ -117,7 +117,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
       return success;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus gambar Logo', err);
+      handleResponse({ message, error }, 'error', 'menghapus gambar Logo', { err });
       return null;
     }
   };
@@ -142,7 +142,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       paymentMethods.value = data;
       handleResponse({ message, error }, 'success', 'mengambil data payment methods');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil data payment methods', err);
+      handleResponse({ message, error }, 'error', 'mengambil data payment methods', { err });
     } finally {
       loading.value = false;
     }
@@ -167,7 +167,9 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       return data;
     } catch (err) {
       paymentMethod.value = null;
-      handleResponse({ message, error }, 'error', 'mengambil payment method berdasarkan ID', err);
+      handleResponse({ message, error }, 'error', 'mengambil payment method berdasarkan ID', {
+        err,
+      });
       return null;
     } finally {
       loading.value = false;
@@ -233,7 +235,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
       handleResponse({ message, error }, 'success', 'menambah payment method');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menambah payment method', err);
+      handleResponse({ message, error }, 'error', 'menambah payment method', { err });
     } finally {
       loading.value = false;
     }
@@ -284,7 +286,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
       handleResponse({ message, error }, 'success', 'menghapus metode pembayaran');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus metode pembayaran', err);
+      handleResponse({ message, error }, 'error', 'menghapus metode pembayaran', { err });
     } finally {
       loading.value = false;
     }

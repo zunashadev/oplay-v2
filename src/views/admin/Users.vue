@@ -15,7 +15,7 @@ onMounted(() => {
   authStore.fetchAllUsers();
 });
 
-// START : TABLE
+// START : Table
 import TableComponent from '@/components/tables/Table.vue';
 
 const columns = [
@@ -32,7 +32,7 @@ const roles = [
   { id: 'admin', name: 'Admin' },
   { id: 'customer', name: 'Customer' },
 ];
-// END : TABLE
+// END : Table
 </script>
 
 <template>
