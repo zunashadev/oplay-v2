@@ -10,7 +10,7 @@ import { useRewardSettingStore } from '@/stores/rewardSettingStore';
 import ButtonComponent from '@/components/buttons/Button.vue';
 
 // 📌 Icons
-// ...
+import PencilIcon from '@/components/icons/Pencil.vue';
 
 // 📌 ...
 const rewardSettingStore = useRewardSettingStore();
@@ -20,7 +20,6 @@ onMounted(() => {
 });
 
 const toggleActive = async (id, currentStatus) => {
-  console.log(id, currentStatus);
   await rewardSettingStore.toggleRewardSettingStatus(id, !currentStatus);
 };
 </script>
@@ -48,15 +47,38 @@ const toggleActive = async (id, currentStatus) => {
 
           <!-- START : Key -->
           <template v-for="setting in items" :key="setting.key">
-            <div class="flex items-start justify-between rounded-xl bg-gray-900 px-5 py-5">
+            <div
+              class="flex items-start justify-between rounded-xl bg-gray-900 px-5 py-5 transition-all"
+              :class="[setting.is_active ? 'ring-lightning-yellow-400 ring' : '']"
+            >
               <div class="flex flex-col gap-5">
                 <div>
-                  <p class="">{{ setting.key }}</p>
-                  <p class="text-sm text-gray-500">{{ setting.description }}</p>
+                  <p
+                    class="transition-all"
+                    :class="[setting.is_active ? 'text-white' : 'text-gray-500']"
+                  >
+                    {{ setting.key }}
+                  </p>
+                  <p
+                    class="text-sm transition-all"
+                    :class="[setting.is_active ? 'text-gray-500' : 'text-gray-700']"
+                  >
+                    {{ setting.description }}
+                  </p>
                 </div>
-                <p class="text-lightning-yellow-400 font-semibold">
-                  + {{ formatRupiah(setting.amount) }}
-                </p>
+                <div class="flex items-center gap-3">
+                  <p
+                    class="font-semibold transition-all"
+                    :class="[setting.is_active ? 'text-lightning-yellow-400' : 'text-gray-500']"
+                  >
+                    + {{ formatRupiah(setting.amount) }}
+                  </p>
+                  <div
+                    class="hover:text-lightning-yellow-400 text-gray-500 transition-all hover:cursor-pointer"
+                  >
+                    <PencilIcon class="size-3" />
+                  </div>
+                </div>
               </div>
               <div>
                 <ButtonComponent
