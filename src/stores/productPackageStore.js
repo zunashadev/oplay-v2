@@ -8,9 +8,10 @@ import { handleResponse } from '@/utils/responseHandler';
 
 export const useProductPackageStore = defineStore('productPackageStore', () => {
   const packages = ref([]);
+
   const loading = ref(false);
   const message = ref(null);
-  const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
+  const error = ref(null);
 
   // Fungsi : Reset message and error state
   const resetMessageState = () => {

@@ -12,13 +12,16 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
    *    STATE & COMPUTED
    *========================================================================**/
 
-  // State
+  // 📌 State
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);
 
   const rewardEvents = ref([]);
-  const currentRewardEvents = ref(null);
+  const currentRewardEvent = ref(null);
+
+  // 📌 Computed
+  // ...
 
   /**========================================================================
    *    UTILITY FUNCTIONS
@@ -44,10 +47,9 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Fetch Reward Events
+   **   Fetch Reward Events (Admin)
    *------------------------------------------------------------------------**/
 
-  // Fetch Reward Event (Admin)
   const fetchAllRewardEvents = async () => {
     loading.value = true;
     resetMessageState();
@@ -76,7 +78,10 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
     }
   };
 
-  // Fetch Reward Event by User
+  /**------------------------------------------------------------------------
+   **   Fetch Reward Event by User
+   *------------------------------------------------------------------------**/
+
   const fetchRewardEventsByUser = async () => {
     loading.value = true;
     resetMessageState();
@@ -168,13 +173,17 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
     }
   };
 
+  /**========================================================================
+   *    RETURNS
+   *========================================================================**/
+
   return {
     loading,
     message,
     error,
 
     rewardEvents,
-    currentRewardEvents,
+    currentRewardEvent,
 
     fetchAllRewardEvents,
     fetchRewardEventsByUser,

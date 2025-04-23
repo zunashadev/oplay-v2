@@ -6,7 +6,7 @@ const toast = useToastStore();
 </script>
 
 <template>
-  <div class="fixed top-10 right-10 z-[100] flex flex-col gap-3">
+  <div class="fixed top-16 right-10 z-[100] flex flex-col gap-3">
     <Toast
       v-for="item in toast.toasts"
       :key="item.id"
