@@ -220,7 +220,7 @@ const router = createRouter({
 // Navigation Guard Global
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
-  await authStore.getCurrentSession();
+  await authStore.initAuth();
 
   // Set judul halaman
   document.title = to.meta.title ? `${to.meta.title} - Oplay` : 'Oplay';
