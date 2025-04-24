@@ -22,7 +22,7 @@ onMounted(() => {
     <div class="flex w-full flex-1 items-center justify-between rounded-xl bg-gray-900 px-5 py-5">
       <!-- Left -->
       <div class="flex items-center gap-4">
-        <img src="/images/apps.png" class="h-10 w-auto" />
+        <img src="/images/apps.png" class="h-8 w-auto sm:h-10" />
         <p class="font-medium text-white">Akun Aktif</p>
       </div>
       <!-- Right -->
@@ -37,7 +37,7 @@ onMounted(() => {
     <div class="flex w-full flex-1 items-center justify-between rounded-xl bg-gray-900 px-5 py-5">
       <!-- Left -->
       <div class="flex items-center gap-4">
-        <img src="/images/referral.png" class="h-10 w-auto" />
+        <img src="/images/referral.png" class="h-8 w-auto sm:h-10" />
         <p class="font-medium text-white">Jumlah Refferal</p>
       </div>
       <!-- Right -->
@@ -55,7 +55,7 @@ onMounted(() => {
       <!-- Left -->
       <div class="flex w-full items-center justify-between">
         <div class="flex items-center gap-4">
-          <img src="/images/money-bag.png" class="h-10 w-auto" />
+          <img src="/images/money-bag.png" class="h-8 w-auto sm:h-10" />
           <p class="font-medium text-white">Saldo</p>
         </div>
         <div>
