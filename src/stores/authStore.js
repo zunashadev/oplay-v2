@@ -662,6 +662,12 @@ export const useAuthStore = defineStore('authStore', () => {
       }, 1000);
     } else if (event === 'SIGNED_OUT') {
       resetAuthState();
+      // Jika perlu, redirect ke halaman login
+      // window.location.href = '/auth/login';
+    } else if (event === 'TOKEN_REFRESH_FAILED' || event === 'SESSION_EXPIRED') {
+      // Logout secara paksa jika token refresh gagal atau sesi kadaluarsa
+      resetAuthState();
+      window.location.href = '/auth/login';
     }
   });
 
