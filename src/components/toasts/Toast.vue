@@ -25,7 +25,7 @@ onMounted(() => {
 <template>
   <transition name="toast" appear>
     <div
-      class="flex w-80 flex-col gap-1 rounded-lg p-3 text-black shadow-lg"
+      class="flex w-full flex-col gap-1 rounded-lg p-3 text-black shadow-lg"
       :class="error ? 'bg-red-500' : 'bg-green-500'"
     >
       <div class="flex items-center justify-between">

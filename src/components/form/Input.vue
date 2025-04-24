@@ -40,41 +40,44 @@ const emit = defineEmits(['update:modelValue']);
 </script>
 
 <template>
-  <div class="relative w-full">
-    <!-- Label -->
-    <label v-if="label" class="mb-1 block text-sm text-gray-500">
+  <div class="flex flex-col gap-1">
+    <!-- 📌 Label -->
+    <label v-if="label" class="block text-sm text-gray-500">
       {{ label }}
       <span v-if="required" class="text-red-500">*</span>
     </label>
 
-    <!-- Slot untuk icon di kiri -->
-    <div
-      v-if="iconPlacement === 'start'"
-      class="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500"
-    >
-      <slot name="icon-start" />
-    </div>
+    <!-- 📌 Field -->
+    <div class="relative w-full">
+      <!-- Slot untuk icon di kiri -->
+      <div
+        v-if="iconPlacement === 'start'"
+        class="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500"
+      >
+        <slot name="icon-start" />
+      </div>
 
-    <!-- Input Utama -->
-    <input
-      :type="type"
-      :placeholder="placeholder"
-      :value="modelValue"
-      @input="emit('update:modelValue', $event.target.value)"
-      :disabled="disabled"
-      :required="required"
-      :data-error="error"
-      :data-success="success"
-      :data-icon-placement="iconPlacement"
-      class="peer border-blue-charcoal-800 focus:border-lightning-yellow-400 hover:border-lightning-yellow-400/50 w-full rounded-md border bg-black px-2.5 py-2 text-sm text-white shadow-sm transition-all ease-in outline-none placeholder:text-gray-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:cursor-not-allowed data-[error=true]:border-red-500 data-[icon-placement=end]:pe-9 data-[icon-placement=start]:ps-9 data-[success=true]:border-green-500"
-    />
+      <!-- Input Utama -->
+      <input
+        :type="type"
+        :placeholder="placeholder"
+        :value="modelValue"
+        @input="emit('update:modelValue', $event.target.value)"
+        :disabled="disabled"
+        :required="required"
+        :data-error="error"
+        :data-success="success"
+        :data-icon-placement="iconPlacement"
+        class="peer border-blue-charcoal-800 focus:border-lightning-yellow-400 hover:border-lightning-yellow-400/50 w-full rounded-md border bg-black px-2.5 py-2 text-sm text-white shadow-sm transition-all ease-in outline-none placeholder:text-gray-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:cursor-not-allowed data-[error=true]:border-red-500 data-[icon-placement=end]:pe-9 data-[icon-placement=start]:ps-9 data-[success=true]:border-green-500"
+      />
 
-    <!-- Slot untuk icon di kanan -->
-    <div
-      v-if="iconPlacement === 'end'"
-      class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:cursor-pointer"
-    >
-      <slot name="icon-end" />
+      <!-- Slot untuk icon di kanan -->
+      <div
+        v-if="iconPlacement === 'end'"
+        class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:cursor-pointer"
+      >
+        <slot name="icon-end" />
+      </div>
     </div>
   </div>
 </template>

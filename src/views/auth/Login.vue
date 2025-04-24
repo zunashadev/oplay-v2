@@ -96,35 +96,36 @@ onMounted(() => {
           <!-- Input Form -->
           <div class="space-y-4">
             <!-- Email -->
-            <div class="flex flex-col gap-2">
-              <label for="email" class="block text-sm font-normal text-gray-500">Email</label>
-              <InputComponent v-model="email" type="email" placeholder="Masukkan email" required />
-            </div>
+            <InputComponent
+              v-model="email"
+              type="email"
+              label="Email"
+              placeholder="Masukkan email"
+              required
+            />
 
             <!-- Password -->
-            <div class="flex flex-col gap-2">
-              <label for="password" class="block text-sm font-normal text-gray-500">Password</label>
-              <InputComponent
-                v-model="password"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="Masukkan password"
-                iconPlacement="end"
-                required
-              >
-                <template #icon-end>
-                  <div @click="showPassword = !showPassword">
-                    <EyeIcon
-                      v-if="!showPassword"
-                      class="hover:text-lightning-yellow-400 size-4 transition-all"
-                    />
-                    <EyeCrossedIcon
-                      v-else
-                      class="hover:text-lightning-yellow-400 size-4 transition-all"
-                    />
-                  </div>
-                </template>
-              </InputComponent>
-            </div>
+            <InputComponent
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              label="Password"
+              placeholder="Masukkan password"
+              iconPlacement="end"
+              required
+            >
+              <template #icon-end>
+                <div @click="showPassword = !showPassword">
+                  <EyeIcon
+                    v-if="!showPassword"
+                    class="hover:text-lightning-yellow-400 size-4 transition-all"
+                  />
+                  <EyeCrossedIcon
+                    v-else
+                    class="hover:text-lightning-yellow-400 size-4 transition-all"
+                  />
+                </div>
+              </template>
+            </InputComponent>
           </div>
 
           <!-- Login Button -->
