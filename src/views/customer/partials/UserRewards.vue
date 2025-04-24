@@ -47,7 +47,7 @@ const handleClaim = async (id) => {
           <!-- 📌 Detail -->
           <div class="flex items-center gap-3">
             <div class="flex-none">
-              <img src="/images/coin.png" class="h-8 w-auto" />
+              <img src="/images/coin.png" class="h-6 w-auto sm:h-8" />
             </div>
             <div class="flex flex-col gap-1">
               <p class="text-lightning-yellow-400 text-sm font-semibold sm:text-base">
