@@ -402,6 +402,7 @@ export const useAuthStore = defineStore('authStore', () => {
   // };
 
   // New
+  // ! ini masih ada kendala karena akan menyebabkan zombie login
   const logout = async (retryCount = 0) => {
     loading.value = true;
     resetMessageState();
