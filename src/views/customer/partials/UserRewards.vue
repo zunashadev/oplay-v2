@@ -43,7 +43,9 @@ const handleClaim = async (id) => {
     </div>
     <div class="flex flex-col gap-3">
       <template v-for="rewardEvent in rewardEventStore.rewardEvents" :key="rewardEvent.id">
-        <div class="flex items-center justify-between gap-3 rounded-lg bg-gray-800 px-5 py-2.5">
+        <div
+          class="flex items-center justify-between gap-3 rounded-lg bg-gray-800 px-3 py-2 sm:px-5 sm:py-2.5"
+        >
           <!-- 📌 Detail -->
           <div class="flex items-center gap-3">
             <div class="flex-none">
