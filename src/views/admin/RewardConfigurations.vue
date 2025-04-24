@@ -9,6 +9,8 @@ import { useRewardSettingStore } from '@/stores/rewardSettingStore';
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
 
+import EditRewardSettingAmountModalComponent from './components/modals/EditRewardSettingAmountModal.vue';
+
 // 📌 Icons
 import PencilIcon from '@/components/icons/Pencil.vue';
 
@@ -22,9 +24,19 @@ onMounted(() => {
 const toggleActive = async (id, currentStatus) => {
   await rewardSettingStore.toggleRewardSettingStatus(id, !currentStatus);
 };
+
+// 📌 Edit Amount Modal
+const editRewardSettingAmountModalRef = ref(null);
+
+function openEditProductModal(id) {
+  editRewardSettingAmountModalRef.value.openModal(id);
+}
 </script>
 
 <template>
+  <!-- Edit Amount -->
+  <EditRewardSettingAmountModalComponent ref="editRewardSettingAmountModalRef" />
+
   <div class="flex flex-col gap-12">
     <!-- START : ... -->
     <div>
@@ -74,6 +86,7 @@ const toggleActive = async (id, currentStatus) => {
                     + {{ formatRupiah(setting.amount) }}
                   </p>
                   <div
+                    @click="openEditProductModal(setting.id)"
                     class="hover:text-lightning-yellow-400 text-gray-500 transition-all hover:cursor-pointer"
                   >
                     <PencilIcon class="size-3" />

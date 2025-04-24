@@ -5,6 +5,7 @@ import { calculateFinalPrice } from '@/utils/priceCalculator';
 
 // 📌 Stores
 import { useRewardEventStore } from '@/stores/rewardEventStore';
+import { useWalletStore } from '@/stores/walletStore';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
@@ -15,10 +16,20 @@ import EyeIcon from '@/components/icons/Eye.vue';
 
 // 📌 ...
 const rewardEventStore = useRewardEventStore();
+const walletStore = useWalletStore();
 
 onMounted(() => {
   rewardEventStore.fetchRewardEventsByUser();
 });
+
+const handleClaim = async (id) => {
+  const result = await rewardEventStore.claimRewardEvent(id);
+  if (result) {
+    console.log('Reward berhasil diklaim!');
+    await rewardEventStore.fetchRewardEventsByUser(); // refresh data
+    await walletStore.fetchWalletByUser(); // refresh data
+  }
+};
 </script>
 
 <template>
@@ -44,8 +55,32 @@ onMounted(() => {
               <p class="text-sm text-gray-500">{{ rewardEvent.note }}</p>
             </div>
           </div>
-          <ButtonComponent variant="solid" size="sm" textColor="black">
+          <ButtonComponent
+            v-if="rewardEvent.status == 'pending'"
+            @click="handleClaim(rewardEvent.id)"
+            variant="solid"
+            size="sm"
+            textColor="black"
+          >
             <span>Claim</span>
+          </ButtonComponent>
+          <ButtonComponent
+            v-else-if="rewardEvent.status == 'claimed'"
+            variant="solid"
+            size="sm"
+            color="gray"
+            textColor="black"
+          >
+            <span>Claimed</span>
+          </ButtonComponent>
+          <ButtonComponent
+            v-else-if="rewardEvent.status == 'rejected'"
+            variant="solid"
+            size="sm"
+            color="red"
+            textColor="black"
+          >
+            <span>Rejected</span>
           </ButtonComponent>
         </div>
       </template>

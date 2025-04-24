@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+
+// 📌 Stores
 import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 
+// 📌 Components
 import DialogModalComponent from '@/components/modals/DialogModal.vue';
 import InputComponent from '@/components/form/Input.vue';
 import SelectComponent from '@/components/form/Select.vue';

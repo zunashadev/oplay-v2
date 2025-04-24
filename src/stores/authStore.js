@@ -287,6 +287,26 @@ export const useAuthStore = defineStore('authStore', () => {
 
       profile.value = currentProfile;
 
+      // 📌 Membuat wallet baru untuk user
+      const createWalletResponse = await fetch(
+        'https://usiluuzsrawbybmslrml.supabase.co/functions/v1/create-wallet',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${userData.session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      const walletData = await createWalletResponse.json();
+
+      if (createWalletResponse.status !== 201) {
+        throw new Error(walletData.error || 'Gagal membuat wallet');
+      }
+
+      console.log('Wallet berhasil dibuat:', walletData.message);
+
       // 📌 Reward referral
       if (referrer_id) {
         await giveReferralRewards(currentProfile, referrer_id, referral_username);

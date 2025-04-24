@@ -173,6 +173,66 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
     }
   };
 
+  /**------------------------------------------------------------------------
+   **   Claim Reward Event (Edge Function)
+   *------------------------------------------------------------------------**/
+
+  const claimRewardEvent = async (reward_event_id) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      // 📌 Dapatkan akses token
+      const authStore = useAuthStore();
+      const accessToken = authStore.session?.access_token;
+
+      if (!accessToken) throw new Error('Tidak ada akses token');
+
+      // 📌 Validasi parameter
+      if (!reward_event_id) throw new Error('Reward event ID tidak valid');
+
+      // 📌 Panggil Edge Function untuk klaim reward
+      const res = await fetch(
+        'https://usiluuzsrawbybmslrml.supabase.co/functions/v1/claim-reward',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ reward_event_id }),
+        },
+      );
+
+      // Coba parse respons sebagai JSON terlebih dahulu
+      let data;
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const textData = await res.text();
+        throw new Error(`Format respons tidak sesuai: ${textData}`);
+      }
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${data.error || 'Error tidak dikenal'}`);
+      }
+
+      // 📌 Pemeriksaan pesan yang lebih fleksibel
+      if (!data.message || !data.message.includes('claimed')) {
+        throw new Error('Response dari server tidak sesuai.');
+      }
+
+      handleResponse({ message, error }, 'success', 'mengklaim reward');
+      return data;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengklaim reward', { err });
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   /**========================================================================
    *    RETURNS
    *========================================================================**/
@@ -188,5 +248,6 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
     fetchAllRewardEvents,
     fetchRewardEventsByUser,
     addRewardEvent,
+    claimRewardEvent,
   };
 });

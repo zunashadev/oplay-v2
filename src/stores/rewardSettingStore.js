@@ -74,6 +74,36 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**------------------------------------------------------------------------
+   **   Fetch Reward Setting by ID
+   *------------------------------------------------------------------------**/
+
+  const fetchRewardSettingById = async (id) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('reward_settings')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (fetchError) throw new Error(fetchError.message);
+
+      currentRewardSetting.value = data;
+
+      handleResponse({ message, error }, 'success', 'mengambil reward setting berdasarkan id');
+      return data;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengambil reward setting berdasarkan id', {
+        err,
+      });
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**------------------------------------------------------------------------
    **   Fetch Reward Settings (Grouped by Type)
    *------------------------------------------------------------------------**/
 
@@ -106,7 +136,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Edit is_active Status
+   **   Update is_active Status
    *------------------------------------------------------------------------**/
 
   const toggleRewardSettingStatus = async (id, newStatus) => {
@@ -132,6 +162,38 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
     }
   };
 
+  /**------------------------------------------------------------------------
+   **   Update is_active Status
+   *------------------------------------------------------------------------**/
+
+  const updateRewardSettingAmount = async (id, newAmount) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const { error: updateError } = await supabase
+        .from('reward_settings')
+        .update({ amount: newAmount })
+        .eq('id', id);
+
+      if (updateError) throw new Error(updateError.message);
+
+      handleResponse({ message, error }, 'success', 'mengubah amount reward');
+
+      // Opsional: perbarui data lokal jika currentRewardSetting sedang aktif
+      if (currentRewardSetting.value && currentRewardSetting.value.id === id) {
+        currentRewardSetting.value.amount = newAmount;
+      }
+
+      // Opsional: refresh data utama
+      await fetchGroupedRewardSettings();
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengubah amount reward', { err });
+    } finally {
+      loading.value = false;
+    }
+  };
+
   /**========================================================================
    *    RETURNS
    *========================================================================**/
@@ -146,7 +208,9 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
     currentRewardSetting,
 
     fetchAllRewardSettings,
+    fetchRewardSettingById,
     fetchGroupedRewardSettings,
     toggleRewardSettingStatus,
+    updateRewardSettingAmount,
   };
 });

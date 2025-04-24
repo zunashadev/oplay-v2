@@ -1,5 +1,19 @@
 <script setup>
+import { ref, onMounted } from 'vue';
+import { formatRupiah } from '@/utils/format';
+
+// 📌 Stores
+import { useWalletStore } from '@/stores/walletStore';
+
+// 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
+
+// 📌 ...
+const walletStore = useWalletStore();
+
+onMounted(() => {
+  walletStore.fetchWalletByUser();
+});
 </script>
 
 <template>
@@ -44,7 +58,16 @@ import ButtonComponent from '@/components/buttons/Button.vue';
           <img src="/images/money-bag.png" class="h-10 w-auto" />
           <p class="font-medium text-white">Saldo</p>
         </div>
-        <p class="text-lightning-yellow-400 text-xl font-semibold">Rp. 12.000</p>
+        <div>
+          <p v-if="walletStore.loading" class="text-center text-white">Memuat wallet...</p>
+          <p
+            v-else-if="walletStore.currentWallet"
+            class="text-lightning-yellow-400 text-xl font-semibold"
+          >
+            {{ formatRupiah(walletStore.currentWallet?.balance) }}
+          </p>
+          <p v-else class="text-sm text-red-500">Saldo tidak tersedia 😢</p>
+        </div>
       </div>
       <!-- Right -->
       <ButtonComponent textColor="black" size="sm" class="w-full sm:w-min">Gunakan</ButtonComponent>
