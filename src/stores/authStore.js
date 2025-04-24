@@ -52,6 +52,26 @@ export const useAuthStore = defineStore('authStore', () => {
     error.value = null;
   };
 
+  /**------------------------------------------------------------------------
+   **   Clear All Auth Data from Storage
+   *------------------------------------------------------------------------**/
+
+  const clearAllAuthDataFromStorage = () => {
+    const prefix = 'sb-' + supabase.supabaseUrl.split('//')[1].split('.')[0];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(prefix)) {
+        localStorage.removeItem(key);
+      }
+    }
+    // Clear any cookies if you're using cookies
+    document.cookie.split(';').forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, '')
+        .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+    });
+  };
+
   /**========================================================================
    *    FILE HANDLING
    *========================================================================**/
@@ -362,19 +382,95 @@ export const useAuthStore = defineStore('authStore', () => {
    **   Logout
    *------------------------------------------------------------------------**/
 
-  const logout = async () => {
+  //  ! Old
+  // const logout = async () => {
+  //   loading.value = true;
+  //   resetMessageState();
+
+  //   try {
+  //     const { error: logoutError } = await supabase.auth.signOut();
+  //     if (logoutError) throw logoutError;
+
+  //     resetAuthState();
+  //     handleResponse({ message, error }, 'success', 'logout');
+  //   } catch (err) {
+  //     handleResponse({ message, error }, 'error', 'logout', { err });
+  //     throw err;
+  //   } finally {
+  //     loading.value = false;
+  //   }
+  // };
+
+  // New
+  const logout = async (retryCount = 0) => {
     loading.value = true;
     resetMessageState();
 
     try {
-      const { error: logoutError } = await supabase.auth.signOut();
-      if (logoutError) throw logoutError;
+      // 📌 Refresh session
+      try {
+        const { data, error: refreshError } = await supabase.auth.refreshSession();
+        if (refreshError) {
+          console.log('Failed to refresh session before logout:', refreshError);
+        }
+      } catch (refreshErr) {
+        console.log('Error during session refresh:', refreshErr);
+      }
 
+      // 📌 Cek session
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        // Session masih ada -> logout normal
+        const { error: logoutError } = await supabase.auth.signOut();
+        if (logoutError) throw logoutError;
+      } else {
+        // Session tidak ada (mungkin sudah logout dari device lain)
+        console.info('No active session found, clearing local auth data');
+        // Pastikan data auth lokal dibersihkan meskipun tidak ada session
+        clearAllAuthDataFromStorage();
+      }
+
+      // 📌 Tetap reset state terlepas dari kondisi session
       resetAuthState();
       handleResponse({ message, error }, 'success', 'logout');
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'logout', { err });
-      throw err;
+      console.error('Logout error:', err);
+
+      // Cek jika error karena auth session missing
+      if (
+        err.message &&
+        (err.message.includes('auth session missing') ||
+          err.message.includes('No current session') ||
+          err.message.includes('JWT expired') ||
+          err.message.includes('Invalid JWT')) &&
+        retryCount < 3
+      ) {
+        console.log(`Retrying logout... (attempt ${retryCount + 1})`);
+        // Wait a bit and retry
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        return logout(retryCount + 1);
+      }
+
+      // Jika sudah mencapai batas retry atau error lain
+      if (
+        err.message &&
+        (err.message.includes('auth session missing') ||
+          err.message.includes('No current session') ||
+          err.message.includes('JWT expired') ||
+          err.message.includes('Invalid JWT'))
+      ) {
+        // Hapus data auth secara manual jika error terkait session
+        clearAllAuthDataFromStorage();
+        resetAuthState();
+        handleResponse({ message, error }, 'success', 'logout');
+      } else {
+        // Error lain, tangani seperti biasa
+        handleResponse({ message, error }, 'error', 'logout', { err });
+        throw err;
+      }
     } finally {
       loading.value = false;
     }
