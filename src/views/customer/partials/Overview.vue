@@ -23,12 +23,12 @@ onMounted(() => {
   <div class="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:gap-5">
     <!-- 📌 START : Jumlah Akun -->
     <div
-      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-800 px-5 py-5"
+      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
     >
       <!-- Top -->
       <div class="flex w-full justify-between">
         <div class="flex items-center gap-4">
-          <div class="flex-none rounded-xl bg-gray-700 p-3">
+          <div class="flex-none rounded-xl bg-gray-800 p-3">
             <img src="/images/apps.png" class="h-6 w-auto sm:h-8" />
           </div>
           <p class="font-medium text-white">Akun</p>
@@ -49,12 +49,12 @@ onMounted(() => {
 
     <!-- 📌 START : Jumlah Referral -->
     <div
-      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-800 px-5 py-5"
+      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
     >
       <!-- Top -->
       <div class="flex w-full justify-between">
         <div class="flex items-center gap-4">
-          <div class="flex-none rounded-xl bg-gray-700 p-3">
+          <div class="flex-none rounded-xl bg-gray-800 p-3">
             <img src="/images/referral.png" class="h-6 w-auto sm:h-8" />
           </div>
           <p class="font-medium text-white">Referral</p>
@@ -75,12 +75,12 @@ onMounted(() => {
 
     <!-- 📌 START : Saldo -->
     <div
-      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-800 px-5 py-5"
+      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
     >
       <!-- Top -->
       <div class="flex w-full justify-between">
         <div class="flex items-center gap-4">
-          <div class="flex-none rounded-xl bg-gray-700 p-3">
+          <div class="flex-none rounded-xl bg-gray-800 p-3">
             <img src="/images/money-bag.png" class="h-6 w-auto sm:h-8" />
           </div>
           <p class="font-medium text-white">Saldo</p>

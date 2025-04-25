@@ -33,7 +33,7 @@ const handleClaim = async (id) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 rounded-xl bg-gray-800 px-5 py-5">
+  <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
@@ -44,7 +44,7 @@ const handleClaim = async (id) => {
     <div class="flex flex-col gap-3">
       <template v-for="rewardEvent in rewardEventStore.rewardEvents" :key="rewardEvent.id">
         <div
-          class="flex items-center justify-between gap-3 rounded-lg bg-gray-700 px-4 py-2 sm:px-5 sm:py-2.5"
+          class="flex items-center justify-between gap-3 rounded-lg bg-gray-800 px-4 py-2 sm:px-5 sm:py-2.5"
         >
           <!-- 📌 Detail -->
           <div class="flex items-center gap-3">
@@ -55,7 +55,7 @@ const handleClaim = async (id) => {
               <p class="text-sm font-semibold text-yellow-500 sm:text-base">
                 + {{ formatRupiah(rewardEvent.amount) }}
               </p>
-              <p class="text-xs text-gray-400 sm:text-sm">{{ rewardEvent.note }}</p>
+              <p class="text-xs text-gray-500 sm:text-sm">{{ rewardEvent.note }}</p>
             </div>
           </div>
           <!-- 📌 Button -->

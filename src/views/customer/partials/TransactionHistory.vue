@@ -22,7 +22,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 rounded-xl bg-gray-800 px-5 py-5">
+  <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
     <!-- START : Title & Filter -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -39,7 +39,7 @@ onMounted(() => {
         <div class="flex flex-col overflow-hidden rounded-xl">
           <!-- START : Top -->
           <div
-            class="flex flex-col gap-3 bg-gray-700 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
+            class="flex flex-col gap-3 bg-gray-800 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
           >
             <!-- App -->
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
@@ -59,12 +59,12 @@ onMounted(() => {
               </div>
               <!--  -->
               <div class="flex w-36 flex-col gap-1">
-                <p class="text-sm font-normal text-gray-400">Paket</p>
+                <p class="text-sm font-normal text-gray-500">Paket</p>
                 <p class="text-sm font-medium text-white">{{ order.product_package_name }}</p>
               </div>
               <!--  -->
               <div class="flex w-72 flex-col gap-1">
-                <p class="text-sm font-normal text-gray-400">Harga</p>
+                <p class="text-sm font-normal text-gray-500">Harga</p>
 
                 <!-- Discount -->
                 <template
@@ -112,14 +112,14 @@ onMounted(() => {
               </div>
               <!--  -->
               <div class="flex w-36 flex-col gap-1">
-                <p class="text-sm font-normal text-gray-400">Durasi</p>
+                <p class="text-sm font-normal text-gray-500">Durasi</p>
                 <p class="text-sm font-medium text-white">
                   {{ order.product_package_duration_name }}
                 </p>
               </div>
               <!--  -->
               <div class="flex w-36 flex-col gap-1">
-                <p class="text-sm font-normal text-gray-400">Total Harga</p>
+                <p class="text-sm font-normal text-gray-500">Total Harga</p>
                 <p class="text-sm font-medium text-white">
                   {{ formatRupiah(order.total_price) }}
                 </p>
@@ -127,7 +127,7 @@ onMounted(() => {
             </div>
             <!-- Status -->
             <div class="flex w-24 flex-col gap-1 sm:items-end">
-              <p class="text-sm font-normal text-gray-400">Status</p>
+              <p class="text-sm font-normal text-gray-500">Status</p>
               <template v-if="order.status">
                 <p
                   class="rounded-full px-3 py-1 text-center text-xs font-medium capitalize"
@@ -147,7 +147,9 @@ onMounted(() => {
           </div>
           <!-- END : Top -->
           <!-- START : Bottom -->
-          <div class="flex justify-center bg-gray-600 px-5 py-3 sm:justify-end">
+          <div
+            class="flex justify-center border-t border-gray-700 bg-gray-800 px-5 py-3 sm:justify-end"
+          >
             <div class="flex w-full flex-col gap-2 sm:w-fit sm:flex-row sm:items-center">
               <!-- Lihat Bukti Pembayaran -->
               <template v-if="order?.payment_proof_image_url">
