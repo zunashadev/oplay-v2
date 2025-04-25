@@ -641,36 +641,38 @@ export const useAuthStore = defineStore('authStore', () => {
    **   Setup Listener for Auth State Changes
    *------------------------------------------------------------------------**/
 
-  supabase.auth.onAuthStateChange((event, currentSession) => {
-    if (event === 'SIGNED_IN') {
-      user.value = currentSession?.user || null;
-      session.value = currentSession || null;
+  function initAuthListener() {
+    supabase.auth.onAuthStateChange((event, currentSession) => {
+      if (event === 'SIGNED_IN') {
+        user.value = currentSession?.user || null;
+        session.value = currentSession || null;
 
-      // Tambahkan delay sebelum mencoba fetch profil
-      setTimeout(() => {
-        // Cek apakah masih dalam session yang valid
-        if (user.value && user.value.id) {
-          fetchUserProfile().catch((err) => {
-            console.error('Failed to fetch profile after auth state change:', err);
-            // Jika profile tidak ditemukan, mungkin user telah dihapus
-            // Reset auth state dan redirect ke login
-            resetAuthState();
-            // Redirect jika dibutuhkan
-            window.location.href = '/auth/login';
-          });
-        }
-      }, 1000);
-    } else if (event === 'SIGNED_OUT') {
-      resetAuthState();
-      // Redirect jika dibutuhkan
-      window.location.href = '/auth/login';
-    } else if (event === 'TOKEN_REFRESH_FAILED' || event === 'SESSION_EXPIRED') {
-      // Logout secara paksa jika token refresh gagal atau sesi kadaluarsa
-      resetAuthState();
-      // Redirect jika dibutuhkan
-      window.location.href = '/auth/login';
-    }
-  });
+        // Tambahkan delay sebelum mencoba fetch profil
+        setTimeout(() => {
+          // Cek apakah masih dalam session yang valid
+          if (user.value && user.value.id) {
+            fetchUserProfile().catch((err) => {
+              console.error('Failed to fetch profile after auth state change:', err);
+              // Jika profile tidak ditemukan, mungkin user telah dihapus
+              // Reset auth state dan redirect ke login
+              resetAuthState();
+              // Redirect jika dibutuhkan
+              window.location.href = '/auth/login';
+            });
+          }
+        }, 1000);
+      } else if (event === 'SIGNED_OUT') {
+        resetAuthState();
+        // Redirect jika dibutuhkan
+        window.location.href = '/auth/login';
+      } else if (event === 'TOKEN_REFRESH_FAILED' || event === 'SESSION_EXPIRED') {
+        // Logout secara paksa jika token refresh gagal atau sesi kadaluarsa
+        resetAuthState();
+        // Redirect jika dibutuhkan
+        window.location.href = '/auth/login';
+      }
+    });
+  }
 
   /**========================================================================
    *    Return
@@ -702,5 +704,8 @@ export const useAuthStore = defineStore('authStore', () => {
     updateUser,
     updateUserRole,
     fetchAllUsers,
+
+    // ...
+    initAuthListener,
   };
 });

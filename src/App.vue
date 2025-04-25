@@ -8,10 +8,11 @@ import { useAuthStore } from './stores/authStore';
 // 📌 Components
 import ToastListComponent from '@/components/toasts/ToastList.vue';
 
+// 📌 ...
 const authStore = useAuthStore();
 
 onMounted(async () => {
-  await authStore.initAuth();
+  authStore.initAuthListener();
 });
 </script>
 
