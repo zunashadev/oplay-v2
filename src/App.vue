@@ -11,7 +11,6 @@ import ToastListComponent from '@/components/toasts/ToastList.vue';
 const authStore = useAuthStore();
 
 onMounted(async () => {
-  await authStore.checkSession(); // Memanggil fungsi checkSession dari store saat komponen dimuat
   await authStore.initAuth();
 });
 </script>

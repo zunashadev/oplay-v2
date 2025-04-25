@@ -598,33 +598,6 @@ export const useAuthStore = defineStore('authStore', () => {
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Check Session
-   *------------------------------------------------------------------------**/
-
-  const checkSession = async () => {
-    try {
-      // Mendapatkan sesi pengguna saat ini
-      const {
-        data: { session: currentSession },
-        error,
-      } = await supabase.auth.getSession();
-
-      if (error || !currentSession) {
-        resetAuthState();
-        window.location.href = '/auth/login'; // Redirect ke halaman login jika tidak ada sesi
-      } else {
-        user.value = currentSession.user;
-        session.value = currentSession;
-        // Bisa tambahkan logika lain di sini jika perlu, seperti mengambil profil pengguna
-      }
-    } catch (err) {
-      console.error('Error during session check:', err);
-      resetAuthState();
-      window.location.href = '/auth/login'; // Redirect ke login jika ada kesalahan
-    }
-  };
-
-  /**------------------------------------------------------------------------
    **   Init Auth (nama awalnya -> Get Current Session)
    *------------------------------------------------------------------------**/
 
