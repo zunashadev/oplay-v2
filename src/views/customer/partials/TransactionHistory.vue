@@ -166,7 +166,7 @@ onMounted(() => {
                   <ButtonComponent
                     variant="solid"
                     size="sm"
-                    color="green"
+                    color="cyan"
                     textColor="black"
                     class="w-full"
                   >
