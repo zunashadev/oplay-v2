@@ -26,7 +26,7 @@ onMounted(() => {
     <!-- START : Title & Filter -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="bg-lightning-yellow-400 h-6 w-1 rounded-md"></div>
+        <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
         <p class="text-xl font-medium">Riwayat Transaksi</p>
       </div>
       <!-- <div>tools</div> -->
@@ -78,7 +78,7 @@ onMounted(() => {
                     <p class="text-sm font-normal text-gray-400 line-through">
                       {{ formatRupiah(order.product_package_price) }}
                     </p>
-                    <p class="text-lightning-yellow-400 text-sm font-normal">
+                    <p class="text-sm font-normal text-yellow-500">
                       {{
                         formatRupiah(
                           calculateFinalPrice(
@@ -133,8 +133,7 @@ onMounted(() => {
                   class="rounded-full px-3 py-1 text-center text-xs font-medium capitalize"
                   :class="[
                     {
-                      'text-lightning-yellow-400 bg-lightning-yellow-400/10':
-                        order.status === 'pending',
+                      'bg-yellow-500/10 text-yellow-500': order.status === 'pending',
                       'bg-blue-500/10 text-blue-500': order.status === 'dibayar',
                       'bg-green-500/10 text-green-500': order.status === 'selesai',
                       'bg-red-500/10 text-red-500': order.status === 'gagal',

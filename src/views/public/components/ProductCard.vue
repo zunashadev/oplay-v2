@@ -24,7 +24,7 @@ const handleClickDetail = () => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-between gap-5 rounded-xl bg-gray-900 px-5 py-5">
+  <div class="flex flex-col justify-between gap-5 rounded-xl bg-gray-800 px-5 py-5">
     <div class="flex flex-1 flex-col gap-5">
       <div class="flex flex-none items-start justify-between">
         <!-- Logo Produk -->

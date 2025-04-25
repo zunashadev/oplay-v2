@@ -47,10 +47,10 @@ const menuItems = ref([
             <div v-for="(menu, index) in menuItems" :key="index" class="flex w-full">
               <RouterLink
                 :to="{ name: menu.link }"
-                class="hover:text-lightning-yellow-400 w-full px-4 py-1.5 text-sm font-medium transition-all hover:cursor-pointer"
+                class="w-full px-4 py-1.5 text-sm font-medium transition-all hover:cursor-pointer hover:text-yellow-500"
                 :class="
                   route.name === menu.link
-                    ? 'rounded-2xl bg-white/10 text-white'
+                    ? 'rounded-2xl bg-white/5 text-white'
                     : 'rounded-md text-white'
                 "
               >
@@ -69,9 +69,9 @@ const menuItems = ref([
     <div v-for="(menu, index) in menuItems" :key="index">
       <RouterLink
         :to="{ name: menu.link }"
-        class="hover:text-lightning-yellow-400 block w-full px-4 py-1.5 text-center font-medium transition-all hover:cursor-pointer"
+        class="block w-full px-4 py-1.5 text-center font-medium transition-all hover:cursor-pointer hover:text-yellow-500"
         :class="
-          route.name === menu.link ? 'rounded-2xl bg-white/10 text-white' : 'rounded-md text-white'
+          route.name === menu.link ? 'rounded-2xl bg-white/5 text-white' : 'rounded-md text-white'
         "
       >
         {{ menu.name }}
