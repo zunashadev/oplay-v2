@@ -21,7 +21,7 @@ onMounted(() => {
 
 <template>
   <div class="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:gap-5">
-    <!-- 📌 START : Jumlah Akun Aktif -->
+    <!-- 📌 START : Jumlah Akun -->
     <div
       class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
     >
@@ -31,7 +31,7 @@ onMounted(() => {
           <div class="flex-none rounded-xl bg-gray-800 p-3">
             <img src="/images/apps.png" class="h-6 w-auto sm:h-8" />
           </div>
-          <p class="font-medium text-white">Akun Aktif</p>
+          <p class="font-medium text-white">Akun</p>
         </div>
         <div>
           <div class="rounded-full border border-gray-700 p-2">
@@ -45,7 +45,7 @@ onMounted(() => {
         <p class="text-xs text-gray-500">Akun</p>
       </div>
     </div>
-    <!-- 📌 END : Jumlah Akun Aktif -->
+    <!-- 📌 END : Jumlah Akun -->
 
     <!-- 📌 START : Jumlah Referral -->
     <div
@@ -67,8 +67,8 @@ onMounted(() => {
       </div>
       <!-- Bottom -->
       <div class="w-full text-end">
-        <p class="text-3xl font-medium text-white">12</p>
-        <p class="text-xs text-gray-500">Akun</p>
+        <p class="text-3xl font-medium text-white">8</p>
+        <p class="text-xs text-gray-500">Pengguna</p>
       </div>
     </div>
     <!-- 📌 END : Jumlah Referral -->

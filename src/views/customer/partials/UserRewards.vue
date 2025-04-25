@@ -37,7 +37,7 @@ const handleClaim = async (id) => {
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="bg-lightning-yellow-400 h-6 w-1 rounded-md"></div>
-        <p class="text-xl font-medium">Daftar Hadiah</p>
+        <p class="text-xl font-medium">Hadiah</p>
       </div>
       <!-- <div>tools</div> -->
     </div>
