@@ -367,7 +367,9 @@ export const useAuthStore = defineStore('authStore', () => {
     resetMessageState();
 
     try {
-      const { error: logoutError } = await supabase.auth.signOut();
+      // local which only terminates the current session for the user but keep sessions on other devices or browsers active
+      const { error: logoutError } = await supabase.auth.signOut({ scope: 'local' });
+
       if (logoutError) throw logoutError;
 
       resetAuthState();
@@ -641,7 +643,7 @@ export const useAuthStore = defineStore('authStore', () => {
    **   Setup Listener for Auth State Changes
    *------------------------------------------------------------------------**/
 
-  function initAuthListener() {
+  const initAuthListener = async () => {
     supabase.auth.onAuthStateChange((event, currentSession) => {
       if (event === 'SIGNED_IN') {
         user.value = currentSession?.user || null;
@@ -672,7 +674,7 @@ export const useAuthStore = defineStore('authStore', () => {
         window.location.href = '/auth/login';
       }
     });
-  }
+  };
 
   /**========================================================================
    *    Return

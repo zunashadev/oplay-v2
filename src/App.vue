@@ -12,8 +12,10 @@ import ToastListComponent from '@/components/toasts/ToastList.vue';
 const authStore = useAuthStore();
 
 onMounted(async () => {
-  authStore.initAuthListener();
+  await authStore.initAuthListener();
 });
+
+console.log(authStore.session);
 </script>
 
 <template>
