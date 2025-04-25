@@ -8,6 +8,9 @@ import { useWalletStore } from '@/stores/walletStore';
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
 
+// 📌 Icons
+import ArrowUpRightIcon from '@/components/icons/ArrowUpRight.vue';
+
 // 📌 ...
 const walletStore = useWalletStore();
 
@@ -19,58 +22,93 @@ onMounted(() => {
 <template>
   <div class="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:gap-5">
     <!-- START : Jumlah Akun Aktif -->
-    <div class="flex w-full flex-1 items-center justify-between rounded-xl bg-gray-900 px-5 py-5">
-      <!-- Left -->
-      <div class="flex items-center gap-4">
-        <img src="/images/apps.png" class="h-8 w-auto sm:h-10" />
-        <p class="font-medium text-white">Akun Aktif</p>
+    <div
+      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
+    >
+      <!-- Top -->
+      <div class="flex w-full justify-between">
+        <div class="flex items-center gap-4">
+          <div class="flex-none rounded-xl bg-gray-800 p-3">
+            <img src="/images/apps.png" class="h-6 w-auto sm:h-8" />
+          </div>
+          <p class="font-medium text-white">Akun Aktif</p>
+        </div>
+        <div>
+          <div class="rounded-full border border-gray-700 p-3">
+            <ArrowUpRightIcon class="size-3 text-gray-500" />
+          </div>
+        </div>
       </div>
-      <!-- Right -->
-      <div class="text-end">
-        <p class="text-xl font-medium text-white">12</p>
+      <!-- Bottom -->
+      <div class="w-full text-end">
+        <p class="text-3xl font-medium text-white">12</p>
         <p class="text-xs text-gray-500">Akun</p>
       </div>
     </div>
     <!-- END : Jumlah Akun Aktif -->
 
-    <!-- START : Jumlah Refferal -->
-    <div class="flex w-full flex-1 items-center justify-between rounded-xl bg-gray-900 px-5 py-5">
-      <!-- Left -->
-      <div class="flex items-center gap-4">
-        <img src="/images/referral.png" class="h-8 w-auto sm:h-10" />
-        <p class="font-medium text-white">Jumlah Refferal</p>
+    <!-- START : Jumlah Referral -->
+    <div
+      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
+    >
+      <!-- Top -->
+      <div class="flex w-full justify-between">
+        <div class="flex items-center gap-4">
+          <div class="flex-none rounded-xl bg-gray-800 p-3">
+            <img src="/images/referral.png" class="h-6 w-auto sm:h-8" />
+          </div>
+          <p class="font-medium text-white">Referral</p>
+        </div>
+        <div>
+          <div class="rounded-full border border-gray-700 p-3">
+            <ArrowUpRightIcon class="size-3 text-gray-500" />
+          </div>
+        </div>
       </div>
-      <!-- Right -->
-      <div class="text-end">
-        <p class="text-xl font-medium text-white">12</p>
+      <!-- Bottom -->
+      <div class="w-full text-end">
+        <p class="text-3xl font-medium text-white">12</p>
         <p class="text-xs text-gray-500">Akun</p>
       </div>
     </div>
-    <!-- END : Jumlah Refferal -->
+    <!-- END : Jumlah Referral -->
 
     <!-- START : Saldo -->
     <div
-      class="flex w-full flex-1 flex-col items-center justify-between gap-4 rounded-xl bg-gray-900 px-5 py-5 sm:flex-row sm:gap-3"
+      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
     >
-      <!-- Left -->
-      <div class="flex w-full items-center justify-between">
+      <!-- Top -->
+      <div class="flex w-full justify-between">
         <div class="flex items-center gap-4">
-          <img src="/images/money-bag.png" class="h-8 w-auto sm:h-10" />
+          <div class="flex-none rounded-xl bg-gray-800 p-3">
+            <img src="/images/money-bag.png" class="h-6 w-auto sm:h-8" />
+          </div>
           <p class="font-medium text-white">Saldo</p>
         </div>
+        <div>
+          <div class="rounded-full border border-gray-700 p-3">
+            <ArrowUpRightIcon class="size-3 text-gray-500" />
+          </div>
+        </div>
+      </div>
+      <!-- Bottom -->
+      <div class="flex w-full items-center justify-end gap-3 text-end">
+        <!-- Saldo -->
         <div>
           <p v-if="walletStore.loading" class="text-center text-white">Memuat wallet...</p>
           <p
             v-else-if="walletStore.currentWallet"
-            class="text-lightning-yellow-400 text-xl font-semibold"
+            class="text-lightning-yellow-400 text-2xl font-semibold"
           >
             {{ formatRupiah(walletStore.currentWallet?.balance) }}
           </p>
           <p v-else class="text-sm text-red-500">Saldo tidak tersedia 😢</p>
         </div>
+        <!-- Button -->
+        <ButtonComponent textColor="black" size="sm" class="w-full sm:w-min">
+          Gunakan
+        </ButtonComponent>
       </div>
-      <!-- Right -->
-      <ButtonComponent textColor="black" size="sm" class="w-full sm:w-min">Gunakan</ButtonComponent>
     </div>
     <!-- END : Saldo -->
   </div>

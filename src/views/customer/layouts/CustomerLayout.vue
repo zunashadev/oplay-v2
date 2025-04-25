@@ -5,7 +5,7 @@ import NavBarPartial from '@/components/navbars/NavBar.vue';
 </script>
 
 <template>
-  <div class="bg-black text-white">
+  <div class="bg-gray-950 text-white">
     <!-- START : NAVBAR -->
     <div class="fixed top-0 left-0 z-50 w-full">
       <NavBarPartial />

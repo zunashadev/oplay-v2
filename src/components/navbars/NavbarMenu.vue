@@ -69,7 +69,7 @@ const menuItems = ref([
     <div v-for="(menu, index) in menuItems" :key="index">
       <RouterLink
         :to="{ name: menu.link }"
-        class="hover:text-lightning-yellow-400 px-4 py-1.5 font-medium transition-all hover:cursor-pointer"
+        class="hover:text-lightning-yellow-400 block w-full px-4 py-1.5 text-center font-medium transition-all hover:cursor-pointer"
         :class="
           route.name === menu.link ? 'rounded-2xl bg-white/10 text-white' : 'rounded-md text-white'
         "
