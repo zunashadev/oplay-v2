@@ -75,12 +75,12 @@ onMounted(() => {
 
     <!-- 📌 START : Saldo -->
     <div
-      class="bg-lightning-yellow-400 flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl px-5 py-5"
+      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
     >
       <!-- Top -->
       <div class="flex w-full justify-between">
         <div class="flex items-center gap-4">
-          <div class="bg-lightning-yellow-300 flex-none rounded-xl p-3">
+          <div class="flex-none rounded-xl bg-gray-800 p-3">
             <img src="/images/money-bag.png" class="h-6 w-auto sm:h-8" />
           </div>
           <p class="font-medium text-white">Saldo</p>
@@ -92,17 +92,20 @@ onMounted(() => {
         </div>
       </div>
       <!-- Bottom -->
-      <div class="flex w-full items-center justify-end gap-3 text-end">
+      <div class="flex w-full flex-col items-center justify-end gap-3 text-end sm:flex-row">
         <!-- Saldo -->
-        <div>
+        <div class="">
           <p v-if="walletStore.loading" class="text-center text-white">Memuat wallet...</p>
-          <p v-else-if="walletStore.currentWallet" class="text-2xl font-semibold text-gray-950">
+          <p
+            v-else-if="walletStore.currentWallet"
+            class="text-lightning-yellow-400 text-2xl font-semibold"
+          >
             {{ formatRupiah(walletStore.currentWallet?.balance) }}
           </p>
           <p v-else class="text-sm text-red-500">Saldo tidak tersedia 😢</p>
         </div>
         <!-- Button -->
-        <ButtonComponent textColor="black" size="sm" color="red" class="w-full sm:w-min">
+        <ButtonComponent textColor="black" size="sm" class="w-full sm:w-min">
           Gunakan
         </ButtonComponent>
       </div>
