@@ -36,7 +36,7 @@ const handleClaim = async (id) => {
   <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="bg-lightning-yellow-400 h-6 w-1 rounded-md"></div>
+        <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
         <p class="text-xl font-medium">Hadiah</p>
       </div>
       <!-- <div>tools</div> -->
@@ -52,7 +52,7 @@ const handleClaim = async (id) => {
               <img src="/images/coin.png" class="h-6 w-auto sm:h-8" />
             </div>
             <div class="flex flex-col gap-1">
-              <p class="text-lightning-yellow-400 text-sm font-semibold sm:text-base">
+              <p class="text-sm font-semibold text-yellow-500 sm:text-base">
                 + {{ formatRupiah(rewardEvent.amount) }}
               </p>
               <p class="text-xs text-gray-500 sm:text-sm">{{ rewardEvent.note }}</p>

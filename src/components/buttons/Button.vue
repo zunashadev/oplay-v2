@@ -19,7 +19,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: 'lightning-yellow',
+    default: 'yellow',
     validator: (value) =>
       [
         'blue-charcoal',
@@ -30,6 +30,7 @@ const props = defineProps({
         'red',
         'green',
         'yellow',
+        'amber',
         'purple',
         'pink',
         'indigo',
@@ -206,6 +207,25 @@ const colorMap = computed(() => {
       ghostHoverBg: 'hover:bg-yellow-100',
       ghostFocusBg: 'focus:bg-yellow-100',
       darkGhostHoverBg: 'dark:hover:bg-yellow-700/30',
+    },
+    amber: {
+      bg: 'bg-amber-500',
+      hoverBg: 'hover:bg-amber-600',
+      focusBg: 'focus:bg-amber-600',
+      text: 'text-amber-500',
+      hoverText: 'hover:text-amber-700',
+      focusText: 'focus:text-amber-700',
+      border: 'border-amber-500',
+      softBg: 'bg-amber-100',
+      softText: 'text-amber-700',
+      softHoverBg: 'hover:bg-amber-200',
+      softFocusBg: 'focus:bg-amber-200',
+      darkText: 'dark:text-amber-400',
+      darkHoverText: 'dark:hover:text-amber-300',
+      darkFocusText: 'dark:focus:text-amber-300',
+      ghostHoverBg: 'hover:bg-amber-100',
+      ghostFocusBg: 'focus:bg-amber-100',
+      darkGhostHoverBg: 'dark:hover:bg-amber-700/30',
     },
     purple: {
       bg: 'bg-purple-500',

@@ -24,7 +24,7 @@ const handleClickDetail = () => {
 </script>
 
 <template>
-  <div class="bg-blue-charcoal-700 flex flex-col justify-between gap-5 rounded-xl px-5 py-5">
+  <div class="flex flex-col justify-between gap-5 rounded-xl bg-gray-900 px-5 py-5">
     <div class="flex flex-1 flex-col gap-5">
       <div class="flex flex-none items-start justify-between">
         <!-- Logo Produk -->
@@ -33,7 +33,7 @@ const handleClickDetail = () => {
           <BrokenImageIcon class="w-4 text-gray-700" />
         </div>
         <!-- Kategori Produk -->
-        <div class="bg-firefly-500 rounded-2xl px-4 py-0.5 text-xs">
+        <div class="rounded-2xl bg-teal-700 px-4 py-0.5 text-xs">
           {{ product.category }}
         </div>
       </div>
@@ -63,7 +63,7 @@ const handleClickDetail = () => {
                     <p class="text-xs font-normal text-gray-500 line-through">
                       {{ formatRupiah(pkg.price) }}
                     </p>
-                    <p class="text-lightning-yellow-400 text-base font-normal">
+                    <p class="text-base font-normal text-yellow-500">
                       {{
                         formatRupiah(
                           calculateFinalPrice(pkg.price, pkg.discount_type, pkg.discount_value),

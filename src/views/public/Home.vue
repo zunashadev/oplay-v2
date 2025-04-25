@@ -10,9 +10,9 @@ import ButtonComponent from '@/components/buttons/Button.vue';
     <div class="flex flex-col items-center space-y-16">
       <div class="flex flex-col items-center space-y-12">
         <div class="flex flex-col items-center space-y-4">
-          <p class="text-lightning-yellow-400 text-2xl font-semibold">OPLAY, Our Play!</p>
+          <p class="text-2xl font-semibold text-yellow-500">OPLAY, Our Play!</p>
           <div
-            class="from-lightning-yellow-200 to-firefly-200 bg-gradient-to-tl bg-clip-text text-center text-3xl/10 font-bold text-transparent sm:text-4xl/12 md:text-5xl/16 lg:text-6xl/18"
+            class="bg-gradient-to-tl from-yellow-200 to-cyan-200 bg-clip-text text-center text-3xl/10 font-bold text-transparent sm:text-4xl/12 md:text-5xl/16 lg:text-6xl/18"
           >
             Dapatkan Akun Premium dengan Harga Terjangkau
           </div>
@@ -20,8 +20,8 @@ import ButtonComponent from '@/components/buttons/Button.vue';
         <p>🚀 Netflix, Spotify, YouTube, dan Lainnya - Langganan Tanpa Ribet, Langsung Aktif!</p>
       </div>
       <div class="flex space-x-4">
-        <ButtonComponent color="firefly">Hubungi Penjual</ButtonComponent>
-        <ButtonComponent color="lightning-yellow">Telusuri Produk</ButtonComponent>
+        <ButtonComponent color="red" textColor="black">Hubungi Penjual</ButtonComponent>
+        <ButtonComponent color="yellow" textColor="black">Telusuri Produk</ButtonComponent>
       </div>
     </div>
   </div>
