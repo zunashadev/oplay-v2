@@ -656,17 +656,18 @@ export const useAuthStore = defineStore('authStore', () => {
             // Reset auth state dan redirect ke login
             resetAuthState();
             // Redirect jika dibutuhkan
-            // window.location.href = '/auth/login';
+            window.location.href = '/auth/login';
           });
         }
       }, 1000);
     } else if (event === 'SIGNED_OUT') {
       resetAuthState();
-      // Jika perlu, redirect ke halaman login
-      // window.location.href = '/auth/login';
+      // Redirect jika dibutuhkan
+      window.location.href = '/auth/login';
     } else if (event === 'TOKEN_REFRESH_FAILED' || event === 'SESSION_EXPIRED') {
       // Logout secara paksa jika token refresh gagal atau sesi kadaluarsa
       resetAuthState();
+      // Redirect jika dibutuhkan
       window.location.href = '/auth/login';
     }
   });
