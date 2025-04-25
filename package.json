@@ -13,6 +13,7 @@
     "@headlessui/vue": "^1.7.23",
     "@supabase/supabase-js": "^2.49.4",
     "@tailwindcss/vite": "^4.0.15",
+    "@vueuse/motion": "^3.0.3",
     "mitt": "^3.0.1",
     "pinia": "^3.0.1",
     "tailwindcss": "^4.0.15",

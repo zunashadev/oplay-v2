@@ -14,8 +14,6 @@ const authStore = useAuthStore();
 onMounted(async () => {
   await authStore.initAuthListener();
 });
-
-console.log(authStore.session);
 </script>
 
 <template>

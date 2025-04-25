@@ -16,7 +16,7 @@
   /* END : FONT */
 
   /* START : COLOR */
-  --color-blue-charcoal-50: #eefaff;
+  /* --color-blue-charcoal-50: #eefaff;
   --color-blue-charcoal-100: #dcf4ff;
   --color-blue-charcoal-200: #b2ebff;
   --color-blue-charcoal-300: #6dddff;
@@ -26,9 +26,21 @@
   --color-blue-charcoal-700: #0074b4;
   --color-blue-charcoal-800: #006295;
   --color-blue-charcoal-900: #00517a;
-  --color-blue-charcoal-950: #00111b; /* Core */
+  --color-blue-charcoal-950: #00111b; Core */
 
-  --color-firefly-50: #eefdfd;
+  --color-blue-charcoal-50: #d1eeff;
+  --color-blue-charcoal-100: #9edbff;
+  --color-blue-charcoal-200: #3db8ff;
+  --color-blue-charcoal-300: #008bdb;
+  --color-blue-charcoal-400: #004e7a;
+  --color-blue-charcoal-500: #00111b; /* Core */
+  --color-blue-charcoal-600: #000d14;
+  --color-blue-charcoal-700: #000a0f;
+  --color-blue-charcoal-800: #00060a;
+  --color-blue-charcoal-900: #000305;
+  --color-blue-charcoal-950: #000305;
+
+  /* --color-firefly-50: #eefdfd;
   --color-firefly-100: #d5f7f8;
   --color-firefly-200: #b0eef1;
   --color-firefly-300: #7ae1e6;
@@ -38,31 +50,67 @@
   --color-firefly-700: #1f717f;
   --color-firefly-800: #215d69;
   --color-firefly-900: #204e59;
-  --color-firefly-950: #0d2a32; /* Core */
+  --color-firefly-950: #0d2a32; Core */
 
-  --color-buttered-rum-50: #ffffe7;
+  --color-firefly-50: #dbf0f6;
+  --color-firefly-100: #b6e0ec;
+  --color-firefly-200: #71c3da;
+  --color-firefly-300: #31a0be;
+  --color-firefly-400: #206679;
+  --color-firefly-500: #0d2a32; /* Core */
+  --color-firefly-600: #0b2228;
+  --color-firefly-700: #07181c;
+  --color-firefly-800: #051114;
+  --color-firefly-900: #020708;
+  --color-firefly-950: #010304;
+
+  /* --color-buttered-rum-50: #ffffe7;
   --color-buttered-rum-100: #fdffc1;
   --color-buttered-rum-200: #fffe85;
   --color-buttered-rum-300: #fff740;
   --color-buttered-rum-400: #ffe70c;
   --color-buttered-rum-500: #f3ce00;
   --color-buttered-rum-600: #d2a000;
-  --color-buttered-rum-700: #a57101; /* Core */
+  --color-buttered-rum-700: #a57101; Core
   --color-buttered-rum-800: #8a5909;
   --color-buttered-rum-900: #75480e;
-  --color-buttered-rum-950: #442604;
+  --color-buttered-rum-950: #442604; */
 
-  --color-lightning-yellow-50: #fffceb;
+  --color-buttered-rum-50: #fff4dc;
+  --color-buttered-rum-100: #ffeabd;
+  --color-buttered-rum-200: #fed376;
+  --color-buttered-rum-300: #febe34;
+  --color-buttered-rum-400: #e9a001;
+  --color-buttered-rum-500: #a57101; /* Core */
+  --color-buttered-rum-600: #845a01;
+  --color-buttered-rum-700: #654501;
+  --color-buttered-rum-800: #422d00;
+  --color-buttered-rum-900: #231800;
+  --color-buttered-rum-950: #0f0a00;
+
+  /* --color-lightning-yellow-50: #fffceb;
   --color-lightning-yellow-100: #fff5c6;
   --color-lightning-yellow-200: #feea89;
   --color-lightning-yellow-300: #fed94b;
-  --color-lightning-yellow-400: #fdc317; /* Core */
+  --color-lightning-yellow-400: #fdc317; Core
   --color-lightning-yellow-500: #f7a509;
   --color-lightning-yellow-600: #db7d04;
   --color-lightning-yellow-700: #b65807;
   --color-lightning-yellow-800: #93440d;
   --color-lightning-yellow-900: #79380e;
-  --color-lightning-yellow-950: #461c02;
+  --color-lightning-yellow-950: #461c02; */
+
+  --color-lightning-yellow-50: #fff9e6;
+  --color-lightning-yellow-100: #fff3d1;
+  --color-lightning-yellow-200: #fee8a4;
+  --color-lightning-yellow-300: #fedb71;
+  --color-lightning-yellow-400: #fdcf44;
+  --color-lightning-yellow-500: #fdc317; /* Core */
+  --color-lightning-yellow-600: #d9a402;
+  --color-lightning-yellow-700: #a27a01;
+  --color-lightning-yellow-800: #6f5401;
+  --color-lightning-yellow-900: #382a00;
+  --color-lightning-yellow-950: #191300;
   /* END : COLOR */
 }
 

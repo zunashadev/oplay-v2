@@ -1,4 +1,9 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue';
+
+// 📌 Components
+import ButtonComponent from '@/components/buttons/Button.vue';
+</script>
 
 <template>
   <div class="h-[2000px] px-24 py-24">
@@ -15,8 +20,8 @@
         <p>🚀 Netflix, Spotify, YouTube, dan Lainnya - Langganan Tanpa Ribet, Langsung Aktif!</p>
       </div>
       <div class="flex space-x-4">
-        <button>Hubungi Penjual</button>
-        <button>Telusuri Produk</button>
+        <ButtonComponent color="firefly">Hubungi Penjual</ButtonComponent>
+        <ButtonComponent color="lightning-yellow">Telusuri Produk</ButtonComponent>
       </div>
     </div>
   </div>
