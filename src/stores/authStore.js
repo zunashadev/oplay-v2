@@ -701,8 +701,5 @@ export const useAuthStore = defineStore('authStore', () => {
     updateUser,
     updateUserRole,
     fetchAllUsers,
-
-    // Session Management
-    checkSession,
   };
 });
