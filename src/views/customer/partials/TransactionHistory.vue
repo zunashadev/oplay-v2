@@ -154,7 +154,13 @@ onMounted(() => {
               <!-- Lihat Bukti Pembayaran -->
               <template v-if="order?.payment_proof_image_url">
                 <a :href="order.payment_proof_image_url" target="_blank" rel="noopener" class="">
-                  <ButtonComponent variant="solid" size="sm" textColor="black" class="w-full">
+                  <ButtonComponent
+                    variant="solid"
+                    size="sm"
+                    color="green"
+                    textColor="black"
+                    class="w-full"
+                  >
                     <FileUploadIcon class="size-5" />
                     <span>Lihat Bukti Pembayaran</span>
                   </ButtonComponent>

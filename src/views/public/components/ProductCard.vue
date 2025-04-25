@@ -33,7 +33,7 @@ const handleClickDetail = () => {
           <BrokenImageIcon class="w-4 text-gray-700" />
         </div>
         <!-- Kategori Produk -->
-        <div class="rounded-2xl bg-teal-700 px-4 py-0.5 text-xs">
+        <div class="rounded-2xl bg-cyan-900 px-4 py-0.5 text-xs">
           {{ product.category }}
         </div>
       </div>
