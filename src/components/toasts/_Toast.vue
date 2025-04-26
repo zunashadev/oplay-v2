@@ -4,7 +4,6 @@ import { defineProps, defineEmits, onMounted } from 'vue';
 // 📌 Icons
 import CrossIcon from '@/components/icons/Cross.vue'; // atau ganti dengan ikon close lain
 import TriangleWarningIcon from '../icons/TriangleWarning.vue';
-import BadgeCheckIcon from '../icons/BadgeCheck.vue';
 
 const props = defineProps({
   message: String,
@@ -28,26 +27,20 @@ onMounted(() => {
 
 <template>
   <transition name="toast" appear>
-    <div class="w-full rounded-lg bg-gray-800 p-3 text-white shadow-lg">
-      <div class="flex items-center gap-3">
-        <!-- Icon -->
-        <div class="rounded-md bg-gray-700 p-2">
-          <TriangleWarningIcon v-if="error" class="size-5 text-red-500" />
-          <BadgeCheckIcon v-else class="size-5 text-green-500" />
-        </div>
-        <!-- Main Content -->
-        <div class="flex flex-col gap-1 pe-2">
-          <p class="text-xs">{{ message }}</p>
-          <p v-if="error" class="text-xs text-gray-500">{{ error }}</p>
-        </div>
-        <!-- Close -->
+    <div
+      class="flex w-full flex-col gap-1 rounded-lg p-3 text-black shadow-lg"
+      :class="error ? 'bg-red-500' : 'bg-green-500'"
+    >
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-medium">{{ message }}</p>
         <button
           @click="closeAlert"
-          class="rounded-md p-1 transition hover:cursor-pointer hover:bg-gray-700"
+          class="rounded-md p-1 transition hover:cursor-pointer hover:bg-white/20"
         >
           <CrossIcon class="size-5" />
         </button>
       </div>
+      <p v-if="error" class="text-xs">{{ error }}</p>
     </div>
   </transition>
 </template>

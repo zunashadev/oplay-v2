@@ -14,8 +14,7 @@ const menuItems = ref([
   { name: 'Beranda', link: 'PublicHome' },
   { name: 'Produk', link: 'PublicProducts' },
   { name: 'FAQ', link: 'PublicFAQ' },
-  { name: 'About', link: '' },
-  { name: 'Menu Lain', link: '' },
+  { name: 'Contact', link: '' },
 ]);
 // END : Menu
 </script>
