@@ -29,16 +29,18 @@ onMounted(() => {
 <template>
   <transition name="toast" appear>
     <div class="w-full rounded-lg bg-gray-800 p-3 text-white shadow-lg">
-      <div class="flex items-center gap-3">
-        <!-- Icon -->
-        <div class="rounded-md bg-gray-700 p-2">
-          <TriangleWarningIcon v-if="error" class="size-5 text-red-500" />
-          <BadgeCheckIcon v-else class="size-5 text-green-500" />
-        </div>
-        <!-- Main Content -->
-        <div class="flex flex-col gap-1 pe-2">
-          <p class="text-xs">{{ message }}</p>
-          <p v-if="error" class="text-xs text-gray-500">{{ error }}</p>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <!-- Icon -->
+          <div class="rounded-md bg-gray-700 p-2">
+            <TriangleWarningIcon v-if="error" class="size-5 text-red-500" />
+            <BadgeCheckIcon v-else class="size-5 text-green-500" />
+          </div>
+          <!-- Main Content -->
+          <div class="flex flex-col gap-1 pe-2">
+            <p class="text-xs">{{ message }}</p>
+            <p v-if="error" class="text-xs text-gray-500">{{ error }}</p>
+          </div>
         </div>
         <!-- Close -->
         <button
