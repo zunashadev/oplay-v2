@@ -111,7 +111,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       if (!user_id) throw new Error('User tidak ditemukan/belum login');
 
       const { data, error: fetchError } = await supabase
-        .from('orderss')
+        .from('orders')
         .select('*')
         .eq('user_id', user_id)
         .order('created_at', { ascending: false });
