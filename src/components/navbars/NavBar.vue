@@ -10,7 +10,7 @@ const authStore = useAuthStore();
 </script>
 
 <template>
-  <nav class="w-full sm:px-12 sm:pt-4 md:px-20 md:pt-6">
+  <nav class="w-full sm:pt-4 md:pt-6">
     <div class="bg-gray-950/50 px-4 py-3 shadow-md backdrop-blur-sm sm:rounded-full">
       <div class="flex items-center justify-between">
         <!-- START : Brand -->

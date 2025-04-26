@@ -337,7 +337,7 @@ const buttonClasses = computed(() => {
 <template>
   <button
     :type="type"
-    class="inline-flex items-center justify-center gap-x-2 rounded-lg font-medium transition-all hover:cursor-pointer disabled:pointer-events-none disabled:opacity-50"
+    class="inline-flex items-center justify-center gap-x-2 rounded-full font-medium transition-all hover:cursor-pointer disabled:pointer-events-none disabled:opacity-50"
     :class="buttonClasses"
     :disabled="disabled"
   >

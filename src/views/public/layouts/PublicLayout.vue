@@ -14,13 +14,13 @@ useNavbarPadding(navbarRef);
 <template>
   <div class="text-white">
     <!-- START : NavBar -->
-    <div ref="navbarRef" class="fixed top-0 left-0 z-50 w-full">
+    <div ref="navbarRef" class="fixed top-0 left-0 z-50 w-full sm:px-12 md:px-24 lg:px-32 xl:px-36">
       <NavBarPartial />
     </div>
     <!-- END : NavBar -->
 
     <!-- START : Main Content -->
-    <div class="pt-20 sm:pt-28">
+    <div class="px-3 pt-20 sm:px-12 sm:pt-28 md:px-24 lg:px-32 xl:px-36">
       <RouterView />
     </div>
     <!-- END : Main Content -->

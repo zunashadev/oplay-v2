@@ -6,6 +6,7 @@ import { useProductPackageStore } from '@/stores/productPackageStore';
 import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
+import InputComponent from '@/components/form/Input.vue';
 
 import ProductCardComponent from './components/ProductCard.vue';
 import ProductCardLoadingSkeletonComponent from './components/ProductCardLoadingSkeleton.vue';
@@ -30,7 +31,25 @@ const goToDetail = (slug) => {
 <template>
   <div class="flex flex-col gap-8 px-6 py-6 sm:px-12">
     <!-- START : Filter -->
-    <!-- <div>Filter</div> -->
+    <div class="flex items-center justify-between rounded-full">
+      <div class="w-96">
+        <InputComponent placeholder="Cari produk..." />
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="rounded-full px-6 py-2 text-sm outline outline-gray-500 hover:cursor-pointer">
+          Design
+        </div>
+        <div class="rounded-full bg-yellow-500 px-6 py-2 text-sm text-black hover:cursor-pointer">
+          Music
+        </div>
+        <div class="rounded-full px-6 py-2 text-sm outline outline-gray-500 hover:cursor-pointer">
+          Streaming
+        </div>
+        <div class="rounded-full px-6 py-2 text-sm outline outline-gray-500 hover:cursor-pointer">
+          AI
+        </div>
+      </div>
+    </div>
     <!-- END : Filter -->
 
     <!-- START : List Product -->
@@ -45,7 +64,7 @@ const goToDetail = (slug) => {
     >
       <!-- Loading -->
       <template v-if="productStore.loading">
-        <ProductCardLoadingSkeletonComponent v-for="n in 10" :key="n" />
+        <ProductCardLoadingSkeletonComponent v-for="n in 4" :key="n" />
       </template>
 
       <!-- Produk -->
