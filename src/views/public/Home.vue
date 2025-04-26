@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { motion } from 'motion-v';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
@@ -20,8 +21,13 @@ import ButtonComponent from '@/components/buttons/Button.vue';
         <p>🚀 Netflix, Spotify, YouTube, dan Lainnya - Langganan Tanpa Ribet, Langsung Aktif!</p>
       </div>
       <div class="flex space-x-4">
-        <ButtonComponent color="red" textColor="black">Hubungi Penjual</ButtonComponent>
-        <ButtonComponent color="yellow" textColor="black">Telusuri Produk</ButtonComponent>
+        <motion.div drag :whileHover="{ scale: 1.1 }" :whilePress="{ scale: 0.95 }">
+          <ButtonComponent color="red" textColor="black">Hubungi Penjual</ButtonComponent>
+        </motion.div>
+
+        <motion.div drag :whileHover="{ scale: 1.1 }" :whilePress="{ scale: 0.95 }">
+          <ButtonComponent color="yellow" textColor="black">Telusuri Produk</ButtonComponent>
+        </motion.div>
       </div>
     </div>
   </div>
