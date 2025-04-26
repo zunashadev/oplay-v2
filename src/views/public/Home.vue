@@ -16,65 +16,67 @@ import ButtonComponent from '@/components/buttons/Button.vue';
   </div>
 
   <!-- 📌 Main Content -->
-  <div class="relative space-y-24 py-16 sm:space-y-32 sm:py-24">
+  <div class="relative space-y-12 sm:space-y-16 md:space-y-20">
     <!-- 📌 Hero Section -->
-    <div class="flex flex-col items-center space-y-16">
-      <div class="flex flex-col items-center space-y-12">
-        <div class="flex flex-col items-center space-y-4">
-          <!-- 📌 ... -->
-          <p class="text-2xl font-semibold text-yellow-500">OPLAY, Our Play!</p>
-          <!-- 📌 ... -->
-          <div class="relative">
-            <div
-              class="bg-gradient-to-tl from-yellow-200 to-cyan-200 bg-clip-text text-center text-3xl/10 font-bold text-transparent sm:text-4xl/12 md:text-5xl/16 lg:text-6xl/18"
-            >
-              Dapatkan Akun Premium dengan Harga Terjangkau
+    <div class="py-32">
+      <div class="flex flex-col items-center space-y-16">
+        <div class="flex flex-col items-center space-y-12">
+          <div class="flex flex-col items-center space-y-4">
+            <!-- 📌 ... -->
+            <p class="text-2xl font-semibold text-yellow-500">OPLAY, Our Play!</p>
+            <!-- 📌 ... -->
+            <div class="relative">
+              <div
+                class="bg-gradient-to-tl from-yellow-200 to-cyan-200 bg-clip-text text-center text-3xl/10 font-bold text-transparent sm:text-4xl/12 md:text-5xl/16 lg:text-6xl/18"
+              >
+                Dapatkan Akun Premium dengan Harga Terjangkau
+              </div>
+
+              <img
+                src="/images/illustrations/cloud.png"
+                class="absolute top-1/2 -left-0 h-auto w-4 translate-y-5 sm:-left-12 sm:w-6 xl:w-8 xl:-translate-y-1/2"
+              />
+              <img
+                src="/images/illustrations/cloud.png"
+                class="absolute top-1/2 -right-0 h-auto w-4 translate-y-5 sm:-right-12 sm:w-6 xl:w-8 xl:translate-y-1/2"
+              />
             </div>
-
-            <img
-              src="/images/illustrations/cloud.png"
-              class="absolute top-1/2 -left-0 h-auto w-4 translate-y-5 sm:-left-12 sm:w-6 xl:w-8 xl:-translate-y-1/2"
-            />
-            <img
-              src="/images/illustrations/cloud.png"
-              class="absolute top-1/2 -right-0 h-auto w-4 translate-y-5 sm:-right-12 sm:w-6 xl:w-8 xl:translate-y-1/2"
-            />
           </div>
+          <p class="text-center">
+            🚀 Netflix, Spotify, YouTube, dan Lainnya - Langganan Tanpa Ribet, Langsung Aktif!
+          </p>
         </div>
-        <p class="text-center">
-          🚀 Netflix, Spotify, YouTube, dan Lainnya - Langganan Tanpa Ribet, Langsung Aktif!
-        </p>
-      </div>
-      <!-- 📌 ... -->
-      <div class="">
-        <div class="flex flex-col gap-2 sm:flex-row sm:gap-4">
-          <motion.div
-            drag
-            :whileHover="{ scale: 1.1 }"
-            :whilePress="{ scale: 0.95 }"
-            class="w-full flex-none sm:w-1/2"
-          >
-            <ButtonComponent color="gray" textColor="black" class="w-full"
-              >Hubungi Penjual</ButtonComponent
+        <!-- 📌 ... -->
+        <div class="">
+          <div class="flex flex-col gap-2 sm:flex-row sm:gap-4">
+            <motion.div
+              drag
+              :whileHover="{ scale: 1.1 }"
+              :whilePress="{ scale: 0.95 }"
+              class="w-full flex-none sm:w-1/2"
             >
-          </motion.div>
+              <ButtonComponent color="gray" textColor="black" class="w-full"
+                >Hubungi Penjual</ButtonComponent
+              >
+            </motion.div>
 
-          <motion.div
-            drag
-            :whileHover="{ scale: 1.1 }"
-            :whilePress="{ scale: 0.95 }"
-            class="w-full flex-none sm:w-1/2"
-          >
-            <ButtonComponent color="yellow" textColor="black" class="w-full"
-              >Telusuri Produk</ButtonComponent
+            <motion.div
+              drag
+              :whileHover="{ scale: 1.1 }"
+              :whilePress="{ scale: 0.95 }"
+              class="w-full flex-none sm:w-1/2"
             >
-          </motion.div>
+              <ButtonComponent color="yellow" textColor="black" class="w-full"
+                >Telusuri Produk</ButtonComponent
+              >
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 📌 App -->
-    <div class="reset-padding">
+    <div class="reset-padding-x">
       <div
         class="flex w-full flex-wrap items-center justify-center gap-6 bg-gray-900 px-12 py-4 sm:gap-12 md:gap-16 lg:gap-20"
       >
@@ -127,7 +129,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
     </div>
 
     <!-- 📌 ... -->
-    <div></div>
+    <div>tess</div>
   </div>
 </template>
 

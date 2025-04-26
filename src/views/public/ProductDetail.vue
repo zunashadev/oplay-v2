@@ -84,7 +84,7 @@ function closeConfirmOrderModal() {
   <!-- END : Loading -> Page -->
 
   <template v-else>
-    <div class="flex flex-col gap-8 px-6 py-6 sm:px-12">
+    <div class="flex flex-col gap-8">
       <!-- START : Detail Produk -->
       <div v-if="product" class="flex w-full flex-col gap-5 md:flex-row">
         <!-- START : Left -->

@@ -29,7 +29,7 @@ const goToDetail = (slug) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8 py-6">
+  <div class="flex flex-col gap-8">
     <!-- START : Filter -->
     <div class="flex items-center justify-between rounded-full">
       <div class="w-96">

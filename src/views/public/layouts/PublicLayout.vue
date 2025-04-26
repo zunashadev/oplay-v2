@@ -23,7 +23,7 @@ useNavbarPadding(navbarRef);
     <!-- END : NavBar -->
 
     <!-- START : Main Content -->
-    <div class="page-padding pt-20 sm:pt-28">
+    <div class="page-padding-x page-padding-y pt-20 sm:pt-28">
       <RouterView />
     </div>
     <!-- END : Main Content -->
