@@ -162,3 +162,11 @@
   background-color: var(--color-gray-700); /* Warna saat hover */
 }
 /* END : Scrollbar */
+
+.page-padding {
+  @apply px-3 sm:px-12 md:px-24 lg:px-32 xl:px-36 2xl:px-40;
+}
+
+.reset-padding {
+  @apply -mx-3 sm:-mx-12 md:-mx-24 lg:-mx-32 xl:-mx-36 2xl:-mx-40;
+}

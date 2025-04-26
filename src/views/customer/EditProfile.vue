@@ -49,7 +49,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 px-24 py-0">
+  <div class="flex flex-col gap-5 py-0">
     <!-- START : PROFILE -->
     <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
       <form @submit.prevent="updateProfile" class="flex flex-col gap-8">

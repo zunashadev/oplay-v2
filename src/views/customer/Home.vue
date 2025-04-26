@@ -10,7 +10,7 @@ import UserRewardsPartial from './partials/UserRewards.vue';
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 px-3 pb-12 sm:px-12 md:px-20">
+  <div class="flex flex-col gap-6 pb-12">
     <!-- START : Notification ... -->
     <div class="w-full">
       <NotificationPartial />

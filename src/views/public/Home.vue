@@ -16,7 +16,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
   </div>
 
   <!-- 📌 Main Content -->
-  <div class="relative h-[2000px] space-y-24 py-16 sm:space-y-32 sm:py-24">
+  <div class="relative space-y-24 py-16 sm:space-y-32 sm:py-24">
     <!-- 📌 Hero Section -->
     <div class="flex flex-col items-center space-y-16">
       <div class="flex flex-col items-center space-y-12">
@@ -31,14 +31,14 @@ import ButtonComponent from '@/components/buttons/Button.vue';
               Dapatkan Akun Premium dengan Harga Terjangkau
             </div>
 
-            <!-- <img
+            <img
               src="/images/illustrations/cloud.png"
               class="absolute top-1/2 -left-0 h-auto w-4 translate-y-5 sm:-left-12 sm:w-6 xl:w-8 xl:-translate-y-1/2"
             />
             <img
               src="/images/illustrations/cloud.png"
               class="absolute top-1/2 -right-0 h-auto w-4 translate-y-5 sm:-right-12 sm:w-6 xl:w-8 xl:translate-y-1/2"
-            /> -->
+            />
           </div>
         </div>
         <p class="text-center">
@@ -74,7 +74,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
     </div>
 
     <!-- 📌 App -->
-    <div class="-mx-3 sm:-mx-12 md:-mx-24 lg:-mx-32 xl:-mx-36">
+    <div class="reset-padding">
       <div
         class="flex w-full flex-wrap items-center justify-center gap-6 bg-gray-900 px-12 py-4 sm:gap-12 md:gap-16 lg:gap-20"
       >
