@@ -15,7 +15,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
         <!-- 📌 ... -->
         <div class="relative">
           <div
-            class="bg-gradient-to-tl from-yellow-200 to-cyan-200 bg-clip-text text-center text-4xl/12 font-bold text-transparent sm:text-5xl/16 md:text-6xl/18"
+            class="bg-gradient-to-tl from-yellow-200 to-cyan-200 bg-clip-text px-4 text-center text-4xl/12 font-bold text-transparent sm:px-0 sm:text-5xl/16 md:text-6xl/18"
           >
             Dapatkan Akun Premium dengan Harga Terjangkau
           </div>
