@@ -44,7 +44,10 @@ const items = [
 
       <!-- 📌 Illustration : <sm -->
       <div class="flex items-center justify-center lg:hidden">
-        <img src="/images/illustrations/public-home/UndrawGoals.svg" class="max-w-[14rem]" />
+        <img
+          src="/images/illustrations/public-home/UndrawGoals.svg"
+          class="max-w-[16rem] sm:max-w-[20rem]"
+        />
       </div>
 
       <div class="flex flex-col gap-5">
