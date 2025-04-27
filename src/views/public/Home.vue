@@ -17,7 +17,7 @@ import ChooseUsBenefitsPartial from './partials/home/ChooseUsBenefits.vue';
   <!-- 📌 Main Content -->
   <div class="relative space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 xl:space-y-32">
     <!-- 📌 Hero -->
-    <div class="py-32">
+    <div class="py-20">
       <HeroPartial />
     </div>
 

@@ -36,8 +36,16 @@ const items = [
 
 <template>
   <div class="flex gap-24">
-    <div class="flex w-1/2 flex-none flex-col gap-10">
-      <div class="text-5xl/16 font-medium">Kenapa harus memilih kami?</div>
+    <!-- 📌 Benefits -->
+    <div class="flex flex-col gap-10 sm:w-1/2 sm:flex-none">
+      <div class="text-2xl/8 font-medium sm:text-4xl/12 md:text-5xl/16">
+        Kenapa harus memilih kami?
+      </div>
+
+      <!-- 📌 Illustration : <sm -->
+      <div class="flex items-center justify-center sm:hidden">
+        <img src="/images/illustrations/public-home/UndrawGoals.svg" class="max-w-[14rem]" />
+      </div>
 
       <div class="flex flex-col gap-5">
         <div
@@ -48,18 +56,20 @@ const items = [
           <div class="flex flex-col gap-2">
             <div class="flex items-center gap-3">
               <div
-                class="rounded-md border border-gray-500/50 p-2 transition-all group-hover:border-yellow-500/50"
+                class="rounded-md border border-gray-500/50 p-1.5 transition-all group-hover:border-yellow-500/50 sm:p-2"
               >
                 <component
                   :is="item.icon"
-                  class="size-5 text-gray-500 transition-all group-hover:text-yellow-500"
+                  class="size-4 text-gray-500 transition-all group-hover:text-yellow-500 sm:size-5"
                 />
               </div>
-              <p class="text-xl text-gray-500 transition-all group-hover:text-yellow-500">
+              <p
+                class="text-lg text-gray-500 transition-all group-hover:text-yellow-500 sm:text-xl"
+              >
                 {{ item.title }}
               </p>
             </div>
-            <p class="text-sm text-gray-500 transition-all group-hover:text-gray-400">
+            <p class="text-xs text-gray-500 transition-all group-hover:text-gray-400 sm:text-sm">
               {{ item.description }}
             </p>
           </div>
@@ -68,7 +78,8 @@ const items = [
       </div>
     </div>
 
-    <div class="flex w-1/2 items-center justify-center">
+    <!-- 📌 Illustration : large -->
+    <div class="hidden w-1/2 items-center justify-center sm:flex">
       <img src="/images/illustrations/public-home/UndrawGoals.svg" class="max-w-[28rem]" />
     </div>
   </div>
