@@ -37,13 +37,13 @@ const items = [
 <template>
   <div class="flex gap-24">
     <!-- 📌 Benefits -->
-    <div class="flex flex-col gap-10 sm:w-1/2 sm:flex-none">
+    <div class="flex flex-col gap-10 lg:w-1/2 lg:flex-none">
       <div class="text-2xl/8 font-medium sm:text-4xl/12 md:text-5xl/16">
         Kenapa harus memilih kami?
       </div>
 
       <!-- 📌 Illustration : <sm -->
-      <div class="flex items-center justify-center sm:hidden">
+      <div class="flex items-center justify-center lg:hidden">
         <img src="/images/illustrations/public-home/UndrawGoals.svg" class="max-w-[14rem]" />
       </div>
 
@@ -79,8 +79,8 @@ const items = [
     </div>
 
     <!-- 📌 Illustration : large -->
-    <div class="hidden w-1/2 items-center justify-center sm:flex">
-      <img src="/images/illustrations/public-home/UndrawGoals.svg" class="max-w-[28rem]" />
+    <div class="hidden w-1/2 items-center justify-center lg:flex">
+      <img src="/images/illustrations/public-home/UndrawGoals.svg" class="w-full max-w-[28rem]" />
     </div>
   </div>
 </template>
