@@ -9,7 +9,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
 <template>
   <div class="flex flex-col items-center space-y-16">
     <div class="flex flex-col items-center space-y-12">
-      <div class="flex flex-col items-center space-y-4">
+      <div class="flex flex-col items-center space-y-8 sm:space-y-4">
         <!-- 📌 ... -->
         <p class="text-2xl font-semibold text-yellow-500">OPLAY, Our Play!</p>
         <!-- 📌 ... -->
