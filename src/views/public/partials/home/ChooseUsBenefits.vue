@@ -38,7 +38,7 @@ const items = [
   <div class="flex gap-24">
     <!-- 📌 Benefits -->
     <div class="flex flex-col gap-10 lg:w-1/2 lg:flex-none">
-      <div class="text-2xl/8 font-medium sm:text-4xl/12 md:text-5xl/16">
+      <div class="text-3xl/10 font-medium sm:text-4xl/12 md:text-5xl/16">
         Kenapa harus memilih kami?
       </div>
 
