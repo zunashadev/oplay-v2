@@ -11,7 +11,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
     <div class="flex flex-col items-center space-y-12">
       <div class="flex flex-col items-center space-y-8 sm:space-y-4">
         <!-- 📌 ... -->
-        <p class="text-2xl font-semibold text-yellow-500">OPLAY, Our Play!</p>
+        <p class="text-xl font-semibold text-yellow-500 sm:text-2xl">OPLAY, Our Play!</p>
         <!-- 📌 ... -->
         <div class="relative">
           <div
