@@ -30,6 +30,14 @@ const goToDetail = (slug) => {
 
 <template>
   <div class="flex flex-col gap-8">
+    <!-- START : Header -->
+    <div class="page-padding-x reset-page-padding-x bg-gray-900 py-6">
+      <div class="">
+        <p class="text-2xl font-semibold">Daftar Produk</p>
+      </div>
+    </div>
+    <!-- END : Header -->
+
     <!-- START : Filter -->
     <div class="flex items-center justify-between rounded-full">
       <div class="w-96">

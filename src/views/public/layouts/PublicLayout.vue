@@ -23,14 +23,14 @@ useNavbarPadding(navbarRef);
     <!-- END : NavBar -->
 
     <!-- START : Main Content -->
-    <div class="page-padding-x page-padding-y pt-20 sm:pt-28">
+    <div class="page-padding-x page-padding-y">
       <RouterView />
     </div>
     <!-- END : Main Content -->
 
     <!-- START : Footer -->
     <div class="absolute bottom-0 w-full">
-      <div class="bg-yellow-500 px-3 py-2 sm:px-12 md:px-24 lg:px-32 xl:px-36 2xl:px-40">
+      <div class="page-padding-x bg-yellow-500 px-3 py-5">
         <p class="font-bold text-gray-950">OPLAY.ID</p>
       </div>
     </div>

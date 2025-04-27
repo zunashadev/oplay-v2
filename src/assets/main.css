@@ -115,6 +115,16 @@
 }
 
 /* START : Scrollbar */
+/* Hidden */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* Untuk Internet Explorer */
+  scrollbar-width: none; /* Untuk Firefox */
+}
+
 /* General */
 .scrollbar-custom::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -168,9 +178,9 @@
 }
 
 .page-padding-y {
-  @apply py-12 sm:py-24 md:py-32;
+  @apply py-20 sm:py-24 md:py-28 lg:py-32;
 }
 
-.reset-padding-x {
+.reset-page-padding-x {
   @apply -mx-3 sm:-mx-12 md:-mx-24 lg:-mx-32 xl:-mx-36 2xl:-mx-40;
 }
