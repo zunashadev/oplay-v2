@@ -4,6 +4,12 @@ import { motion } from 'motion-v';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
+
+// 📌 Icons
+import CheapDollarIcon from '@/components/icons/CheapDollar.vue';
+import RocketLunchIcon from '@/components/icons/RocketLunch.vue';
+import ShieldCheckIcon from '@/components/icons/ShieldCheck.vue';
+import CreditCardIcon from '@/components/icons/CreditCard.vue';
 </script>
 
 <template>
@@ -16,7 +22,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
   </div>
 
   <!-- 📌 Main Content -->
-  <div class="relative space-y-12 sm:space-y-16 md:space-y-20">
+  <div class="relative space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 xl:space-y-32">
     <!-- 📌 Hero Section -->
     <div class="py-32">
       <div class="flex flex-col items-center space-y-16">
@@ -128,8 +134,116 @@ import ButtonComponent from '@/components/buttons/Button.vue';
       </div>
     </div>
 
-    <!-- 📌 ... -->
-    <div>tess</div>
+    <!-- 📌 Why Us? ... -->
+    <div>
+      <div class="flex gap-24">
+        <div class="flex w-1/2 flex-col gap-10">
+          <div class="text-5xl/16 font-medium">Kenapa harus memilih kami?</div>
+          <div class="flex flex-col gap-5">
+            <!-- 1 -->
+            <div class="group flex flex-col gap-3 transition-all hover:cursor-pointer">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="rounded-md border border-gray-500/50 p-2 transition-all group-hover:border-yellow-500/50"
+                  >
+                    <CheapDollarIcon
+                      class="size-5 text-gray-500 transition-all group-hover:text-yellow-500"
+                    />
+                  </div>
+                  <p class="text-xl text-gray-500 transition-all group-hover:text-yellow-500">
+                    Harga Terjangkau
+                  </p>
+                </div>
+                <p class="text-sm text-gray-500 transition-all group-hover:text-gray-400">
+                  Kami menawarkan harga terbaik untuk akun-akun premium tanpa mengorbankan kualitas.
+                  Dapatkan akses premium dengan biaya yang ramah di kantong.
+                </p>
+              </div>
+              <hr
+                class="rounded-full text-gray-500/50 transition-all group-hover:text-yellow-500/50"
+              />
+            </div>
+
+            <!-- 2 -->
+            <div class="group flex flex-col gap-3 transition-all hover:cursor-pointer">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="rounded-md border border-gray-500/50 p-2 transition-all group-hover:border-yellow-500/50"
+                  >
+                    <RocketLunchIcon
+                      class="size-5 text-gray-500 transition-all group-hover:text-yellow-500"
+                    />
+                  </div>
+                  <p class="text-xl text-gray-500 transition-all group-hover:text-yellow-500">
+                    Proses Cepat
+                  </p>
+                </div>
+                <p class="text-sm text-gray-500 transition-all group-hover:text-gray-400">
+                  Nikmati pengalaman belanja yang cepat dan mudah. Setelah pembayaran dikonfirmasi,
+                  akun Anda langsung dikirim tanpa perlu menunggu lama.
+                </p>
+              </div>
+              <hr
+                class="rounded-full text-gray-500/50 transition-all group-hover:text-yellow-500/50"
+              />
+            </div>
+
+            <!-- 3 -->
+            <div class="group flex flex-col gap-3 transition-all hover:cursor-pointer">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="rounded-md border border-gray-500/50 p-2 transition-all group-hover:border-yellow-500/50"
+                  >
+                    <ShieldCheckIcon
+                      class="size-5 text-gray-500 transition-all group-hover:text-yellow-500"
+                    />
+                  </div>
+                  <p class="text-xl text-gray-500 transition-all group-hover:text-yellow-500">
+                    Garansi Keamanan
+                  </p>
+                </div>
+                <p class="text-sm text-gray-500 transition-all group-hover:text-gray-400">
+                  Keamanan Anda prioritas kami. Kami menjamin setiap akun yang Anda beli aman
+                  digunakan, serta dilindungi dengan garansi penggantian jika terjadi kendala.
+                </p>
+              </div>
+              <hr
+                class="rounded-full text-gray-500/50 transition-all group-hover:text-yellow-500/50"
+              />
+            </div>
+
+            <!-- 4 -->
+            <div class="group flex flex-col gap-3 transition-all hover:cursor-pointer">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="rounded-md border border-gray-500/50 p-2 transition-all group-hover:border-yellow-500/50"
+                  >
+                    <CreditCardIcon
+                      class="size-5 text-gray-500 transition-all group-hover:text-yellow-500"
+                    />
+                  </div>
+                  <p class="text-xl text-gray-500 transition-all group-hover:text-yellow-500">
+                    Beragam Metode Pembayaran
+                  </p>
+                </div>
+                <p class="text-sm text-gray-500 transition-all group-hover:text-gray-400">
+                  Kami mendukung berbagai metode pembayaran mulai dari transfer bank, e-wallet,
+                  hingga pembayaran digital lainnya — memudahkan Anda memilih sesuai kebutuhan.
+                </p>
+              </div>
+              <hr
+                class="rounded-full text-gray-500/50 transition-all group-hover:text-yellow-500/50"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="w-1/2 bg-pink-500">asd</div>
+      </div>
+    </div>
   </div>
 </template>
 
