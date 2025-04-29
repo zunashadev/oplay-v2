@@ -1,8 +1,11 @@
 <script setup>
 import { ref, markRaw } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
+
+// 📌 Stores
 import { useAuthStore } from '@/stores/authStore';
 
+// 📌Icons
 import AppsIcon from '@/components/icons/Apps.vue';
 import BoxesIcon from '@/components/icons/Boxes.vue';
 import OrderHistoryIcon from '@/components/icons/OrderHistory.vue';
@@ -10,7 +13,6 @@ import UsersIcon from '@/components/icons/Users.vue';
 import CircleUserIcon from '@/components/icons/CircleUser.vue';
 import CreditCardIcon from '@/components/icons/CreditCard.vue';
 import GiftIcon from '@/components/icons/Gift.vue';
-
 import LogOutIcon from '@/components/icons/LogOut.vue';
 
 // Data menu
@@ -22,7 +24,7 @@ const menuItems = ref([
     icon: markRaw(BoxesIcon),
     submenu: [
       { name: 'Daftar Produk', link: 'AdminDashboardProducts' },
-      { name: 'Kategori', link: '' },
+      { name: 'Kategori', link: 'AdminDashboardCategories' },
       { name: 'Akun', link: '' },
     ],
   },
@@ -95,7 +97,7 @@ const handleLogout = async () => {
               class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-3 text-white hover:bg-gray-800"
             >
               <div class="flex items-center gap-3 text-sm font-medium">
-                <component :is="menu.icon" class="size-4" />
+                <component :is="menu.icon" class="size-4 text-gray-500" />
                 <span>
                   {{ menu.name }}
                 </span>
@@ -124,14 +126,11 @@ const handleLogout = async () => {
                     class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all"
                     :class="[
                       route.name === sub.link
-                        ? 'bg-lightning-yellow-400 text-black'
+                        ? 'bg-white text-black'
                         : 'text-white hover:bg-gray-800',
                     ]"
                   >
-                    <div
-                      class="size-1 rounded-full"
-                      :class="[route.name === sub.link ? 'bg-black' : 'bg-white']"
-                    ></div>
+                    <div class="size-1 rounded-full bg-gray-500"></div>
                     <span>
                       {{ sub.name }}
                     </span>
@@ -145,12 +144,10 @@ const handleLogout = async () => {
             <span
               class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all"
               :class="[
-                route.name === menu.link
-                  ? 'bg-lightning-yellow-400 text-black'
-                  : 'text-white hover:bg-gray-800',
+                route.name === menu.link ? 'bg-white text-black' : 'text-white hover:bg-gray-800',
               ]"
             >
-              <component :is="menu.icon" class="size-4" />
+              <component :is="menu.icon" class="size-4 text-gray-500" />
               <span>
                 {{ menu.name }}
               </span>

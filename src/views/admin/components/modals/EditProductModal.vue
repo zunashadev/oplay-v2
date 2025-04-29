@@ -1,12 +1,25 @@
 <script setup>
-import { ref } from 'vue';
-import { useProductStore } from '@/stores/productStore';
+import { ref, onMounted } from 'vue';
 
+// 📌 Stores
+import { useProductStore } from '@/stores/productStore';
+import { useProductCategoryStore } from '@/stores/productCategoryStore';
+
+// 📌 Components
 import DialogModalComponent from '@/components/modals/DialogModal.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 import InputComponent from '@/components/form/Input.vue';
 import TextAreaComponent from '@/components/form/TextArea.vue';
 import FileInputComponent from '@/components/form/FileInput.vue';
+import SelectComponent from '@/components/form/Select.vue';
+
+// 📌 ...
+const productCategoryStore = useProductCategoryStore();
+
+// 📌 Fetch Categories
+onMounted(() => {
+  productCategoryStore.fetchCategories();
+});
 
 // START : MODAL
 const dialogModalRef = ref(null);
@@ -23,7 +36,8 @@ async function openModal(productId) {
       name.value = data.name;
       category.value = data.category;
       description.value = data.description;
-      file.value = null;
+      productImageFile.value = null;
+      productBannerImageFile.value = null;
     }
   }
 
@@ -36,7 +50,8 @@ function closeModal() {
   name.value = '';
   category.value = '';
   description.value = '';
-  file.value = null;
+  productImageFile.value = null;
+  productBannerImageFile.value = null;
 
   dialogModalRef.value.closeModal();
 }
@@ -53,7 +68,8 @@ const product = ref('');
 const name = ref('');
 const category = ref('');
 const description = ref('');
-const file = ref(null);
+const productImageFile = ref(null);
+const productBannerImageFile = ref(null);
 
 const updateProduct = async () => {
   if (!selectedProductId.value) return alert('ID produk tidak ditemukan');
@@ -64,7 +80,12 @@ const updateProduct = async () => {
     description: description.value,
   };
 
-  await productStore.updateProduct(selectedProductId.value, updatedData, file.value);
+  await productStore.updateProduct(
+    selectedProductId.value,
+    updatedData,
+    productImageFile.value,
+    productBannerImageFile.value,
+  );
 
   if (!productStore.error) {
     closeModal(); // Tutup modal jika tidak ada error
@@ -76,15 +97,36 @@ const updateProduct = async () => {
 <template>
   <DialogModalComponent ref="dialogModalRef" title="Edit Produk">
     <form @submit.prevent="updateProduct" class="flex flex-col gap-5">
-      <div class="flex flex-col gap-2">
-        <!-- Name -->
-        <InputComponent v-model="name" placeholder="Masukkan nama produk" required />
-        <!-- Category -->
-        <InputComponent v-model="category" placeholder="Masukkan kategori produk" required />
-        <!-- Description -->
-        <TextAreaComponent v-model="description" placeholder="Masukkan deskripsi" required />
-        <!-- File -->
-        <FileInputComponent v-model="file" class="mt-3" />
+      <div class="flex flex-col gap-5">
+        <!-- Nama -->
+        <InputComponent v-model="name" label="Nama" placeholder="Masukkan nama produk" required />
+
+        <!-- Kategori -->
+        <SelectComponent
+          class="w-full"
+          v-model="category"
+          :options="productCategoryStore.categories"
+          label="Kategori"
+          labelKey="name"
+          valueKey="id"
+          placeholder="Pilih kategori"
+          required
+        >
+        </SelectComponent>
+
+        <!-- Deskripsi -->
+        <TextAreaComponent
+          v-model="description"
+          label="Deskripsi"
+          placeholder="Masukkan deskripsi"
+          required
+        />
+
+        <!-- Logo Produk -->
+        <FileInputComponent v-model="productImageFile" label="Logo Produk" />
+
+        <!-- Logo Produk -->
+        <FileInputComponent v-model="productBannerImageFile" label="Banner Produk" />
       </div>
 
       <!-- Submit Button -->

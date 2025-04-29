@@ -6,13 +6,16 @@ import { useProductStore } from '@/stores/productStore';
 import { useOrderStore } from '@/stores/orderStore';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
+// 📌 Components
 import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 import ConfirmOrderModalComponent from './components/modals/ConfirmOrderModal.vue';
 
+// 📌 Icons
 import BoxOpenSolidIcon from '@/components/icons/BoxOpenSolid.vue';
-import Products from './Products.vue';
+import AngleSmallLeftIcon from '@/components/icons/AngleSmallLeft.vue';
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -85,167 +88,201 @@ function closeConfirmOrderModal() {
 
   <template v-else>
     <div class="flex flex-col gap-8">
-      <!-- START : Detail Produk -->
-      <div v-if="product" class="flex w-full flex-col gap-5 md:flex-row">
-        <!-- START : Left -->
-        <div class="flex w-full flex-col gap-5 md:w-2/3">
-          <div class="flex items-center gap-3 rounded-xl bg-gray-900 px-3 py-3 sm:px-5 sm:py-5">
-            <img
-              v-if="product.image_url"
-              :src="product.image_url"
-              alt="Produk"
-              class="max-h-16 w-fit sm:max-h-16"
-            />
-            <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
-              <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
-              <p
-                class="bg-lightning-yellow-400 w-fit rounded-sm px-3 py-0.5 text-xs text-black sm:text-sm"
+      <!-- START : Header -->
+      <div class="flex items-center gap-6">
+        <div class="rounded-full bg-gray-800 p-1.5">
+          <AngleSmallLeftIcon class="size-5" />
+        </div>
+        <p class="text-xl font-medium">Detail Produk</p>
+      </div>
+      <!-- END : Header -->
+
+      <div v-if="product" class="">
+        <!-- START : Product -->
+        <div class="relative">
+          <!-- <div class="h-32 rounded-2xl bg-gray-700"></div> -->
+          <img
+            v-if="product.product_banner_image_path"
+            :src="getPublicImageUrl(product.product_banner_image_path)"
+            alt="Gambar"
+            class="h-44 w-full rounded-2xl object-cover"
+          />
+          <div class="absolute -bottom-16 w-full px-12">
+            <div
+              class="flex items-center gap-3 rounded-2xl bg-gray-900 px-3 py-3 backdrop-blur-sm sm:gap-5 sm:px-6 sm:py-5"
+            >
+              <img
+                v-if="product.product_image_path"
+                :src="getPublicImageUrl(product.product_image_path)"
+                alt="Produk"
+                class="max-h-16 w-fit sm:max-h-16"
+              />
+
+              <div
+                class="flex w-full flex-col justify-between gap-1 sm:flex-row sm:items-center sm:gap-4"
               >
-                {{ product.category }}
-              </p>
+                <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
+                <p
+                  class="bg-lightning-yellow-400 w-fit rounded-sm px-3 py-0.5 text-xs text-black sm:text-sm"
+                >
+                  {{ product.category }}
+                </p>
+              </div>
             </div>
           </div>
-          <p class="text-sm font-normal text-white">{{ product.description }}</p>
         </div>
-        <!-- END : Left -->
+        <!-- END : Product -->
 
-        <!-- START : Right -->
-        <div class="flex w-full flex-col gap-5 rounded-lg bg-gray-900 px-5 py-5 md:w-1/3">
-          <p class="text-xl font-medium">📋 Buat Pesanan</p>
-          <!-- Pilih Paket -->
-          <div class="flex flex-col gap-3">
-            <p class="text-sm text-gray-400">Pilih paket :</p>
-            <template v-if="product.product_packages && product.product_packages.length">
-              <div class="flex flex-col gap-2">
-                <template v-for="pkg in product.product_packages" :key="pkg.id">
-                  <div
-                    @click="selectPackage(pkg)"
-                    class="flex items-center gap-3 rounded-lg px-4 py-2 hover:cursor-pointer"
-                    :class="
-                      selectedPackage?.id === pkg.id
-                        ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                        : 'bg-gray-800'
-                    "
-                  >
-                    <BoxOpenSolidIcon class="size-4 text-gray-600" />
-                    <div>
-                      <p class="text-xs font-normal text-gray-200">
-                        {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
-                      </p>
-                      <!-- Discount -->
-                      <template
-                        v-if="
-                          pkg.discount_type && pkg.discount_type !== '' && pkg.discount_value > 0
-                        "
-                      >
-                        <div class="flex items-center gap-1">
-                          <p class="text-xs font-normal text-gray-400 line-through">
-                            {{ formatRupiah(pkg.price) }}
-                          </p>
-                          <p class="text-lightning-yellow-400 text-base font-normal">
-                            {{
-                              formatRupiah(
-                                calculateFinalPrice(
-                                  pkg.price,
-                                  pkg.discount_type,
-                                  pkg.discount_value,
-                                ),
-                              )
-                            }}
-                          </p>
-                          <span
-                            v-if="pkg.discount_type === 'fixed_amount'"
-                            class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                            >-{{ formatRupiah(pkg.discount_value) }}</span
-                          >
-                          <span
-                            v-if="pkg.discount_type === 'percentage'"
-                            class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                            >-{{ pkg.discount_value }}%</span
-                          >
-                        </div>
-                      </template>
-                      <!-- No Discount -->
-                      <template v-else>
-                        <div>
-                          <p class="text-base font-normal text-gray-200">
-                            {{ formatRupiah(pkg.price) }}
-                          </p>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                </template>
-              </div>
-            </template>
+        <!-- START : Detail Produk -->
+        <div class="mt-28 flex w-full flex-col gap-5 md:flex-row">
+          <!-- START : Left -->
+          <div class="w-full md:w-2/3">
+            <!-- Deskripsi -->
+            <div class="flex flex-col gap-3">
+              <p class="text-xl font-semibold text-white">Deskripsi</p>
+              <p class="text-sm font-normal text-white">{{ product.description }}</p>
+            </div>
           </div>
-          <!-- Pilih Durasi -->
-          <div class="flex flex-col gap-3">
-            <p class="text-sm text-gray-400">Pilih durasi :</p>
+          <!-- END : Left -->
 
-            <template v-if="!selectedPackage">
-              <p class="text-sm font-normal text-gray-600">Pilih paket untuk melihat durasi</p>
-            </template>
-            <template v-else>
-              <template
-                v-if="
-                  !selectedPackage.product_package_durations ||
-                  !selectedPackage.product_package_durations.length
-                "
-              >
-                <p class="text-sm font-normal text-gray-600">
-                  Mohon maaf, untuk saat ini pilihan durasi belum tersedia
-                </p>
-              </template>
-              <template v-else>
-                <div class="grid grid-cols-2 gap-2">
-                  <template
-                    v-for="duration in selectedPackage.product_package_durations"
-                    :key="duration.id"
-                  >
+          <!-- START : Right -->
+          <div class="flex w-full flex-col gap-5 rounded-lg bg-gray-900 px-5 py-5 md:w-1/3">
+            <p class="text-xl font-medium">📋 Buat Pesanan</p>
+            <!-- Pilih Paket -->
+            <div class="flex flex-col gap-3">
+              <p class="text-sm text-gray-400">Pilih paket :</p>
+              <template v-if="product.product_packages && product.product_packages.length">
+                <div class="flex flex-col gap-2">
+                  <template v-for="pkg in product.product_packages" :key="pkg.id">
                     <div
-                      @click="selectDuration(duration)"
-                      class="rounded-lg px-4 py-2 text-center hover:cursor-pointer"
-                      :class="[
-                        selectedDuration?.id === duration.id
+                      @click="selectPackage(pkg)"
+                      class="flex items-center gap-3 rounded-lg px-4 py-2 hover:cursor-pointer"
+                      :class="
+                        selectedPackage?.id === pkg.id
                           ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                          : 'bg-gray-800',
-                      ]"
+                          : 'bg-gray-800'
+                      "
                     >
-                      <p class="text-sm">{{ duration.name }}</p>
+                      <BoxOpenSolidIcon class="size-4 text-gray-600" />
+                      <div>
+                        <p class="text-xs font-normal text-gray-200">
+                          {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
+                        </p>
+                        <!-- Discount -->
+                        <template
+                          v-if="
+                            pkg.discount_type && pkg.discount_type !== '' && pkg.discount_value > 0
+                          "
+                        >
+                          <div class="flex items-center gap-1">
+                            <p class="text-xs font-normal text-gray-400 line-through">
+                              {{ formatRupiah(pkg.price) }}
+                            </p>
+                            <p class="text-lightning-yellow-400 text-base font-normal">
+                              {{
+                                formatRupiah(
+                                  calculateFinalPrice(
+                                    pkg.price,
+                                    pkg.discount_type,
+                                    pkg.discount_value,
+                                  ),
+                                )
+                              }}
+                            </p>
+                            <span
+                              v-if="pkg.discount_type === 'fixed_amount'"
+                              class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
+                              >-{{ formatRupiah(pkg.discount_value) }}</span
+                            >
+                            <span
+                              v-if="pkg.discount_type === 'percentage'"
+                              class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
+                              >-{{ pkg.discount_value }}%</span
+                            >
+                          </div>
+                        </template>
+                        <!-- No Discount -->
+                        <template v-else>
+                          <div>
+                            <p class="text-base font-normal text-gray-200">
+                              {{ formatRupiah(pkg.price) }}
+                            </p>
+                          </div>
+                        </template>
+                      </div>
                     </div>
                   </template>
                 </div>
               </template>
-            </template>
-          </div>
+            </div>
+            <!-- Pilih Durasi -->
+            <div class="flex flex-col gap-3">
+              <p class="text-sm text-gray-400">Pilih durasi :</p>
 
-          <!-- Total Harga -->
-          <div class="flex items-center justify-between">
-            <p>Total Harga :</p>
-            <p>{{ formatRupiah(totalPrice) }}</p>
+              <template v-if="!selectedPackage">
+                <p class="text-sm font-normal text-gray-600">Pilih paket untuk melihat durasi</p>
+              </template>
+              <template v-else>
+                <template
+                  v-if="
+                    !selectedPackage.product_package_durations ||
+                    !selectedPackage.product_package_durations.length
+                  "
+                >
+                  <p class="text-sm font-normal text-gray-600">
+                    Mohon maaf, untuk saat ini pilihan durasi belum tersedia
+                  </p>
+                </template>
+                <template v-else>
+                  <div class="grid grid-cols-2 gap-2">
+                    <template
+                      v-for="duration in selectedPackage.product_package_durations"
+                      :key="duration.id"
+                    >
+                      <div
+                        @click="selectDuration(duration)"
+                        class="rounded-lg px-4 py-2 text-center hover:cursor-pointer"
+                        :class="[
+                          selectedDuration?.id === duration.id
+                            ? 'outline-lightning-yellow-400 bg-gray-900 outline'
+                            : 'bg-gray-800',
+                        ]"
+                      >
+                        <p class="text-sm">{{ duration.name }}</p>
+                      </div>
+                    </template>
+                  </div>
+                </template>
+              </template>
+            </div>
+
+            <!-- Total Harga -->
+            <div class="flex items-center justify-between">
+              <p>Total Harga :</p>
+              <p>{{ formatRupiah(totalPrice) }}</p>
+            </div>
+            <!-- Buat Pesanan -->
+            <ButtonComponent
+              v-if="!authStore.isAuthenticated"
+              variant="solid"
+              textColor="black"
+              disabled=""
+            >
+              Buat Pesanan
+            </ButtonComponent>
+            <ButtonComponent
+              v-else
+              @click="openConfirmOrderModal()"
+              variant="solid"
+              textColor="black"
+            >
+              Buat Pesanan
+            </ButtonComponent>
           </div>
-          <!-- Buat Pesanan -->
-          <ButtonComponent
-            v-if="!authStore.isAuthenticated"
-            variant="solid"
-            textColor="black"
-            disabled=""
-          >
-            Buat Pesanan
-          </ButtonComponent>
-          <ButtonComponent
-            v-else
-            @click="openConfirmOrderModal()"
-            variant="solid"
-            textColor="black"
-          >
-            Buat Pesanan
-          </ButtonComponent>
+          <!-- END : Right -->
         </div>
-        <!-- END : Right -->
+        <!-- END : Detail Produk -->
       </div>
-      <!-- END : Detail Produk -->
 
       <!-- START : Loading -->
       <!-- ! Perlu diperhatikan lagi -->

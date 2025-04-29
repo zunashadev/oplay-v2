@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/authStore';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // Public
+    // 📌 Public
     {
       path: '/',
       component: () => import('../views/public/layouts/PublicLayout.vue'),
@@ -47,7 +47,7 @@ const router = createRouter({
         },
       ],
     },
-    // Auth
+    // 📌 Auth
     {
       path: '/auth',
       component: () => import('../views/auth/layouts/AuthLayout.vue'),
@@ -72,7 +72,7 @@ const router = createRouter({
         },
       ],
     },
-    // Customer
+    // 📌 Customer
     {
       path: '/customer',
       component: () => import('../views/customer/layouts/CustomerLayout.vue'),
@@ -109,7 +109,7 @@ const router = createRouter({
         },
       ],
     },
-    // Admin
+    // 📌 Admin
     {
       path: '/admin',
       component: () => import('../views/admin/layouts/AdminLayout.vue'),
@@ -132,6 +132,16 @@ const router = createRouter({
           component: () => import('../views/admin/Products.vue'),
           meta: {
             title: 'Daftar Produk',
+            requiresAuth: true,
+            requiredRoles: ['admin'],
+          },
+        },
+        {
+          path: 'categories',
+          name: 'AdminDashboardCategories',
+          component: () => import('../views/admin/Categories.vue'),
+          meta: {
+            title: 'Daftar Kategori',
             requiresAuth: true,
             requiredRoles: ['admin'],
           },

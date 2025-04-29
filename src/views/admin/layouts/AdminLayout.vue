@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { RouterView } from 'vue-router';
 
-// Partials
+// 📌 Partials
 import SideBarPartial from '../partials/SideBar.vue';
 import NavBarPartial from '../partials/NavBar.vue';
 
@@ -32,9 +32,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex h-screen bg-black text-white">
+  <div class="flex h-screen text-white">
     <!-- Sidebar -->
-    <div class="h-screen w-full max-w-72 flex-none bg-black">
+    <div class="h-screen w-full max-w-72 flex-none">
       <SideBarPartial />
     </div>
 
@@ -42,7 +42,7 @@ onUnmounted(() => {
     <div ref="mainContent" class="flex flex-1 flex-col overflow-y-auto">
       <!-- Navbar dengan sticky -->
       <div
-        class="sticky top-0 z-50 border-b bg-black transition-all duration-150"
+        class="sticky top-0 z-50 border-b bg-gray-950 transition-all duration-150"
         :class="{ 'border-gray-800': isScrolled, 'border-transparent': !isScrolled }"
       >
         <NavBarPartial />

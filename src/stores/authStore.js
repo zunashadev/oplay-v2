@@ -10,10 +10,10 @@ import { deleteUserViaEdge } from '@/services/authService';
 
 export const useAuthStore = defineStore('authStore', () => {
   /**========================================================================
-   *    STATE & COMPUTED
+   **   STATE & COMPUTED
    *========================================================================**/
 
-  // State
+  // 📌 State
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);
@@ -23,18 +23,18 @@ export const useAuthStore = defineStore('authStore', () => {
   const users = ref([]);
   const profile = ref(null);
 
-  // Computed
+  // 📌 Computed
   const isAuthenticated = computed(() => !!user.value);
   const userName = computed(() => profile.value?.name || 'Guest');
   const userRole = computed(() => profile.value?.role || 'guest');
   const userAvatar = computed(() => profile.value?.avatar_url || '');
 
   /**========================================================================
-   *    UTILITY FUNCTIONS
+   **   UTILITY FUNCTIONS
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Reset Authentication State
+   *    Reset Authentication State
    *------------------------------------------------------------------------**/
 
   const resetAuthState = () => {
@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Reset Message & Error State
+   *    Reset Message & Error State
    *------------------------------------------------------------------------**/
 
   const resetMessageState = () => {
@@ -53,11 +53,11 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**========================================================================
-   *    FILE HANDLING
+   **   FILE HANDLING
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Upload Avatar -> Supabase Storage
+   *    Upload & Delete Avatar -> Supabase Storage
    *------------------------------------------------------------------------**/
 
   const uploadAvatar = async (file) => {
@@ -81,10 +81,6 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  /**------------------------------------------------------------------------
-   **   Delete Avatar -> Supabase Storage
-   *------------------------------------------------------------------------**/
-
   const deleteAvatar = async (imageUrl) => {
     if (!imageUrl) return null;
 
@@ -103,11 +99,11 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**========================================================================
-   *    METHODS - AUTH
+   **   METHODS - AUTH
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Register
+   *    Register
    *------------------------------------------------------------------------**/
 
   const giveReferralRewards = async (newUser, referrer_id, referral_username) => {
@@ -324,7 +320,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Login
+   *    Login
    *------------------------------------------------------------------------**/
 
   const login = async (email, password) => {
@@ -359,7 +355,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Logout
+   *    Logout
    *------------------------------------------------------------------------**/
 
   const logout = async () => {
@@ -383,7 +379,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Fetch All Users
+   *    Fetch All Users
    *------------------------------------------------------------------------**/
 
   const fetchAllUsers = async () => {
@@ -414,7 +410,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Update User (email/password)
+   *    Update User (email/password)
    *!   Masih error
    *------------------------------------------------------------------------**/
 
@@ -457,11 +453,11 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**========================================================================
-   *    PROFILE METHODS
+   **   PROFILE METHODS
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Fetch User Profile
+   *    Fetch User Profile
    *------------------------------------------------------------------------**/
 
   const fetchUserProfile = async () => {
@@ -507,7 +503,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Update Profile
+   *    Update Profile
    *------------------------------------------------------------------------**/
 
   const updateProfile = async (updatedData, newAvatarFile = null) => {
@@ -555,7 +551,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Update Role Pengguna
+   *    Update Role Pengguna
    *    Admnin only / di dashboard user list
    *------------------------------------------------------------------------**/
 
@@ -596,11 +592,11 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**========================================================================
-   *    SESSION MANAGEMENT
+   **   SESSION MANAGEMENT
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Init Auth (nama awalnya -> Get Current Session)
+   *    Init Auth (nama awalnya -> Get Current Session)
    *------------------------------------------------------------------------**/
 
   const initAuth = async () => {
@@ -640,7 +636,7 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Setup Listener for Auth State Changes
+   *    Setup Listener for Auth State Changes
    *------------------------------------------------------------------------**/
 
   const initAuthListener = async () => {
@@ -677,11 +673,11 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   /**========================================================================
-   *    Return
+   **   RETURNS
    *========================================================================**/
 
   return {
-    // State
+    // 📌 States
     session,
     user,
     users,
@@ -690,13 +686,13 @@ export const useAuthStore = defineStore('authStore', () => {
     message,
     error,
 
-    // Computed
+    // 📌 Computeds
     isAuthenticated,
     userName,
     userRole,
     userAvatar,
 
-    // Method
+    // 📌 Methods
     login,
     register,
     logout,

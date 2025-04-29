@@ -9,7 +9,7 @@ import { storageService } from '@/services/storageService';
 
 export const useRewardEventStore = defineStore('rewardEventStore', () => {
   /**========================================================================
-   *    STATE & COMPUTED
+   **   STATE & COMPUTED
    *========================================================================**/
 
   // 📌 State
@@ -20,15 +20,12 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
   const rewardEvents = ref([]);
   const currentRewardEvent = ref(null);
 
-  // 📌 Computed
-  // ...
-
   /**========================================================================
-   *    UTILITY FUNCTIONS
+   **   UTILITY FUNCTIONS
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Reset Message & Error State
+   *    Reset Message & Error State
    *------------------------------------------------------------------------**/
 
   const resetMessageState = () => {
@@ -37,17 +34,17 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
   };
 
   /**========================================================================
-   *    FILE HANDLING
+   **   FILE HANDLING
    *========================================================================**/
 
   //   .....
 
   /**========================================================================
-   *    METHODS
+   **   METHODS
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Fetch Reward Events (Admin)
+   *    Fetch Reward Events (Admin)
    *------------------------------------------------------------------------**/
 
   const fetchAllRewardEvents = async () => {
@@ -79,7 +76,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Fetch Reward Event by User
+   *    Fetch Reward Event by User
    *------------------------------------------------------------------------**/
 
   const fetchRewardEventsByUser = async () => {
@@ -112,7 +109,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Add Reward Event (Edge Function)
+   *    Add Reward Event (Edge Function)
    *------------------------------------------------------------------------**/
 
   const addRewardEvent = async (payload) => {
@@ -174,7 +171,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Claim Reward Event (Edge Function)
+   *    Claim Reward Event (Edge Function)
    *------------------------------------------------------------------------**/
 
   const claimRewardEvent = async (reward_event_id) => {
@@ -234,7 +231,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
   };
 
   /**========================================================================
-   *    RETURNS
+   **   RETURNS
    *========================================================================**/
 
   return {

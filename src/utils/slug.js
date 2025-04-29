@@ -7,8 +7,11 @@ export const generateSlug = async (name, table, column = 'slug') => {
 
   let slug = name
     .toLowerCase()
+    .trim()
     .replace(/\s+/g, '-') // Ganti spasi dengan "-"
-    .replace(/[^\w-]+/g, ''); // Hapus karakter spesial
+    .replace(/[^a-z0-9-]+/g, '') // Hapus karakter selain huruf, angka, dan dash
+    .replace(/-+/g, '-') // Gabungkan dash yang berurutan
+    .replace(/^-|-$/g, ''); // Hapus dash di awal/akhir
 
   let uniqueSlug = slug;
   let count = 1;

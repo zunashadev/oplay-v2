@@ -9,7 +9,7 @@ import { storageService } from '@/services/storageService';
 
 export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   /**========================================================================
-   *    STATE & COMPUTED
+   **   STATE & COMPUTED
    *========================================================================**/
 
   // 📌 State
@@ -21,15 +21,12 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   const groupedRewardSettings = ref({});
   const currentRewardSetting = ref(null);
 
-  // 📌 Computed
-  // ...
-
   /**========================================================================
-   *    UTILITY FUNCTIONS
+   **   UTILITY FUNCTIONS
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Reset Message & Error State
+   *    Reset Message & Error State
    *------------------------------------------------------------------------**/
 
   const resetMessageState = () => {
@@ -38,17 +35,17 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**========================================================================
-   *    FILE HANDLING
+   **   FILE HANDLING
    *========================================================================**/
 
   // .....
 
   /**========================================================================
-   *    METHODS
+   **   METHODS
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Fetch Reward Settings
+   *    Fetch Reward Settings
    *------------------------------------------------------------------------**/
 
   const fetchAllRewardSettings = async () => {
@@ -74,7 +71,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Fetch Reward Setting by ID
+   *    Fetch Reward Setting by ID
    *------------------------------------------------------------------------**/
 
   const fetchRewardSettingById = async (id) => {
@@ -104,7 +101,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Fetch Reward Settings (Grouped by Type)
+   *    Fetch Reward Settings (Grouped by Type)
    *------------------------------------------------------------------------**/
 
   const fetchGroupedRewardSettings = async () => {
@@ -136,7 +133,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Update is_active Status
+   *    Update is_active Status
    *------------------------------------------------------------------------**/
 
   const toggleRewardSettingStatus = async (id, newStatus) => {
@@ -163,7 +160,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   **   Update is_active Status
+   *    Update is_active Status
    *------------------------------------------------------------------------**/
 
   const updateRewardSettingAmount = async (id, newAmount) => {
@@ -195,7 +192,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**========================================================================
-   *    RETURNS
+   **   RETURNS
    *========================================================================**/
 
   return {

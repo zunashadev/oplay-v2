@@ -9,59 +9,126 @@ import { generateSlug } from '@/utils/slug';
 import { storageService } from '@/services/storageService';
 
 export const useProductStore = defineStore('productStore', () => {
-  const products = ref([]);
+  /**========================================================================
+   **   STATE & COMPUTED
+   *========================================================================**/
 
+  // 📌 State
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);
 
-  // Fungsi : Reset message and error state
+  const products = ref([]);
+
+  /**========================================================================
+   **   UTILITY FUNCTIONS
+   *========================================================================**/
+
+  /**------------------------------------------------------------------------
+   *    Reset Message & Error State
+   *------------------------------------------------------------------------**/
+
   const resetMessageState = () => {
     message.value = null;
     error.value = null;
   };
 
-  // Fungsi : Upload gambar ke Supabase Storage
-  const uploadImage = async (file) => {
+  /**========================================================================
+   **   FILE HANDLING
+   *========================================================================**/
+
+  /**------------------------------------------------------------------------
+   *    Upload & Delete Product Image -> Supabase Storage
+   *------------------------------------------------------------------------**/
+
+  const uploadProductImage = async (file) => {
     if (!file) return null;
 
     try {
-      const publicUrl = await storageService.uploadFile(file, 'product-images', 'products', [
+      const path = await storageService.uploadFile(file, 'product-images', 'products', [
         'jpg',
         'jpeg',
         'png',
         'webp',
       ]);
 
-      if (!publicUrl) return null;
+      if (!path) return null;
 
-      handleResponse({ message, error }, 'success', 'mengunggah gambar');
-      return publicUrl;
+      handleResponse({ message, error }, 'success', 'mengunggah gambar produk');
+      return path;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengunggah gambar', { err });
+      handleResponse({ message, error }, 'error', 'mengunggah gambar produk', { err });
       return null;
     }
   };
 
-  // Fungsi : Hapus gambar dari Supabase Storage
-  const deleteImage = async (imageUrl) => {
-    if (!imageUrl) return null;
+  const deleteProductImage = async (imagePath) => {
+    if (!imagePath) return null;
 
     try {
-      const success = await storageService.deleteFile(imageUrl, 'product-images');
+      const success = await storageService.deleteFile(imagePath);
 
       if (success) {
-        handleResponse({ message, error }, 'success', 'menghapus gambar');
+        handleResponse({ message, error }, 'success', 'menghapus gambar produk');
       }
 
       return success;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus gambar', { err });
+      handleResponse({ message, error }, 'error', 'menghapus gambar produk', { err });
       return null;
     }
   };
 
-  // Fungsi : Fetch semua produk
+  /**------------------------------------------------------------------------
+   *    Upload & Delete Product Banner Image -> Supabase Storage
+   *------------------------------------------------------------------------**/
+
+  const uploadProductBannerImage = async (file) => {
+    if (!file) return null;
+
+    try {
+      const path = await storageService.uploadFile(file, 'product-images', 'banners', [
+        'jpg',
+        'jpeg',
+        'png',
+        'webp',
+      ]);
+
+      if (!path) return null;
+
+      handleResponse({ message, error }, 'success', 'mengunggah gambar banner produk');
+      return path;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengunggah gambar banner produk', { err });
+      return null;
+    }
+  };
+
+  const deleteProductBannerImage = async (imagePath) => {
+    if (!imagePath) return null;
+
+    try {
+      const success = await storageService.deleteFile(imagePath);
+
+      if (success) {
+        handleResponse({ message, error }, 'success', 'menghapus gambar banner produk');
+      }
+
+      return success;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'menghapus gambar banner produk', { err });
+      return null;
+    }
+  };
+
+  /**========================================================================
+   **   METHODS
+   *========================================================================**/
+
+  /**------------------------------------------------------------------------
+   *    Fetch Products
+   *------------------------------------------------------------------------**/
+
   const fetchProducts = async () => {
     loading.value = true;
     resetMessageState();
@@ -69,13 +136,12 @@ export const useProductStore = defineStore('productStore', () => {
     try {
       const { data, error: fetchError } = await supabase
         .from('products')
-        .select('*, product_packages (*, product_package_durations (*))')
+        .select('*, product_categories(*), product_packages (*, product_package_durations (*))')
         .order('created_at', { ascending: false });
 
-      // Hentikan eksekusi dan lempar error ke blok catch jika terjadi error
       if (fetchError) throw fetchError;
 
-      // Isi products dan urutkan product_packages serta product_package_durations secara manual
+      // 📌 Isi products dan urutkan product_packages serta product_package_durations secara manual
       products.value = data.map((product) => ({
         ...product,
         product_packages: product.product_packages
@@ -98,7 +164,10 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Fungsi : Ambil produk berdasarkan Slug
+  /**------------------------------------------------------------------------
+   *    Fetch Product by Slug
+   *------------------------------------------------------------------------**/
+
   const fetchProductBySlug = async (slug) => {
     loading.value = true;
     resetMessageState();
@@ -138,7 +207,10 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Fungsi : Ambil produk berdasarkan ID
+  /**------------------------------------------------------------------------
+   *    Fetch Product by ID
+   *------------------------------------------------------------------------**/
+
   const fetchProductById = async (id) => {
     loading.value = true;
     resetMessageState();
@@ -178,81 +250,132 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Fungsi : Tambah produk baru
-  const addProduct = async (name, category, description, file) => {
+  /**------------------------------------------------------------------------
+   *    Add Product
+   *------------------------------------------------------------------------**/
+
+  const addProduct = async (
+    name,
+    category,
+    description,
+    productImageFile,
+    productBannerImageFile,
+  ) => {
     loading.value = true;
     resetMessageState();
 
+    let product_image_path = null;
+    let product_banner_image_path = null;
+
     try {
-      // Cek user
+      // 📌 Cek user
       const user_id = useAuthStore().user?.id;
       if (!user_id) {
         throw new Error('User tidak ditemukan/belum login');
       }
 
-      // Generate slug unik
+      // 📌 Generate slug
       const slug = await generateSlug(name, 'products');
 
-      // Upload gambar
-      let image_url = null;
-      if (file) {
-        image_url = await uploadImage(file);
-        if (!image_url) return; // Stop eksekusi jika gambar tidak valid, message dan error diambil dari fungsi uploadImage()
+      // 📌 Upload gambar product
+      if (productImageFile) {
+        product_image_path = await uploadProductImage(productImageFile);
+        if (!product_image_path) throw new Error('Gagal mengupload gambar produk');
       }
 
-      // Simpan produk ke database
+      // 📌 Upload gambar banner
+      if (productBannerImageFile) {
+        product_banner_image_path = await uploadProductBannerImage(productBannerImageFile);
+        if (!product_banner_image_path) throw new Error('Gagal mengupload gambar banner produk');
+      }
+
+      // 📌 Simpan produk ke database
       const { data, error: insertError } = await supabase
         .from('products')
-        .insert([{ name, slug, category, user_id, description, image_url }])
+        .insert([
+          {
+            user_id,
+            name,
+            slug,
+            category,
+            description,
+            product_image_path,
+            product_banner_image_path,
+          },
+        ])
         .select()
         .single();
 
       if (insertError) throw insertError;
 
-      // Tambahkan daftar paket kosong agar konsisten
-      data.product_packages = [];
-      products.value.unshift(data);
+      // 📌 Fetch ulang produk
+      await fetchProducts();
 
       handleResponse({ message, error }, 'success', 'menambah produk');
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menambah produk', { err });
+
+      // 📌 Hapus Gambar Produk dari Supabase Storage
+      if (product_image_path) {
+        await deleteProductImage(product_image_path);
+      }
+
+      // 📌 Hapus Gambar Banner Produk dari Supabase Storage
+      if (product_banner_image_path) {
+        await deleteProductBannerImage(product_banner_image_path);
+      }
+
+      throw err;
     } finally {
       loading.value = false;
     }
   };
 
-  // Fungsi : Hapus produk
+  /**------------------------------------------------------------------------
+   *    Delete Product
+   *!   Belum bisa rollback gambar yang sudah terhapus (disini ada 2 gambar) -> harusnya sudah aman selama kode hapus file(gambar) sudah benar
+   *------------------------------------------------------------------------**/
+
   const deleteProduct = async (productId) => {
     loading.value = true;
     resetMessageState();
 
     try {
-      // Ambil produk berdasarkan ID
-      // ! bagian select coba dipertimbangin lagi, hanya butuh image_url atau butuh semua data
+      // 📌 Ambil produk berdasarkan ID -> untuk hapus gambar dari supabase storage
       const { data: product, error: fetchError } = await supabase
         .from('products')
-        .select('image_url')
+        .select('*')
         .eq('id', productId)
         .single();
 
       if (fetchError) throw fetchError;
 
-      // Hapus gambar jika ada
-      if (product?.image_url) {
-        const imageDeleted = await deleteImage(product.image_url);
-        if (!imageDeleted) {
-          console.error('Gagal menghapus gambar, produk tidak akan dihapus.');
-          return; // Stop eksekusi jika gagal hapus gambar
+      // 📌 Hapus gambar produk jika ada
+      if (product?.product_image_path) {
+        const produkImageDeleted = await deleteProductImage(product.product_image_path);
+
+        if (!produkImageDeleted)
+          throw new Error('Gagal menghapus gambar produk, produk tidak akan dihapus.');
+      }
+
+      // 📌 Hapus gambar banner produk jika ada
+      if (product?.product_banner_image_path) {
+        const produkBannerImageDeleted = await deleteProductBannerImage(
+          product.product_banner_image_path,
+        );
+
+        if (!produkBannerImageDeleted) {
+          throw new Error('Gagal menghapus gambar banner produk, produk tidak akan dihapus.');
         }
       }
 
-      // Hapus produk dari database
+      // 📌 Hapus produk dari database
       const { error: deleteError } = await supabase.from('products').delete().eq('id', productId);
 
       if (deleteError) throw deleteError;
 
-      // Hapus produk dari state lokal
-      products.value = products.value.filter((p) => p.id !== productId);
+      // 📌 Fetch ulang data produk setelah penghapusan
+      await fetchProducts();
 
       handleResponse({ message, error }, 'success', 'menghapus produk');
     } catch (err) {
@@ -262,51 +385,67 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
-  // Fungsi : Edit produk
-  const updateProduct = async (productId, updatedData, newFile = null) => {
+  /**------------------------------------------------------------------------
+   *    Update Product
+   *------------------------------------------------------------------------**/
+
+  const updateProduct = async (
+    productId,
+    updatedData,
+    newProductImageFile = null,
+    newProductBannerImageFile = null,
+  ) => {
     loading.value = true;
     resetMessageState();
 
     try {
-      // Ambil produk lama
+      // 📌 Ambil produk lama
       const oldProduct = products.value.find((p) => p.id === productId);
       if (!oldProduct) throw new Error('Produk tidak ditemukan');
 
-      // Jika ada file baru, upload gambar baru
-      if (newFile) {
-        const newImageUrl = await uploadImage(newFile);
-        if (!newImageUrl) return; // uploadImage akan set message/error jika gagal
-
-        // Hapus gambar lama
-        if (oldProduct.image_url) {
-          await deleteImage(oldProduct.image_url);
-        }
-
-        // Tambahkan image_url ke data yang akan diupdate
-        updatedData.image_url = newImageUrl;
+      // 📌 Jika ada perubahan nama, perbarui slug
+      if (updatedData.name && updatedData.name !== oldProduct.name) {
+        updatedData.slug = await generateSlug(updatedData.name, 'products');
       }
 
-      // Update produk di Supabase
+      // 📌 Jika ada file produk baru, upload gambar baru
+      if (newProductImageFile) {
+        const newProductImagePath = await uploadProductImage(newProductImageFile);
+        if (!newProductImagePath) throw new Error('Gagal mengupload gambar produk yang baru');
+
+        // Hapus gambar lama
+        if (oldProduct.product_image_path) {
+          await deleteProductImage(oldProduct.product_image_path);
+        }
+
+        // Tambahkan image_path ke data yang akan diupdate
+        updatedData.product_image_path = newProductImagePath;
+      }
+
+      // 📌 Jika ada file banner produk baru, upload gambar baru
+      if (newProductBannerImageFile) {
+        const newProductBannerImagePath = await uploadProductBannerImage(newProductBannerImageFile);
+        if (!newProductBannerImagePath) throw new Error('Gagal mengupload gambar produk yang baru');
+
+        // Hapus gambar lama
+        if (oldProduct.product_banner_image_path) {
+          await deleteProductBannerImage(oldProduct.product_banner_image_path);
+        }
+
+        // Tambahkan image_path ke data yang akan diupdate
+        updatedData.product_banner_image_path = newProductBannerImagePath;
+      }
+
+      // 📌 Update produk di Supabase
       const { data, error: updateError } = await supabase
         .from('products')
         .update(updatedData)
-        .eq('id', productId)
-        .select()
-        .single();
+        .eq('id', productId);
 
       if (updateError) throw updateError;
 
-      // Update produk di state lokal
-      const index = products.value.findIndex((p) => p.id === productId);
-      if (index !== -1) {
-        // Jaga agar product_packages tetap ada
-        const oldPackages = products.value[index].product_packages || [];
-        products.value[index] = {
-          ...updatedData,
-          ...data,
-          product_packages: oldPackages,
-        };
-      }
+      // 📌 Fetch ulang produk setelah berhasil menghapus produk
+      await fetchProducts();
 
       handleResponse({ message, error }, 'success', 'mengedit produk');
     } catch (err) {
@@ -316,14 +455,18 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
+  /**========================================================================
+   **   RETURNS
+   *========================================================================**/
+
   return {
-    // State
+    // 📌 States
     products,
     loading,
     message,
     error,
 
-    // Methods
+    // 📌 Methods
     resetMessageState,
     fetchProducts,
     fetchProductBySlug,

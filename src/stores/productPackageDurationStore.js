@@ -68,24 +68,9 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
         throw insertError;
       }
 
-      durations.value.unshift(data);
-
+      // 📌 Fetch ulang produk
       const productStore = useProductStore();
-      const product = productStore.products.find((p) => p.id === product_id);
-
-      if (product) {
-        // Pastikan paket produk ada dan memiliki array product_package_durations
-        const productPackage = product.product_packages.find(
-          (pkg) => pkg.id === product_package_id,
-        );
-
-        if (productPackage) {
-          // Inisialisasi jika belum ada
-          productPackage.product_package_durations = productPackage.product_package_durations || [];
-          // Menambahkan durasi ke dalam array product_package_durations
-          productPackage.product_package_durations.unshift(data);
-        }
-      }
+      await productStore.fetchProducts();
 
       handleResponse({ message, error }, 'success', 'menambah durasi paket produk');
     } catch (err) {
@@ -108,19 +93,9 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
 
       if (deleteError) throw deleteError;
 
-      // Hapus paket dari state lokal
-      durations.value = durations.value.filter((d) => d.id !== durationId);
-
-      // Update produk di store agar UI langsung diperbarui
+      // 📌 Fetch ulang produk
       const productStore = useProductStore();
-      productStore.products.forEach((product) => {
-        product.product_packages.forEach((pkg) => {
-          // Hapus durasi dari product_package_durations
-          pkg.product_package_durations = pkg.product_package_durations.filter(
-            (d) => d.id !== durationId,
-          );
-        });
-      });
+      await productStore.fetchProducts();
 
       handleResponse({ message, error }, 'success', 'menghapus durasi paket produk');
     } catch (err) {

@@ -7,19 +7,38 @@ import { useProductStore } from './productStore';
 import { handleResponse } from '@/utils/responseHandler';
 
 export const useProductPackageStore = defineStore('productPackageStore', () => {
-  const packages = ref([]);
+  /**========================================================================
+   **    STATE & COMPUTED
+   *========================================================================**/
 
+  // 📌 State
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);
 
-  // Fungsi : Reset message and error state
+  const packages = ref([]);
+
+  /**========================================================================
+   **    UTILITY FUNCTIONS
+   *========================================================================**/
+
+  /**------------------------------------------------------------------------
+   *   Reset Message & Error State
+   *------------------------------------------------------------------------**/
+
   const resetMessageState = () => {
     message.value = null;
     error.value = null;
   };
 
-  // Fetch product package berdasarkan product id
+  /**========================================================================
+   **    METHODS
+   *========================================================================**/
+
+  /**------------------------------------------------------------------------
+   *   Fetch Product Packages by Product ID
+   *------------------------------------------------------------------------**/
+
   const fetchProductPackages = async (productId) => {
     loading.value = true;
     resetMessageState();
@@ -30,7 +49,9 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
         .select('*')
         .eq('product_id', productId)
         .order('created_at', { ascending: false });
+
       if (fetchError) throw fetchError;
+
       packages.value = data;
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data paket produk', { err });
@@ -39,7 +60,10 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     }
   };
 
-  // Ambil satu paket produk berdasarkan ID
+  /**------------------------------------------------------------------------
+   *   Get Product Package by Package ID
+   *------------------------------------------------------------------------**/
+
   const getProductPackageById = async (packageId) => {
     loading.value = true;
     resetMessageState();
@@ -62,7 +86,10 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     }
   };
 
-  // Tambah paket baru
+  /**------------------------------------------------------------------------
+   *   Add Product Package
+   *------------------------------------------------------------------------**/
+
   const addProductPackage = async (
     product_id,
     name,
@@ -75,20 +102,20 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     resetMessageState();
 
     try {
-      // Cek user
+      // 📌 Cek user
       const user_id = useAuthStore().user?.id;
       if (!user_id) {
         throw new Error('User tidak ditemukan/belum login');
       }
 
-      // Validasi input harga dan diskon
+      // 📌 Validasi input harga dan diskon
       if (price <= 0) throw new Error('Harga harus lebih dari 0');
       if (discount_type && !['percentage', 'fixed_amount'].includes(discount_type)) {
         throw new Error('Jenis diskon tidak valid');
       }
       if (discount_value < 0) throw new Error('Nilai diskon tidak boleh negatif');
 
-      // Simpan paket ke database
+      // 📌 Simpan paket ke database
       const { data, error: insertError } = await supabase
         .from('product_packages')
         .insert([
@@ -107,18 +134,9 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       if (insertError) throw insertError;
 
-      // Tambahkan paket baru ke state langsung agar UI langsung diperbarui
-      packages.value.unshift(data);
-
-      // Update product di products.value agar UI langsung berubah
+      // 📌 Fetch ulang produk
       const productStore = useProductStore();
-      const product = productStore.products.find((p) => p.id === product_id);
-
-      if (product) {
-        // Pastikan daftar paket ada sebelum menambahkan
-        product.product_packages = product.product_packages || [];
-        product.product_packages.unshift(data);
-      }
+      await productStore.fetchProducts();
 
       handleResponse({ message, error }, 'success', 'menambah paket produk');
     } catch (err) {
@@ -128,7 +146,10 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     }
   };
 
-  // Hapus paket
+  /**------------------------------------------------------------------------
+   *   Delete Product Package
+   *------------------------------------------------------------------------**/
+
   const deleteProductPackage = async (packageId) => {
     loading.value = true;
     resetMessageState();
@@ -142,16 +163,9 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       if (deleteError) throw deleteError;
 
-      // Hapus paket dari state lokal
-      packages.value = packages.value.filter((p) => p.id !== packageId);
-
-      // Update produk di store agar UI langsung diperbarui
+      // 📌 Fetch ulang produk
       const productStore = useProductStore();
-      productStore.products.forEach((product) => {
-        if (product.product_packages) {
-          product.product_packages = product.product_packages.filter((pkg) => pkg.id !== packageId);
-        }
-      });
+      await productStore.fetchProducts();
 
       handleResponse({ message, error }, 'success', 'menghapus paket produk');
     } catch (err) {
@@ -161,7 +175,10 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     }
   };
 
-  // Edit paket produk
+  /**------------------------------------------------------------------------
+   *   Update Product Package
+   *------------------------------------------------------------------------**/
+
   const updateProductPackage = async (
     packageId,
     updatedFields = {}, // { name, price, discount_type, discount_value, is_best_seller }
@@ -197,22 +214,9 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       if (updateError) throw updateError;
 
-      // Update state lokal
-      const index = packages.value.findIndex((pkg) => pkg.id === packageId);
-      if (index !== -1) {
-        packages.value[index] = data;
-      }
-
-      // Update juga productStore supaya sync
+      // 📌 Fetch ulang produk
       const productStore = useProductStore();
-      productStore.products.forEach((product) => {
-        if (product.product_packages) {
-          const pkgIndex = product.product_packages.findIndex((pkg) => pkg.id === packageId);
-          if (pkgIndex !== -1) {
-            product.product_packages[pkgIndex] = data;
-          }
-        }
-      });
+      await productStore.fetchProducts();
 
       handleResponse({ message, error }, 'success', 'mengedit paket produk');
     } catch (err) {
@@ -222,14 +226,18 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     }
   };
 
+  /**========================================================================
+   **    RETURNS
+   *========================================================================**/
+
   return {
-    // State
+    // 📌 States
     packages,
     loading,
     message,
     error,
 
-    // Methods
+    // 📌 Methods
     resetMessageState,
     fetchProductPackages,
     addProductPackage,

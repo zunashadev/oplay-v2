@@ -10,7 +10,7 @@ import { sendTelegramNotification } from '@/services/telegramService';
 
 export const useOrderStore = defineStore('orderStore', () => {
   /**========================================================================
-   *    STATE & COMPUTED
+   **   STATE & COMPUTED
    *========================================================================**/
 
   // State
@@ -22,20 +22,26 @@ export const useOrderStore = defineStore('orderStore', () => {
   const currentOrder = ref(null); // order yang sedang diakses per id
 
   /**========================================================================
-   *    UTILITY FUNCTIONS
+   **   UTILITY FUNCTIONS
    *========================================================================**/
 
-  // Reset message and error state
+  /**------------------------------------------------------------------------
+   *    Reset Message & Error State
+   *------------------------------------------------------------------------**/
+
   const resetMessageState = () => {
     message.value = null;
     error.value = null;
   };
 
   /**========================================================================
-   *    FILE HANDLING
+   **   FILE HANDLING
    *========================================================================**/
 
-  // Upload paymet proof ke Supabase Storage
+  /**------------------------------------------------------------------------
+   *    Upload & Delete Payment Proof Image -> Supabase Storage
+   *------------------------------------------------------------------------**/
+
   const uploadPaymentProof = async (file) => {
     if (!file) return null;
 
@@ -57,7 +63,6 @@ export const useOrderStore = defineStore('orderStore', () => {
     }
   };
 
-  // Hapus paymet proof ke Supabase Storage
   const deletePaymentProof = async (imageUrl) => {
     if (!imageUrl) return null;
 
@@ -76,10 +81,13 @@ export const useOrderStore = defineStore('orderStore', () => {
   };
 
   /**========================================================================
-   *    ORDER METHODS
+   **   METHODS
    *========================================================================**/
 
-  // Fetch orders
+  /**------------------------------------------------------------------------
+   *    Fetch Orders
+   *------------------------------------------------------------------------**/
+
   const fetchOrders = async () => {
     loading.value = true;
     resetMessageState();
@@ -101,7 +109,10 @@ export const useOrderStore = defineStore('orderStore', () => {
     }
   };
 
-  // Fetch orders by user_id
+  /**------------------------------------------------------------------------
+   *    Fetch Orders By User
+   *------------------------------------------------------------------------**/
+
   const fetchOrdersByUser = async () => {
     loading.value = true;
     resetMessageState();
@@ -127,7 +138,10 @@ export const useOrderStore = defineStore('orderStore', () => {
     }
   };
 
-  // Fetch order by id
+  /**------------------------------------------------------------------------
+   *    Fetch Order By Id
+   *------------------------------------------------------------------------**/
+
   const fetchOrderById = async (orderId) => {
     loading.value = true;
     resetMessageState();
@@ -151,7 +165,10 @@ export const useOrderStore = defineStore('orderStore', () => {
     }
   };
 
-  // Tambah Order
+  /**------------------------------------------------------------------------
+   *    Add Order
+   *------------------------------------------------------------------------**/
+
   const addOrder = async (product, pkg, duration, total_price, status = 'pending') => {
     loading.value = true;
     resetMessageState();
@@ -219,7 +236,10 @@ export const useOrderStore = defineStore('orderStore', () => {
     }
   };
 
-  // Submit bukti pembayaran dan simpan URL ke database
+  /**------------------------------------------------------------------------
+   *    Submit Payment Proof
+   *------------------------------------------------------------------------**/
+
   const submitPaymentProof = async (orderId, file) => {
     loading.value = true;
     resetMessageState();
@@ -254,7 +274,10 @@ export const useOrderStore = defineStore('orderStore', () => {
     }
   };
 
-  // Update order status
+  /**------------------------------------------------------------------------
+   *    Update Order Status
+   *------------------------------------------------------------------------**/
+
   const updateOrderStatus = async (orderId, newStatus) => {
     if (!orderId || !newStatus) {
       const err = new Error('Order ID dan status pesanan baru diperlukan');
@@ -290,7 +313,10 @@ export const useOrderStore = defineStore('orderStore', () => {
     }
   };
 
-  // Hapus order berdasarkan ID
+  /**------------------------------------------------------------------------
+   *    Delete Order
+   *------------------------------------------------------------------------**/
+
   const deleteOrder = async (orderId) => {
     loading.value = true;
     resetMessageState();
@@ -336,7 +362,12 @@ export const useOrderStore = defineStore('orderStore', () => {
     }
   };
 
+  /**========================================================================
+   **   RETURNS
+   *========================================================================**/
+
   return {
+    // 📌 States
     loading,
     message,
     error,
@@ -344,6 +375,7 @@ export const useOrderStore = defineStore('orderStore', () => {
     orders,
     currentOrder,
 
+    // 📌 Methods
     resetMessageState,
     fetchOrders,
     fetchOrdersByUser,

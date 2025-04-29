@@ -2,50 +2,52 @@
 import { ref, onMounted, watch, watchEffect, nextTick } from 'vue';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
-// Stores
+// 📌 Stores
 import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
 
-// Components
+// 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
-import AddProductPackageModalComponent from '../components/modals/AddProductPackageModal.vue';
-import AddProductPackageDurationModalComponent from '../components/modals/AddProductPackageDurationModal.vue';
-import EditProductPackageModalComponent from '../components/modals/EditProductPackageModal.vue';
-import EditProductModalComponent from '../components/modals/EditProductModal.vue';
-import DeleteProductModalComponent from '../components/modals/DeleteProductModal.vue';
-import DeleteProductPackageModalComponent from '../components/modals/DeleteProductPackageModal.vue';
-import DeleteProductPackageDurationComponent from '../components/modals/DeleteProductPackageDuration.vue';
+import AddProductPackageModalComponent from '../../components/modals/AddProductPackageModal.vue';
+import AddProductPackageDurationModalComponent from '../../components/modals/AddProductPackageDurationModal.vue';
+import EditProductPackageModalComponent from '../../components/modals/EditProductPackageModal.vue';
+import EditProductModalComponent from '../../components/modals/EditProductModal.vue';
+import DeleteProductModalComponent from '../../components/modals/DeleteProductModal.vue';
+import DeleteProductPackageModalComponent from '../../components/modals/DeleteProductPackageModal.vue';
+import DeleteProductPackageDurationComponent from '../../components/modals/DeleteProductPackageDuration.vue';
 
-// Icons
+// 📌 Icons
 import CrossIcon from '@/components/icons/Cross.vue';
 import PlusIcon from '@/components/icons/Plus.vue';
 
+// 📌 ...
 const productStore = useProductStore();
 const productPackageStore = useProductPackageStore();
 const productPackageDurationStore = useProductPackageDurationStore();
 
-// Fetch Product
+// 📌 Fetch Product
 onMounted(() => {
   productStore.fetchProducts();
 });
 
-// Edit Product
+// 📌 Edit Product
 const editProductModalRef = ref(null);
 
 function openEditProductModal(productId) {
   editProductModalRef.value.openModal(productId);
 }
 
-// Delete Product
+// 📌 Delete Product
 const deleteProductModalRef = ref(null);
 
 const openDeleteProductModal = async (id) => {
   deleteProductModalRef.value.openModal(id);
 };
 
-// Add Package
+// 📌 Add Package
 const addProductPackageModalRef = ref(null);
 
 function openAddProductPackageModal(productId) {
@@ -57,21 +59,21 @@ function openAddProductPackageModal(productId) {
   addProductPackageModalRef.value.openModal(productId);
 }
 
-// Edit Package
+// 📌 Edit Package
 const editProductPackageModalRef = ref(null);
 
 function openEditProductPackageModal(packageId) {
   editProductPackageModalRef.value.openModal(packageId);
 }
 
-// Delete Package
+// 📌 Delete Package
 const deleteProductPackageModalRef = ref(null);
 
 const openDeleteProductPackageModal = async (id) => {
   deleteProductPackageModalRef.value.openModal(id);
 };
 
-// Add Duration
+// 📌 Add Duration
 const addProductPackageDurationModalRef = ref(null);
 
 function openAddDurationModal(productId, productPackageId) {
@@ -83,7 +85,7 @@ function openAddDurationModal(productId, productPackageId) {
   addProductPackageDurationModalRef.value.openModal(productId, productPackageId);
 }
 
-// Delete Duration
+// 📌 Delete Duration
 const deleteProductPackageDurationModalRef = ref(null);
 
 const openDeleteProductPackageDurationModal = async (id) => {
@@ -124,7 +126,12 @@ const openDeleteProductPackageDurationModal = async (id) => {
         <!-- START : HEAD -->
         <div class="flex items-center justify-between bg-gray-800 px-4 py-4">
           <div class="flex items-center space-x-3">
-            <img v-if="product.image_url" :src="product.image_url" alt="Produk" class="max-h-8" />
+            <img
+              v-if="product.product_image_path"
+              :src="getPublicImageUrl(product.product_image_path)"
+              alt="Produk"
+              class="max-h-8"
+            />
             <p class="text-xl font-semibold">
               {{ product.name }}
             </p>
@@ -155,6 +162,15 @@ const openDeleteProductPackageDurationModal = async (id) => {
 
         <!-- START : BODY -->
         <div class="flex w-full flex-col gap-3 px-4 py-5">
+          <!-- START : Banner -->
+          <img
+            v-if="product.product_banner_image_path"
+            :src="getPublicImageUrl(product.product_banner_image_path)"
+            alt="Gambar"
+            class="h-44 w-full rounded-2xl object-cover"
+          />
+          <!-- END : Banner -->
+
           <!-- START : DETAIL -->
           <div
             class="flex w-full flex-col gap-5 rounded-md border border-dashed border-gray-600 px-3 py-3"
@@ -163,7 +179,7 @@ const openDeleteProductPackageDurationModal = async (id) => {
             <div class="flex flex-col gap-2">
               <div>
                 <p class="text-xs font-normal text-gray-400">Category</p>
-                <p>{{ product.category }}</p>
+                <p>{{ product.product_categories.name }}</p>
               </div>
               <div>
                 <p class="text-xs font-normal text-gray-400">Description</p>

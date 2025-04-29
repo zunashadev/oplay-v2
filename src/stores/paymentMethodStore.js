@@ -9,40 +9,46 @@ import { storageService } from '@/services/storageService';
 
 export const usePaymentMethodStore = defineStore('paymentMethod', () => {
   /**========================================================================
-   *    STATE & COMPUTED
+   **   STATE & COMPUTED
    *========================================================================**/
 
-  //   State
-  const paymentMethods = ref([]);
-  const paymentMethod = ref(null);
-
+  // 📌 State
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);
 
-  //   Computed
-  // ...
+  const paymentMethods = ref([]);
+  const paymentMethod = ref(null);
 
   /**========================================================================
-   *    UTILITY FUNCTIONS
+   **   UTILITY FUNCTIONS
    *========================================================================**/
 
-  // Reset message dan error state
+  /**------------------------------------------------------------------------
+   *    Reset Message & Error State
+   *------------------------------------------------------------------------**/
+
   const resetMessageState = () => {
     message.value = null;
     error.value = null;
   };
 
-  //   Get Payment Methods by Type
+  /**------------------------------------------------------------------------
+   *    Get Payment Methods by Type
+   *------------------------------------------------------------------------**/
+
   const filterPaymentMethodsByType = (type) => {
     return paymentMethods.value.filter((pm) => pm.type === type);
   };
 
   /**========================================================================
-   *    FILE HANDLING
+   **   FILE HANDLING
    *========================================================================**/
 
-  //   Upload gambar QR Code ke Supabase Storage
+  /**------------------------------------------------------------------------
+   *    Upload & Delete QR Code Image -> Supabase Storage
+   *------------------------------------------------------------------------**/
+
   const uploadQRCodeImage = async (file) => {
     if (!file) return null;
 
@@ -64,7 +70,6 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     }
   };
 
-  // Hapus gambar QR Code ke Supabase Storage
   const deleteQRCodeImage = async (imageUrl) => {
     if (!imageUrl) return null;
 
@@ -82,7 +87,10 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     }
   };
 
-  //   Upload gambar QR Code ke Supabase Storage
+  /**------------------------------------------------------------------------
+   *    Upload & Delete Logo Image -> Supabase Storage
+   *------------------------------------------------------------------------**/
+
   const uploadLogoImage = async (file) => {
     if (!file) return null;
 
@@ -104,7 +112,6 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     }
   };
 
-  // Hapus gambar QR Code ke Supabase Storage
   const deleteLogoImage = async (imageUrl) => {
     if (!imageUrl) return null;
 
@@ -123,10 +130,13 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
   };
 
   /**========================================================================
-   *    PAYMENT METHOD METHODS
+   **   METHODS
    *========================================================================**/
 
-  //   Fetch Payment Methods
+  /**------------------------------------------------------------------------
+   *    Fetch Payment Methods
+   *------------------------------------------------------------------------**/
+
   const fetchPaymentMethods = async () => {
     loading.value = true;
     resetMessageState();
@@ -148,7 +158,10 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     }
   };
 
-  //   Fetch Payment Method by ID
+  /**------------------------------------------------------------------------
+   *    Fetch Payment Method by ID
+   *------------------------------------------------------------------------**/
+
   const fetchPaymentMethodById = async (id) => {
     loading.value = true;
     resetMessageState();
@@ -176,7 +189,10 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     }
   };
 
-  //   Add Payment Method
+  /**------------------------------------------------------------------------
+   *    Add Payment Method
+   *------------------------------------------------------------------------**/
+
   const addPaymentMethod = async (
     name,
     type,
@@ -231,7 +247,8 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
       if (insertError) throw insertError;
 
-      paymentMethods.value.unshift(data);
+      // 📌 Fetch ulang payment methods
+      await fetchPaymentMethods();
 
       handleResponse({ message, error }, 'success', 'menambah payment method');
     } catch (err) {
@@ -241,7 +258,10 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     }
   };
 
-  //   Delete Payment Method
+  /**------------------------------------------------------------------------
+   *    Delete Payment Method
+   *------------------------------------------------------------------------**/
+
   const deletePaymentMethod = async (id) => {
     loading.value = true;
     resetMessageState();
@@ -281,8 +301,8 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
       if (deleteError) throw deleteError;
 
-      // Hapus metode pembayaran dari state lokal
-      paymentMethods.value = paymentMethods.value.filter((pm) => pm.id !== id);
+      // 📌 Fetch ulang payment methods
+      await fetchPaymentMethods();
 
       handleResponse({ message, error }, 'success', 'menghapus metode pembayaran');
     } catch (err) {
@@ -291,6 +311,10 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       loading.value = false;
     }
   };
+
+  /**========================================================================
+   **   RETURNS
+   *========================================================================**/
 
   return {
     loading,

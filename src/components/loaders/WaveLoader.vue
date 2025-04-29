@@ -5,7 +5,7 @@
     <div
       v-for="(bar, index) in 4"
       :key="index"
-      class="animate-wave bg-lightning-yellow-400 mx-[5px] h-2 w-4 rounded-full"
+      class="animate-wave mx-[5px] h-2 w-4 rounded-full bg-yellow-500"
       :style="{ animationDelay: `${index * 0.1}s` }"
     ></div>
   </div>

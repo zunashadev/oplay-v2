@@ -1,5 +1,5 @@
 <script setup>
-import ListOrdersTablePartial from './partials/ListOrdersTable.vue';
+import ListOrdersTablePartial from './partials/orders/ListOrdersTable.vue';
 </script>
 
 <template>
