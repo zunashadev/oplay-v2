@@ -1,23 +1,21 @@
 <script setup>
-import { ref, onMounted, watch, watchEffect, nextTick } from 'vue';
+import { ref, onMounted, nextTick, onUnmounted } from 'vue';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
 import { getPublicImageUrl } from '@/utils/storageHelper';
 
 // 📌 Stores
 import { useProductStore } from '@/stores/productStore';
-import { useProductPackageStore } from '@/stores/productPackageStore';
-import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
-import AddProductPackageModalComponent from '../../components/modals/AddProductPackageModal.vue';
-import AddProductPackageDurationModalComponent from '../../components/modals/AddProductPackageDurationModal.vue';
-import EditProductPackageModalComponent from '../../components/modals/EditProductPackageModal.vue';
-import EditProductModalComponent from '../../components/modals/EditProductModal.vue';
-import DeleteProductModalComponent from '../../components/modals/DeleteProductModal.vue';
-import DeleteProductPackageModalComponent from '../../components/modals/DeleteProductPackageModal.vue';
-import DeleteProductPackageDurationComponent from '../../components/modals/DeleteProductPackageDuration.vue';
+import AddProductPackageModalComponent from '../../components/products/AddProductPackageModal.vue';
+import AddProductPackageDurationModalComponent from '../../components/products/AddProductPackageDurationModal.vue';
+import EditProductPackageModalComponent from '../../components/products/EditProductPackageModal.vue';
+import EditProductModalComponent from '../../components/products/EditProductModal.vue';
+import DeleteProductModalComponent from '../../components/products/DeleteProductModal.vue';
+import DeleteProductPackageModalComponent from '../../components/products/DeleteProductPackageModal.vue';
+import DeleteProductPackageDurationComponent from '../../components/products/DeleteProductPackageDuration.vue';
 
 // 📌 Icons
 import CrossIcon from '@/components/icons/Cross.vue';
@@ -25,12 +23,14 @@ import PlusIcon from '@/components/icons/Plus.vue';
 
 // 📌 ...
 const productStore = useProductStore();
-const productPackageStore = useProductPackageStore();
-const productPackageDurationStore = useProductPackageDurationStore();
 
 // 📌 Fetch Product
 onMounted(() => {
   productStore.fetchProducts();
+});
+
+onUnmounted(() => {
+  productStore.resetProductsState();
 });
 
 // 📌 Edit Product
@@ -117,7 +117,21 @@ const openDeleteProductPackageDurationModal = async (id) => {
     <!-- END : HEADER -->
 
     <!-- START : LIST PRODUCTS -->
-    <template v-if="productStore.products && productStore.products.length">
+    <!-- loading -->
+    <div v-if="productStore.loading" class="py-10 text-center">
+      <span class="text-gray-500">Loading produk...</span>
+    </div>
+
+    <!-- Kategori Kosong -->
+    <div
+      v-else-if="!productStore.loading && productStore.products.length === 0"
+      class="py-10 text-center"
+    >
+      <span class="text-gray-500">Belum ada produk.</span>
+    </div>
+
+    <!-- Products -->
+    <template v-else>
       <div
         v-for="product in productStore.products"
         :key="product.id"

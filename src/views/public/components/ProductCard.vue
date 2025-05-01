@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
 
@@ -46,17 +47,13 @@ const handleClickDetail = () => {
           <div class="flex flex-none items-start justify-between">
             <!-- Logo Produk -->
             <img
-              v-if="product?.image_url && product.image_url.trim().length"
-              :src="product.image_url"
+              :src="getPublicImageUrl(product.product_image_path, 'product')"
               alt="Produk"
               class="max-h-14"
             />
-            <div v-else class="flex size-14 items-center justify-center rounded-md bg-gray-200">
-              <BrokenImageIcon class="w-4 text-gray-500" />
-            </div>
             <!-- Kategori Produk -->
             <div class="rounded-2xl bg-cyan-700 px-4 py-0.5 text-xs">
-              {{ product.category }}
+              {{ product.product_categories.name }}
             </div>
           </div>
 

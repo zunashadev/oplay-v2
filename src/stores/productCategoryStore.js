@@ -33,6 +33,14 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
     error.value = null;
   };
 
+  /**------------------------------------------------------------------------
+   *    Reset Categories State
+   *------------------------------------------------------------------------**/
+
+  const resetCategoriesState = () => {
+    categories.value = [];
+  };
+
   /**========================================================================
    **   METHODS
    *========================================================================**/
@@ -149,6 +157,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
     categories,
 
     // 📌 Methods
+    resetCategoriesState,
     fetchCategories,
     addCategory,
     deleteCategory,

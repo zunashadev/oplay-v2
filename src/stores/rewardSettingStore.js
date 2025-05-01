@@ -160,7 +160,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   *    Update is_active Status
+   *    Update Amount
    *------------------------------------------------------------------------**/
 
   const updateRewardSettingAmount = async (id, newAmount) => {

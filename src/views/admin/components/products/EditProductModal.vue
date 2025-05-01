@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 // 📌 Stores
 import { useProductStore } from '@/stores/productStore';
@@ -19,6 +19,10 @@ const productCategoryStore = useProductCategoryStore();
 // 📌 Fetch Categories
 onMounted(() => {
   productCategoryStore.fetchCategories();
+});
+
+onUnmounted(() => {
+  productCategoryStore.resetCategoriesState();
 });
 
 // START : MODAL
@@ -130,7 +134,12 @@ const updateProduct = async () => {
       </div>
 
       <!-- Submit Button -->
-      <ButtonComponent type="submit" variant="solid" textColor="black">
+      <ButtonComponent
+        type="submit"
+        variant="solid"
+        textColor="black"
+        :disabled="productStore.loading"
+      >
         Edit Produk
       </ButtonComponent>
     </form>

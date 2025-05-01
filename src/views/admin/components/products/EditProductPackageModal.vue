@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 // 📌 Stores
 import { useProductStore } from '@/stores/productStore';
@@ -76,6 +76,10 @@ onMounted(async () => {
   productStore.fetchProducts(); // Ambil daftar produk
 });
 
+onUnmounted(() => {
+  productStore.resetProductsState();
+});
+
 const updateProductPackage = async () => {
   if (!selectedPackageId.value) return alert('ID paket tidak ditemukan');
 
@@ -137,7 +141,12 @@ const updateProductPackage = async () => {
       <CheckBoxComponent v-model="isBestSeller" label="🔥 Terlaris" />
 
       <!-- Button -->
-      <ButtonComponent type="submit" variant="solid" textColor="black">
+      <ButtonComponent
+        type="submit"
+        variant="solid"
+        textColor="black"
+        :disabled="productPackageStore.loading"
+      >
         Edit Produk
       </ButtonComponent>
     </form>

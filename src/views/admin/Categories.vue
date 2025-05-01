@@ -2,8 +2,8 @@
 import { ref } from 'vue';
 
 // 📌 Partials
-import AddCategoryPartial from './partials/categories/AddCategory.vue';
-import ListCategoriesPartial from './partials/categories/ListCategories.vue';
+import AddCategoryPartial from './partials/product-categories/AddCategory.vue';
+import ListCategoriesPartial from './partials/product-categories/ListCategories.vue';
 </script>
 
 <template>

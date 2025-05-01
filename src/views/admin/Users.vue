@@ -1,5 +1,8 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
+import { getPublicImageUrl } from '@/utils/storageHelper';
+
+// Stores
 import { useAuthStore } from '@/stores/authStore';
 
 // Components
@@ -13,6 +16,10 @@ const authStore = useAuthStore();
 
 onMounted(() => {
   authStore.fetchAllUsers();
+});
+
+onUnmounted(() => {
+  authStore.resetUsers();
 });
 
 // START : Table
@@ -45,21 +52,23 @@ const roles = [
 
     <!-- START : USERS TABLE -->
     <div class="rounded-xl bg-gray-900 px-5 py-5">
-      <TableComponent :columns="columns" :data="authStore.users">
+      <TableComponent :columns="columns" :data="authStore.users" :loading="authStore.loading">
         <!-- Avatar -->
         <template #cell-custom-profile-avatar="{ row }">
           <div class="flex-none">
             <img
-              :src="row.profile.avatar_url || '/images/avatar.jpg'"
-              alt="Produk"
+              :src="getPublicImageUrl(row.profile.avatar_image_path, 'avatar')"
+              alt="User Avatar"
               class="size-10 rounded-full object-cover"
             />
           </div>
         </template>
+
         <!-- Name -->
         <template #cell-custom-profile-name="{ row }">
           <p class="text-lightning-yellow-400">{{ row.profile.name }}</p>
         </template>
+
         <!-- Role -->
         <template #cell-custom-profile-role="{ row }">
           <div class="flex w-max">
@@ -76,6 +85,7 @@ const roles = [
             </SelectComponent>
           </div>
         </template>
+
         <!-- Actions -->
         <template #cell-actions="{ row }">
           <div class="flex items-center gap-3">

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted, watchEffect, inject, defineExpose } from 'vue';
+import { ref, watch, onMounted, watchEffect, inject, defineExpose, onBeforeUnmount } from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import emitter from '@/utils/eventBus';
 
@@ -48,6 +48,7 @@ defineExpose({ openModal, closeModal });
           >
             <DialogPanel
               class="relative transform overflow-hidden rounded-lg shadow-xl transition-all"
+              tabindex="0"
             >
               <slot>INI BASE BRO!</slot>
             </DialogPanel>

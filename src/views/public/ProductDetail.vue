@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores/authStore';
-import { useProductStore } from '@/stores/productStore';
-import { useOrderStore } from '@/stores/orderStore';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
 import { getPublicImageUrl } from '@/utils/storageHelper';
+
+import { useAuthStore } from '@/stores/authStore';
+import { useProductStore } from '@/stores/productStore';
+import { useOrderStore } from '@/stores/orderStore';
 
 // 📌 Components
 import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
@@ -102,8 +103,7 @@ function closeConfirmOrderModal() {
         <div class="relative">
           <!-- <div class="h-32 rounded-2xl bg-gray-700"></div> -->
           <img
-            v-if="product.product_banner_image_path"
-            :src="getPublicImageUrl(product.product_banner_image_path)"
+            :src="getPublicImageUrl(product.product_banner_image_path, 'banner')"
             alt="Gambar"
             class="h-44 w-full rounded-2xl object-cover"
           />
@@ -112,8 +112,7 @@ function closeConfirmOrderModal() {
               class="flex items-center gap-3 rounded-2xl bg-gray-900 px-3 py-3 backdrop-blur-sm sm:gap-5 sm:px-6 sm:py-5"
             >
               <img
-                v-if="product.product_image_path"
-                :src="getPublicImageUrl(product.product_image_path)"
+                :src="getPublicImageUrl(product.product_image_path, 'product')"
                 alt="Produk"
                 class="max-h-16 w-fit sm:max-h-16"
               />
@@ -122,10 +121,8 @@ function closeConfirmOrderModal() {
                 class="flex w-full flex-col justify-between gap-1 sm:flex-row sm:items-center sm:gap-4"
               >
                 <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
-                <p
-                  class="bg-lightning-yellow-400 w-fit rounded-sm px-3 py-0.5 text-xs text-black sm:text-sm"
-                >
-                  {{ product.category }}
+                <p class="w-fit rounded-sm bg-cyan-700 px-3 py-0.5 text-xs text-white sm:text-sm">
+                  {{ product.product_categories.name }}
                 </p>
               </div>
             </div>

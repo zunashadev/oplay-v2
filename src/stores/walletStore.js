@@ -68,7 +68,9 @@ export const useWalletStore = defineStore('walletStore', () => {
 
       currentWallet.value = data;
 
-      handleResponse({ message, error }, 'success', 'mengambil wallet berdasarkan id');
+      handleResponse({ message, error }, 'success', 'mengambil wallet berdasarkan id', {
+        showToast: false,
+      });
       return data;
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil wallet berdasarkan id', {

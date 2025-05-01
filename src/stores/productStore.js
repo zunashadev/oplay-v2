@@ -33,6 +33,14 @@ export const useProductStore = defineStore('productStore', () => {
     error.value = null;
   };
 
+  /**------------------------------------------------------------------------
+   *    Reset Products State
+   *------------------------------------------------------------------------**/
+
+  const resetProductsState = () => {
+    products.value = [];
+  };
+
   /**========================================================================
    **   FILE HANDLING
    *========================================================================**/
@@ -175,7 +183,8 @@ export const useProductStore = defineStore('productStore', () => {
     try {
       const { data, error: fetchError } = await supabase
         .from('products')
-        .select('*, product_packages (*, product_package_durations (*))')
+        // .select('*, product_packages (*, product_package_durations (*))')
+        .select('*, product_categories(*), product_packages (*, product_package_durations (*))')
         .eq('slug', slug)
         .single();
 
@@ -468,6 +477,7 @@ export const useProductStore = defineStore('productStore', () => {
 
     // 📌 Methods
     resetMessageState,
+    resetProductsState,
     fetchProducts,
     fetchProductBySlug,
     fetchProductById,

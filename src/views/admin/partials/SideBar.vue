@@ -1,6 +1,7 @@
 <script setup>
 import { ref, markRaw } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
 // 📌 Stores
 import { useAuthStore } from '@/stores/authStore';
@@ -166,7 +167,7 @@ const handleLogout = async () => {
       <a href="#" class="flex w-full items-center gap-2">
         <img
           alt="User Avatar"
-          :src="authStore.user.avatar_url || '/images/avatar.jpg'"
+          :src="getPublicImageUrl(authStore.profile.avatar_image_path, 'avatar')"
           class="size-10 rounded-full object-cover"
         />
 

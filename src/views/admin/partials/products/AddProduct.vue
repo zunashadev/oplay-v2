@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 // 📌 Stores
 import { useProductStore } from '@/stores/productStore';
@@ -19,6 +19,10 @@ const productCategoryStore = useProductCategoryStore();
 // 📌 Fetch Categories
 onMounted(() => {
   productCategoryStore.fetchCategories();
+});
+
+onUnmounted(() => {
+  productCategoryStore.resetCategoriesState();
 });
 
 // 📌 ...
@@ -94,7 +98,12 @@ const addProduct = async () => {
           <FileInputComponent v-model="productBannerImageFile" label="Banner Produk" required />
         </div>
 
-        <ButtonComponent type="submit" variant="solid" textColor="black">
+        <ButtonComponent
+          type="submit"
+          variant="solid"
+          textColor="black"
+          :disabled="productStore.loading"
+        >
           Tambah Produk
         </ButtonComponent>
       </form>

@@ -18,6 +18,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const sortKey = ref('');
@@ -103,8 +107,15 @@ const sortedData = computed(() => {
             </thead>
 
             <tbody class="divide-y divide-gray-700">
+              <!-- Loading -->
+              <tr v-if="loading">
+                <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-gray-400">
+                  Memuat data...
+                </td>
+              </tr>
+
               <!-- Data Tidak Ada -->
-              <tr v-if="sortedData.length === 0">
+              <tr v-else-if="sortedData.length === 0">
                 <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-gray-500">
                   Tidak ada data 🙏
                 </td>

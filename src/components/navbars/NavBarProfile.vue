@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
 // Stores
 import { useAuthStore } from '@/stores/authStore';
@@ -42,7 +43,7 @@ const handleLogout = async () => {
         </div>
         <img
           alt="User Avatar"
-          :src="authStore.profile?.avatar_url || '/images/avatar.jpg'"
+          :src="getPublicImageUrl(authStore.profile.avatar_image_path, 'avatar')"
           class="size-10 flex-none rounded-full object-cover"
         />
       </div>

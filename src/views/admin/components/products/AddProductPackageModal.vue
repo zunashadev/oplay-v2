@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 
@@ -50,7 +50,11 @@ const discountTypes = [
 ];
 
 onMounted(() => {
-  productStore.fetchProducts(); // Ambil daftar produk
+  productStore.fetchProducts();
+});
+
+onUnmounted(() => {
+  productStore.resetProductsState();
 });
 
 const addProductPackage = async () => {
@@ -81,7 +85,7 @@ const addProductPackage = async () => {
 </script>
 
 <template>
-  <DialogModalComponent ref="dialogModalRef" title="Tambah Produk">
+  <DialogModalComponent ref="dialogModalRef" title="Tambah Paket Produk">
     <div class="">
       <form @submit.prevent="addProductPackage" class="flex flex-col gap-2">
         <!-- Dropdown Pilih Produk -->
@@ -121,8 +125,13 @@ const addProductPackage = async () => {
         <CheckBoxComponent v-model="isBestSeller" label="🔥 Terlaris" />
 
         <!-- Button -->
-        <ButtonComponent type="submit" variant="solid" textColor="black">
-          Tambah Produk
+        <ButtonComponent
+          type="submit"
+          variant="solid"
+          textColor="black"
+          :disabled="productPackageStore.loading"
+        >
+          Tambah Paket Produk
         </ButtonComponent>
       </form>
     </div>

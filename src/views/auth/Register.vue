@@ -48,7 +48,6 @@ const handleRegister = async () => {
       password.value,
       name.value,
       username.value,
-      null,
       referralCode.value,
     );
 

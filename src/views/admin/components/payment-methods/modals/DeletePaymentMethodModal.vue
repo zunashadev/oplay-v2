@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 // 📌 Stores
-import { useProductCategoryStore } from '@/stores/productCategoryStore';
+import { usePaymentMethodStore } from '@/stores/paymentMethodStore';
 
 // 📌 Components
 import ConfirmModalComponent from '@/components/modals/ConfirmModal.vue';
@@ -11,20 +11,21 @@ import ConfirmModalComponent from '@/components/modals/ConfirmModal.vue';
 import TriangleWarningIcon from '@/components/icons/TriangleWarning.vue';
 
 // 📌...
-const productCategoryStore = useProductCategoryStore();
+const paymentMethodStore = usePaymentMethodStore();
 
-const selectedCategoryId = ref('');
+// 📌 ...
+const selectedPaymentMethodId = ref('');
 
 // START : Modal
 const confirmModalRef = ref(null);
 
-function openModal(categoryId) {
-  selectedCategoryId.value = categoryId;
+function openModal(paymentMethodId) {
+  selectedPaymentMethodId.value = paymentMethodId;
   confirmModalRef.value.openModal();
 }
 
 function closeModal() {
-  selectedCategoryId.value = '';
+  selectedPaymentMethodId.value = '';
   confirmModalRef.value.closeModal();
 }
 
@@ -33,7 +34,7 @@ defineExpose({ openModal, closeModal });
 
 // START : Handle Button
 const handleConfirm = async () => {
-  await productCategoryStore.deleteCategory(selectedCategoryId.value);
+  await paymentMethodStore.deletePaymentMethod(selectedPaymentMethodId.value);
   closeModal();
 };
 
@@ -46,8 +47,8 @@ function handleCancel() {
 <template>
   <ConfirmModalComponent
     ref="confirmModalRef"
-    title="Hapus Kategori Produk"
-    message="Apakah anda yakin untuk menghapus kategori produk ini?"
+    title="Hapus Metode Pembayaran"
+    message="Apakah anda yakin untuk menghapus metode pembayaran ini?"
     confirmText="Hapus"
     cancelText="Batal"
     @confirm="handleConfirm"
