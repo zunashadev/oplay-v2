@@ -150,7 +150,9 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       if (fetchError) throw fetchError;
 
       paymentMethods.value = data;
-      handleResponse({ message, error }, 'success', 'mengambil data payment methods');
+      handleResponse({ message, error }, 'success', 'mengambil data payment methods', {
+        showToast: false,
+      });
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data payment methods', { err });
     } finally {
@@ -176,7 +178,9 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       if (fetchError) throw fetchError;
 
       paymentMethod.value = data;
-      handleResponse({ message, error }, 'success', 'mengambil payment method berdasarkan ID');
+      handleResponse({ message, error }, 'success', 'mengambil payment method berdasarkan ID', {
+        showToast: false,
+      });
       return data;
     } catch (err) {
       paymentMethod.value = null;

@@ -2,12 +2,16 @@
 import { ref, onMounted } from 'vue';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
 // 📌 Stores
 import { useRewardEventStore } from '@/stores/rewardEventStore';
 
 // 📌 Components
-import ButtonComponent from '@/components/buttons/Button.vue';
+// ...
+
+// 📌 Partials
+import AddRewardEventPartial from './partials/reward-histories/AddRewardEvent.vue';
 
 // 📌 Icons
 import FileUploadIcon from '@/components/icons/FileUpload.vue';
@@ -15,7 +19,7 @@ import EyeIcon from '@/components/icons/Eye.vue';
 import EyeSolidIcon from '@/components/icons/EyeSolid.vue';
 import TrashSolidIcon from '@/components/icons/TrashSolid.vue';
 
-// 📌 ...
+// 📌 Inisialisasi Store
 const rewardEventStore = useRewardEventStore();
 
 onMounted(() => {
@@ -32,20 +36,13 @@ const columns = [
   { label: 'Status', key: 'custom-status', align: 'center' },
   { label: 'Actions', key: 'actions', align: 'right' },
 ];
-
-const roles = [
-  { id: 'admin', name: 'Admin' },
-  { id: 'customer', name: 'Customer' },
-];
 </script>
 
 <template>
   <div class="flex flex-col gap-5">
-    <!-- START : ... -->
-    <div>
-      <p class="text-2xl font-semibold">⏰ Riwayat Hadiah</p>
-    </div>
-    <!-- END : ... -->
+    <!-- START : Add Reward Event -->
+    <AddRewardEventPartial />
+    <!-- END : Add Reward Event -->
 
     <!-- START : USERS TABLE -->
     <div class="rounded-xl bg-gray-900 px-5 py-5">
@@ -55,7 +52,7 @@ const roles = [
           <div class="flex items-center gap-3">
             <div class="flex-none">
               <img
-                :src="row.profile.avatar_url || '/images/avatar.jpg'"
+                :src="getPublicImageUrl(row.profile.avatar_image_path, 'avatar')"
                 alt="Avatar"
                 class="size-10 rounded-full object-cover"
               />

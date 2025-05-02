@@ -100,7 +100,9 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
       // 📌 Menyimpan hasil ke state
       rewardEvents.value = data;
 
-      handleResponse({ message, error }, 'success', 'mengambil reward events');
+      handleResponse({ message, error }, 'success', 'mengambil reward events', {
+        showToast: false,
+      });
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil reward events', { err });
     } finally {

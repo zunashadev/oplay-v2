@@ -1,74 +1,70 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { useRouter } from 'vue-router';
 import { formatRupiah } from '@/utils/format';
-import { calculateFinalPrice } from '@/utils/priceCalculator';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
-// Stores
+// 📌 Stores
 import { useOrderStore } from '@/stores/orderStore';
 import { usePaymentMethodStore } from '@/stores/paymentMethodStore';
 
-// Components
+// 📌 Components
+import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 import FileInputComponent from '@/components/form/FileInput.vue';
 
 import PaymentSuccessModalComponent from './components/modals/PaymentSuccessModal.vue';
 
-// Icons
+// 📌 Icons
 import TriangleWarningIcon from '@/components/icons/TriangleWarning.vue';
 
+// 📌 Inisialisasi Route
 const route = useRoute();
-const router = useRouter();
 
+// 📌 Inisialisasi Stores
 const orderStore = useOrderStore();
 const paymentMethodStore = usePaymentMethodStore();
 
+// 📌 Ambil dan Filter Payment Methods by Type
 const eWalletPaymentMethods = computed(() =>
   paymentMethodStore.filterPaymentMethodsByType('e-wallet'),
 );
 const bankPaymentMethods = computed(() => paymentMethodStore.filterPaymentMethodsByType('bank'));
 const qrisPaymentMethods = computed(() => paymentMethodStore.filterPaymentMethodsByType('qris'));
 
-// Payment Success Modal
+// 📌 Payment Success Modal
 const paymentSuccessModalRef = ref(null);
 
 function openPaymentSuccessModal() {
   paymentSuccessModalRef.value.openModal();
 }
 
-function closePaymentSuccessModal() {
-  paymentSuccessModalRef.value.closeModal();
-}
-
-// Unggah Bukti Pembayaran
+// 📌 Unggah Bukti Pembayaran
 const file = ref(null);
 
 const handleSubmitPaymentProof = async () => {
-  const orderId = route.query.orderId;
+  const orderId = orderStore.currentOrder.id;
 
-  if (!orderId || !file.value) {
-    alert('Order ID atau file bukti pembayaran belum tersedia!');
-    return;
-  }
+  if (!orderId || !file.value) return alert('Order ID atau file bukti pembayaran belum tersedia!');
 
   const result = await orderStore.submitPaymentProof(orderId, file.value);
 
   if (result) {
-    alert('Bukti pembayaran berhasil diunggah!');
     file.value = null;
+    openPaymentSuccessModal();
   }
 };
 
-// On Mounted
+// 📌 On Mounted
 onMounted(async () => {
   const orderId = route.query.orderId;
+
   if (orderId) {
     await orderStore.fetchOrderById(orderId);
 
     const order = orderStore.currentOrder;
 
-    if (order?.payment_proof_image_url !== null && order?.payment_proof_image_url.length > 0) {
+    if (order?.payment_proof_image_path !== null && order?.payment_proof_image_path.length > 0) {
       openPaymentSuccessModal();
     }
   }
@@ -80,32 +76,32 @@ onMounted(async () => {
 <template>
   <PaymentSuccessModalComponent ref="paymentSuccessModalRef" />
 
-  <div class="flex flex-col gap-8 pb-12">
-    <template v-if="orderStore.loading">
-      <div>LOADING...</div>
-    </template>
+  <template v-if="orderStore.loading">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs">
+      <WaveLoaderComponent />
+    </div>
+  </template>
 
-    <template v-else>
+  <template v-else>
+    <div class="flex flex-col gap-8 pb-12">
       <template v-if="orderStore.currentOrder">
         <div class="flex flex-col gap-10 sm:gap-12">
           <!-- START : Nominal Yang Harus Dibayar -->
           <div class="flex flex-col gap-3">
             <div
-              class="border-lightning-yellow-400 flex flex-col items-center gap-2 rounded-xl border bg-gray-900 px-5 py-5"
+              class="flex flex-col items-center gap-2 rounded-xl border border-yellow-500 bg-gray-900 px-5 py-5"
             >
               <p>Nominal yang harus dibayar:</p>
-              <p class="text-lightning-yellow-400 text-4xl font-semibold">
+              <p class="text-4xl font-semibold text-yellow-500">
                 {{ formatRupiah(orderStore.currentOrder.total_price) }}
               </p>
             </div>
-            <div
-              class="bg-lightning-yellow-400/25 border-lightning-yellow-400 rounded-lg border px-3 py-3"
-            >
+            <div class="rounded-lg border border-yellow-500 bg-yellow-500/25 px-3 py-3">
               <div class="flex items-center gap-3">
                 <div class="flex-none">
-                  <TriangleWarningIcon class="text-lightning-yellow-400 size-5" />
+                  <TriangleWarningIcon class="size-5 text-yellow-500" />
                 </div>
-                <p class="text-lightning-yellow-400 text-xs">
+                <p class="text-xs text-yellow-500">
                   Pilih salah satu metode pembayaran, lalu kirim bukti pembayaran melalui form yang
                   disediakan di bawah .
                 </p>
@@ -118,7 +114,7 @@ onMounted(async () => {
           <div class="flex flex-col gap-5">
             <!--  -->
             <div class="flex items-center gap-3">
-              <div class="bg-lightning-yellow-400 h-6 w-1 rounded-md"></div>
+              <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
               <p class="text-xl font-medium">Pilih Metode Pembayaran</p>
             </div>
             <!--  -->
@@ -135,8 +131,7 @@ onMounted(async () => {
                     <div class="flex items-center gap-3">
                       <div class="flex-none">
                         <img
-                          v-if="item.logo_image_url"
-                          :src="item.logo_image_url"
+                          :src="getPublicImageUrl(item.logo_image_path)"
                           alt="Logo"
                           class="max-h-6"
                         />
@@ -165,8 +160,7 @@ onMounted(async () => {
                     <div class="flex items-center gap-3">
                       <div class="flex-none">
                         <img
-                          v-if="item.logo_image_url"
-                          :src="item.logo_image_url"
+                          :src="getPublicImageUrl(item.logo_image_path)"
                           alt="Logo"
                           class="max-h-6"
                         />
@@ -195,8 +189,7 @@ onMounted(async () => {
                     <div class="flex items-center gap-3">
                       <div class="flex-none">
                         <img
-                          v-if="item.logo_image_url"
-                          :src="item.logo_image_url"
+                          :src="getPublicImageUrl(item.logo_image_path)"
                           alt="Logo"
                           class="max-h-6"
                         />
@@ -206,8 +199,7 @@ onMounted(async () => {
                     <div class="flex flex-col items-center gap-3">
                       <div class="flex-none">
                         <img
-                          v-if="item.qr_code_image_url"
-                          :src="item.qr_code_image_url"
+                          :src="getPublicImageUrl(item.qr_code_image_path)"
                           alt="Logo"
                           class="max-h-24"
                         />
@@ -225,7 +217,7 @@ onMounted(async () => {
           <div class="flex flex-col gap-5">
             <!--  -->
             <div class="flex items-center gap-3">
-              <div class="bg-lightning-yellow-400 h-6 w-1 rounded-md"></div>
+              <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
               <p class="text-xl font-medium">Unggah Bukti Pembayaran</p>
             </div>
             <div
@@ -241,12 +233,13 @@ onMounted(async () => {
               type="button"
               variant="solid"
               textColor="black"
+              :disabled="file === null"
             >
               Unggah
             </ButtonComponent>
 
             <p
-              class="hover:text-lightning-yellow-400 text-center text-sm font-normal text-gray-500 transition-all hover:cursor-pointer"
+              class="text-center text-sm font-normal text-gray-500 transition-all hover:cursor-pointer hover:text-yellow-500"
             >
               Bayar nanti dan kembali ke halaman produk
             </p>
@@ -254,9 +247,17 @@ onMounted(async () => {
           <!-- END : Unggah Bukti Pembayaran -->
         </div>
       </template>
+
       <template v-else>
-        <p>Maaf data pesanan tidak ditemukan, mungkin terjadi error</p>
+        <div class="flex h-full flex-col items-center justify-center gap-12 py-12">
+          <img src="/images/illustrations/UndrawNoData.svg" class="max-w-32 sm:max-w-52" />
+          <div class="px-12">
+            <p class="text-center text-sm text-gray-500">
+              Maaf data pesanan tidak ditemukan, mungkin terjadi error
+            </p>
+          </div>
+        </div>
       </template>
-    </template>
-  </div>
+    </div>
+  </template>
 </template>

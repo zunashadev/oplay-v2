@@ -168,7 +168,16 @@ const router = createRouter({
           },
         },
         // Wallet
-        // ...
+        {
+          path: 'wallets',
+          name: 'AdminDashboardWallets',
+          component: () => import('../views/admin/Wallets.vue'),
+          meta: {
+            title: 'Metode Pembayaran',
+            requiresAuth: true,
+            requiredRoles: ['admin'],
+          },
+        },
         // Reward
         {
           path: 'reward-configurations',

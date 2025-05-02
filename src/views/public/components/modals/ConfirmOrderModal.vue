@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
 import { useOrderStore } from '@/stores/orderStore';
 
@@ -60,7 +61,11 @@ const addOrder = async () => {
     <div class="flex flex-col gap-5">
       <!-- START : Produk -->
       <div class="flex items-center gap-5">
-        <img v-if="product.image_url" :src="product.image_url" alt="Produk" class="max-h-12" />
+        <img
+          :src="getPublicImageUrl(product.product_image_path, 'product')"
+          alt="Produk"
+          class="max-h-12"
+        />
         <div class="flex flex-col gap-1">
           <p class="text-xl font-semibold">
             {{ product.name }}

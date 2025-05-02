@@ -29,7 +29,7 @@ defineExpose({ openModal, closeModal });
 </script>
 
 <template>
-  <BaseModalComponent ref="baseModalRef">
+  <BaseModalComponent ref="baseModalRef" @close="$emit('close')">
     <div class="flex w-full max-w-xl bg-gray-900 text-white">
       <div class="flex w-xl flex-col">
         <!-- START : Header -->

@@ -41,6 +41,7 @@ const menuItems = ref([
     name: 'Dompet',
     icon: markRaw(CreditCardIcon),
     submenu: [
+      { name: 'Dompet', link: 'AdminDashboardWallets' },
       { name: 'Riwayat Transaksi', link: '' },
       { name: 'Sub Menu 2', link: '' },
       { name: 'Sub Menu 3', link: '' },

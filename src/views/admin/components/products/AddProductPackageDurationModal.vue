@@ -1,7 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useProductStore } from '@/stores/productStore';
-import { useProductPackageStore } from '@/stores/productPackageStore';
+import { ref, onMounted, onUnmounted } from 'vue';
+
 import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
 
 import DialogModalComponent from '@/components/modals/DialogModal.vue';
@@ -11,6 +10,14 @@ import ButtonComponent from '@/components/buttons/Button.vue';
 // START : MODAL
 const dialogModalRef = ref(null);
 
+// Fungsi reset form
+function resetForm() {
+  name.value = '';
+  value.value = null;
+  selectedProductId.value = null;
+  selectedProductPackageId.value = null;
+}
+
 function openModal(productId, productPackageId) {
   selectedProductId.value = productId;
   selectedProductPackageId.value = productPackageId;
@@ -19,11 +26,9 @@ function openModal(productId, productPackageId) {
 }
 
 function closeModal() {
-  name.value = '';
-  value.value = '';
-  selectedProductId.value = '';
-  selectedProductPackageId.value = '';
+  console.log('Modal ditutup dan nilai direset');
 
+  resetForm();
   dialogModalRef.value.closeModal();
 }
 
@@ -31,18 +36,12 @@ defineExpose({ openModal, closeModal });
 // END : MODAL
 
 // START : ADD PRODUCT PACKAGE DURATION
-const productStore = useProductStore();
-const productPackageStore = useProductPackageStore();
 const productPackageDurationStore = useProductPackageDurationStore();
 
 const name = ref('');
 const value = ref('');
 const selectedProductId = ref('');
 const selectedProductPackageId = ref('');
-
-onMounted(() => {
-  productStore.fetchProducts(); // Ambil daftar produk
-});
 
 const addProductPackageDuration = async () => {
   if (!name.value || !value.value || !selectedProductId.value || !selectedProductPackageId.value)
@@ -68,7 +67,7 @@ const addProductPackageDuration = async () => {
 </script>
 
 <template>
-  <DialogModalComponent ref="dialogModalRef" title="Tambah Durasi Paket">
+  <DialogModalComponent ref="dialogModalRef" title="Tambah Durasi Paket" @close="resetForm">
     <div class="">
       <form @submit.prevent="addProductPackageDuration" class="flex flex-col gap-5">
         <div class="flex flex-col gap-2">

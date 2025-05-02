@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
+import { getPublicImageUrl } from '@/utils/storageHelper';
+
 import { useAuthStore } from '@/stores/authStore';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
@@ -28,13 +30,7 @@ const handleLogout = async () => {
         <img
           v-if="authStore.profile && authStore.profile?.avatar_url"
           alt="User Avatar"
-          :src="authStore.profile?.avatar_url"
-          class="size-24 rounded-full object-cover"
-        />
-        <img
-          v-else
-          alt="User Avatar"
-          src="/images/avatar.jpg"
+          :src="getPublicImageUrl(authStore.profile?.avatar_url, 'avatar')"
           class="size-24 rounded-full object-cover"
         />
       </div>

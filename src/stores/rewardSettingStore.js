@@ -45,6 +45,62 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
    *========================================================================**/
 
   /**------------------------------------------------------------------------
+   *    Generate Reward Settings
+   *------------------------------------------------------------------------**/
+
+  const generateRewardSettings = async () => {
+    const rewardSettingsData = [
+      {
+        type: 'referral',
+        key: 'referral_new_user',
+        description: 'Bonus untuk user baru yang mendaftar',
+        amount: 5000,
+        is_active: false,
+      },
+      {
+        type: 'referral',
+        key: 'referral_referrer',
+        description: 'Bonus untuk user yang mengundang user lain',
+        amount: 3000,
+        is_active: false,
+      },
+      {
+        type: 'purchase',
+        key: 'first_purchase',
+        description: 'Bonus untuk pembelian pertama',
+        amount: 10000,
+        is_active: false,
+      },
+      {
+        type: 'purchase',
+        key: 'product_purchase',
+        description: 'Reward untuk setiap pembelian produk',
+        amount: 1000,
+        is_active: false,
+      },
+      {
+        type: 'manual',
+        key: 'manual_reward',
+        description: 'Reward khusus yang diberikan oleh admin untuk alasan tertentu',
+        amount: 10000,
+        is_active: false,
+      },
+    ];
+
+    if (rewardSettings) {
+      for (const reward of rewardSettingsData) {
+        await addRewardSetting(
+          reward.type,
+          reward.key,
+          reward.description,
+          reward.amount,
+          reward.is_active,
+        );
+      }
+    }
+  };
+
+  /**------------------------------------------------------------------------
    *    Fetch Reward Settings
    *------------------------------------------------------------------------**/
 
@@ -133,6 +189,50 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
   };
 
   /**------------------------------------------------------------------------
+   *    Add Reward Setting
+   *------------------------------------------------------------------------**/
+
+  const addRewardSetting = async (type, key, description, amount, is_active = false) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      // 📌 Cek user
+      const user_id = useAuthStore().user?.id;
+      if (!user_id) {
+        throw new Error('User tidak ditemukan/belum login');
+      }
+
+      // 📌 Simpan reward setting ke database
+      const { data, error: insertError } = await supabase
+        .from('reward_settings')
+        .insert([
+          {
+            type,
+            key,
+            description,
+            amount,
+            is_active,
+          },
+        ])
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+
+      // 📌 Fetch ulang kategori
+      await fetchGroupedRewardSettings();
+
+      handleResponse({ message, error }, 'success', 'menambah reward setting');
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'menambah reward setting', { err });
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**------------------------------------------------------------------------
    *    Update is_active Status
    *------------------------------------------------------------------------**/
 
@@ -204,9 +304,11 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
     groupedRewardSettings,
     currentRewardSetting,
 
+    generateRewardSettings,
     fetchAllRewardSettings,
     fetchRewardSettingById,
     fetchGroupedRewardSettings,
+    addRewardSetting,
     toggleRewardSettingStatus,
     updateRewardSettingAmount,
   };

@@ -152,56 +152,57 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  const giveReferralRewards = async (newUser, referrer_id, referral_username) => {
-    const rewardStore = useRewardEventStore();
-
+  const giveReferralRewards = async (newUser, referrer_id, referrer_username) => {
     try {
       // 📌 Ambil data reward_settings dari Supabase
       const { data: settings, error } = await supabase
         .from('reward_settings')
         .select('*')
-        .in('key', ['referral_new_user', 'referral_referrer'])
+        .eq('type', 'referral') // ! filter berdasarkan type, harus sesuai dengan database
+        .in('key', ['referral_new_user', 'referral_referrer']) // ! filter berdasarkan key, harus sesuai dengan database
         .eq('is_active', true);
 
       if (error || !settings) throw error || new Error('Reward settings tidak ditemukan');
 
-      console.log('Berhasil mendapatkan reward_settings:' + settings);
+      const referralNewUserSetting = settings.find((s) => s.key === 'referral_new_user');
+      const referralReferrerSetting = settings.find((s) => s.key === 'referral_referrer');
 
-      const referralUserSetting = settings.find((s) => s.key === 'referral_new_user');
-      const referrerSetting = settings.find((s) => s.key === 'referral_referrer');
+      // 📌 Beri reward
+      const rewardStore = useRewardEventStore();
 
-      console.log('Berhasil mendapatkan referralUserSetting:' + referralUserSetting);
-      console.log('Berhasil mendapatkan referrerSetting:' + referrerSetting);
+      // Reward untuk user baru pengguna kode referral -> jika ada
+      if (referralNewUserSetting) {
+        await rewardStore.addRewardEvent({
+          user_id: newUser.id,
+          reward_setting_id: referralNewUserSetting.id,
+          amount: referralNewUserSetting.amount,
+          note: `Bonus mendaftar dengan kode referral ${referrer_username}`,
+          status: 'pending',
+          metadata: {
+            referrer_username,
+          },
+        });
+      }
 
-      // 📌 Reward untuk user baru pengguna kode referral
-      await rewardStore.addRewardEvent({
-        user_id: newUser.id,
-        reward_setting_id: referralUserSetting.id,
-        amount: referralUserSetting.amount,
-        note: `Bonus mendaftar dengan kode referral ${referral_username}`,
-        status: 'pending',
-        metadata: {
-          referral_username,
-        },
-      });
-
-      // 📌 Reward untuk pemilik referral
-      await rewardStore.addRewardEvent({
-        user_id: referrer_id,
-        reward_setting_id: referrerSetting.id,
-        amount: referrerSetting.amount,
-        note: `User ${newUser.username} mendaftar menggunakan kode referral Anda`,
-        status: 'pending',
-        metadata: {
-          new_user_username: newUser.username,
-        },
-      });
+      // Reward untuk pemilik referral -> jika ada
+      if (referralReferrerSetting) {
+        await rewardStore.addRewardEvent({
+          user_id: referrer_id,
+          reward_setting_id: referralReferrerSetting.id,
+          amount: referralReferrerSetting.amount,
+          note: `User ${newUser.username} mendaftar menggunakan kode referral Anda`,
+          status: 'pending',
+          metadata: {
+            new_user_username: newUser.username,
+          },
+        });
+      }
     } catch (err) {
       console.warn('Gagal memberi reward referral:', err);
     }
   };
 
-  const register = async (email, password, name, username, referral_username = null) => {
+  const register = async (email, password, name, username, referral_code = null) => {
     // 📌 Validasi form awal - ini juga sudah di cek pada komponen input (dsb) menggunakan required
     if (!name || !username || !email || !password) {
       const err = new Error('Nama lengkap, username, email, dan password diperlukan!');
@@ -224,22 +225,22 @@ export const useAuthStore = defineStore('authStore', () => {
       if (existingUsername) throw new Error(`Username "${username}" sudah digunakan`);
 
       // 📌 Validasi referral tidak boleh diri sendiri
-      if (referral_username === username) {
+      if (referral_code === username) {
         throw new Error('Kode referral tidak boleh milik sendiri.');
       }
 
       // 📌 Validasi referral username (apakah ada)
       let referrer_id = null;
 
-      if (referral_username) {
+      if (referral_code) {
         const { data: referrer, error: referrerError } = await supabase
           .from('profiles')
           .select('id')
-          .eq('username', referral_username)
+          .eq('username', referral_code)
           .single();
 
         if (referrerError || !referrer) {
-          throw new Error(`Kode referral "${referral_username}" tidak ditemukan`);
+          throw new Error(`Kode referral "${referral_code}" tidak ditemukan`);
         }
 
         referrer_id = referrer.id;
@@ -310,7 +311,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
       // 📌 Reward referral
       if (referrer_id) {
-        await giveReferralRewards(currentProfile, referrer_id, referral_username);
+        await giveReferralRewards(currentProfile, referrer_id, referral_code);
       }
 
       handleResponse({ message, error }, 'success', 'mendaftar');
