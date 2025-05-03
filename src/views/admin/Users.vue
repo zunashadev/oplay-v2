@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/authStore';
 
 // Components
 import SelectComponent from '@/components/form/Select.vue';
+import TableComponent from '@/components/tables/Table.vue';
 
 // Icons
 import EyeSolidIcon from '@/components/icons/EyeSolid.vue';
@@ -23,8 +24,6 @@ onUnmounted(() => {
 });
 
 // START : Table
-import TableComponent from '@/components/tables/Table.vue';
-
 const columns = [
   { label: 'Avatar', key: 'custom-profile-avatar' },
   { label: 'Nama', key: 'custom-profile-name' },
@@ -44,12 +43,6 @@ const roles = [
 
 <template>
   <div class="flex flex-col gap-5">
-    <!-- START : ... -->
-    <div>
-      <p class="text-2xl font-semibold">👥 Daftar User</p>
-    </div>
-    <!-- END : ... -->
-
     <!-- START : USERS TABLE -->
     <div class="rounded-xl bg-gray-900 px-5 py-5">
       <TableComponent :columns="columns" :data="authStore.users" :loading="authStore.loading">

@@ -26,23 +26,8 @@ const handleClickDetail = () => {
 
 <template>
   <div class="flex flex-col overflow-hidden rounded-4xl">
-    <!-- Top -->
-    <div class="relative">
-      <div class="flex">
-        <div class="h-3 w-full rounded-t-4xl bg-gray-50"></div>
-        <div class="h-3 w-12 flex-none rounded-t-4xl bg-gray-950"></div>
-        <div class="h-3 w-full rounded-t-4xl bg-gray-50"></div>
-      </div>
-      <!--  -->
-      <div
-        class="absolute top-3 left-1/2 h-6 w-12 -translate-x-1/2 rounded-b-4xl bg-gray-950"
-      ></div>
-      <div class="h-10 bg-gray-50"></div>
-    </div>
-
-    <!-- Main Content -->
     <div class="flex flex-1 flex-col bg-white">
-      <div class="flex flex-1 flex-col border-y-2 border-dashed border-gray-300 px-5 py-5">
+      <div class="flex flex-1 flex-col px-5 py-5">
         <div class="flex flex-1 flex-col gap-5 pb-5">
           <div class="flex flex-none items-start justify-between">
             <!-- Logo Produk -->
@@ -135,20 +120,6 @@ const handleClickDetail = () => {
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Bottom -->
-    <div class="relative rotate-180">
-      <div class="flex">
-        <div class="h-3 w-full rounded-t-4xl bg-gray-50"></div>
-        <div class="h-3 w-12 flex-none rounded-t-4xl bg-gray-950"></div>
-        <div class="h-3 w-full rounded-t-4xl bg-gray-50"></div>
-      </div>
-      <!-- ... -->
-      <div
-        class="absolute top-3 left-1/2 h-6 w-12 -translate-x-1/2 rounded-b-4xl bg-gray-950"
-      ></div>
-      <div class="h-10 bg-gray-50"></div>
     </div>
   </div>
 </template>

@@ -9,7 +9,7 @@ import { storageService } from '@/services/storageService';
 
 export const useWalletStore = defineStore('walletStore', () => {
   /**========================================================================
-   *    STATE & COMPUTED
+   **   STATE & COMPUTED
    *========================================================================**/
 
   // 📌 State
@@ -24,11 +24,11 @@ export const useWalletStore = defineStore('walletStore', () => {
   // ...
 
   /**========================================================================
-   *    UTILITY FUNCTIONS
+   **   UTILITY FUNCTIONS
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Reset Message & Error State
+   *    Reset Message & Error State
    *------------------------------------------------------------------------**/
 
   const resetMessageState = () => {
@@ -36,18 +36,86 @@ export const useWalletStore = defineStore('walletStore', () => {
     error.value = null;
   };
 
+  /**------------------------------------------------------------------------
+   *    Reset Users
+   *------------------------------------------------------------------------**/
+
+  const resetWalletsState = () => {
+    wallets.value = [];
+  };
+
   /**========================================================================
-   *    FILE HANDLING
+   **   FILE HANDLING
    *========================================================================**/
 
   // .....
 
   /**========================================================================
-   *    METHODS
+   **   METHODS
    *========================================================================**/
 
   /**------------------------------------------------------------------------
-   **   Fetch Wallet by User
+   *    Fetch Wallets -> Admin
+   *------------------------------------------------------------------------**/
+
+  const fetchWallets = async () => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const { data: walletsData, error: fetchError } = await supabase
+        .from('wallets')
+        .select('*, profiles(*)')
+        .order('created_at', { ascending: false });
+
+      if (fetchError) throw fetchError;
+
+      wallets.value = walletsData;
+      handleResponse({ message, error }, 'success', 'mengambil semua data wallet');
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengambil semua data wallet', { err });
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**------------------------------------------------------------------------
+   *    Fetch Wallets By ID -> Admin
+   *------------------------------------------------------------------------**/
+
+  const fetchWalletById = async (walletId) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const userId = useAuthStore().user?.id;
+
+      if (!userId) throw new Error('User tidak ditemukan/belum login');
+
+      const { data, error: fetchError } = await supabase
+        .from('wallets')
+        .select('*')
+        .eq('id', walletId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      currentWallet.value = data;
+      handleResponse({ message, error }, 'success', 'mengambil data wallet berdasarkan id', {
+        showToast: false,
+      });
+      return data;
+    } catch (err) {
+      currentOrder.value = null;
+      handleResponse({ message, error }, 'error', 'mengambil data wallet berdasarkan id', { err });
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**------------------------------------------------------------------------
+   *    Fetch Wallet by User
    *------------------------------------------------------------------------**/
 
   const fetchWalletByUser = async () => {
@@ -68,12 +136,12 @@ export const useWalletStore = defineStore('walletStore', () => {
 
       currentWallet.value = data;
 
-      handleResponse({ message, error }, 'success', 'mengambil wallet berdasarkan id', {
+      handleResponse({ message, error }, 'success', 'mengambil wallet berdasarkan user', {
         showToast: false,
       });
       return data;
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil wallet berdasarkan id', {
+      handleResponse({ message, error }, 'error', 'mengambil wallet berdasarkan user', {
         err,
       });
     } finally {
@@ -81,8 +149,42 @@ export const useWalletStore = defineStore('walletStore', () => {
     }
   };
 
+  /**------------------------------------------------------------------------
+   *   Update Wallet
+   *------------------------------------------------------------------------**/
+
+  const updateWallet = async (walletId, updatedFields = {}) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      if (!walletId) throw new Error('ID wallet tidak ditemukan');
+
+      // 📌 Update ke database
+      const { data, error: updateError } = await supabase
+        .from('wallets')
+        .update(updatedFields)
+        .eq('id', walletId)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      // 📌 Fetch ulang wallets
+      await fetchWallets();
+
+      handleResponse({ message, error }, 'success', 'mengedit wallet');
+      return data;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengedit wallet', { err });
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   /**========================================================================
-   *    RETURNS
+   **   RETURNS
    *========================================================================**/
 
   return {
@@ -93,6 +195,11 @@ export const useWalletStore = defineStore('walletStore', () => {
     wallets,
     currentWallet,
 
+    resetWalletsState,
+
+    fetchWallets,
+    fetchWalletById,
     fetchWalletByUser,
+    updateWallet,
   };
 });

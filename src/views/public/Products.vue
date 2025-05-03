@@ -6,6 +6,7 @@ import { getPublicImageUrl } from '@/utils/storageHelper';
 import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
+import { useProductCategoryStore } from '@/stores/productCategoryStore';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
 import InputComponent from '@/components/form/Input.vue';
@@ -18,13 +19,15 @@ import NotFoundIllustration from '@/components/illustrations/NotFound.vue';
 const router = useRouter();
 
 const productStore = useProductStore();
+const categoryStore = useProductCategoryStore();
 
-// Fetch Product
+// 📌 Fetch Product
 onMounted(() => {
   productStore.fetchProducts();
+  categoryStore.fetchCategories();
 });
 
-// Go TO Detail Product
+// 📌 Go TO Detail Product
 const goToDetail = (slug) => {
   router.push({ name: 'PublicProductDetail', params: { slug } });
 };
@@ -42,23 +45,23 @@ const goToDetail = (slug) => {
 
     <!-- START : Filter -->
     <div class="flex items-center justify-between rounded-full">
+      <!-- 📌 Search -->
       <div class="w-96">
         <InputComponent placeholder="Cari produk..." />
       </div>
-      <div class="flex items-center gap-3">
-        <div class="rounded-full px-6 py-2 text-sm outline outline-gray-500 hover:cursor-pointer">
-          Design
+
+      <!-- 📌 Filter -->
+      <template v-if="categoryStore.categories.length">
+        <div class="flex items-center gap-3">
+          <div
+            v-for="(item, index) in categoryStore.categories"
+            :key="index"
+            class="rounded-full px-6 py-2 text-sm outline outline-gray-500 hover:cursor-pointer"
+          >
+            {{ item.name }}
+          </div>
         </div>
-        <div class="rounded-full bg-yellow-500 px-6 py-2 text-sm text-black hover:cursor-pointer">
-          Music
-        </div>
-        <div class="rounded-full px-6 py-2 text-sm outline outline-gray-500 hover:cursor-pointer">
-          Streaming
-        </div>
-        <div class="rounded-full px-6 py-2 text-sm outline outline-gray-500 hover:cursor-pointer">
-          AI
-        </div>
-      </div>
+      </template>
     </div>
     <!-- END : Filter -->
 
