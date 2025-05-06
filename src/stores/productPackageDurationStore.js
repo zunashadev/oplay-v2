@@ -8,18 +8,38 @@ import { useProductPackageStore } from './productPackageStore';
 import { handleResponse } from '@/utils/responseHandler';
 
 export const useProductPackageDurationStore = defineStore('productPackageDurationStore', () => {
-  const durations = ref([]);
+  /**========================================================================
+   **   STATE & COMPUTED
+   *========================================================================**/
+
+  // 📌 State
   const loading = ref(false);
   const message = ref(null);
-  const error = ref(null); // ini digunakan sebagai keterangan message apabila terjadi error
+  const error = ref(null);
 
-  // Fungsi : Reset message and error state
+  const durations = ref([]);
+
+  /**========================================================================
+   **   UTILITY FUNCTIONS
+   *========================================================================**/
+
+  /**------------------------------------------------------------------------
+   *    Reset Message & Error State
+   *------------------------------------------------------------------------**/
+
   const resetMessageState = () => {
     message.value = null;
     error.value = null;
   };
 
-  // Fetch product package duration berdasarkan product package id
+  /**========================================================================
+   **   METHODS
+   *========================================================================**/
+
+  /**------------------------------------------------------------------------
+   *    Fetch Products Package Duration by Product Package ID
+   *------------------------------------------------------------------------**/
+
   const fetchProductPackageDurations = async (productPackageId) => {
     loading.value = true;
     resetMessageState();
@@ -39,15 +59,19 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
     }
   };
 
-  const addProductPackageDuration = async (product_id, product_package_id, name, value) => {
+  /**------------------------------------------------------------------------
+   *    Add Products Package Duration
+   *------------------------------------------------------------------------**/
+
+  const addProductPackageDuration = async (product_package_id, name, value) => {
     loading.value = true;
     resetMessageState();
 
+    console.log('Masuk store');
+
     try {
       const user_id = useAuthStore().user?.id;
-      if (!user_id) {
-        throw new Error('User tidak ditemukan/belum login');
-      }
+      if (!user_id) throw new Error('User tidak ditemukan/belum login');
 
       const { data, error: insertError } = await supabase
         .from('product_package_durations')
@@ -62,11 +86,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
         .select()
         .single();
 
-      // if (insertError) throw insertError;
-      if (insertError) {
-        console.log(insertError);
-        throw insertError;
-      }
+      if (insertError) throw insertError;
 
       // 📌 Fetch ulang produk
       const productStore = useProductStore();
@@ -79,6 +99,10 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
       loading.value = false;
     }
   };
+
+  /**------------------------------------------------------------------------
+   *    Delete Products Package Duration
+   *------------------------------------------------------------------------**/
 
   const deleteProductPackageDuration = async (durationId) => {
     loading.value = true;
@@ -104,6 +128,10 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
       loading.value = false;
     }
   };
+
+  /**========================================================================
+   **   RETURNS
+   *========================================================================**/
 
   return {
     // State

@@ -73,7 +73,7 @@ const sortedData = computed(() => {
     <div class="scrollbar-custom -m-1.5 overflow-x-auto">
       <div class="inline-block min-w-full p-1.5 align-middle">
         <div class="overflow-hidden">
-          <table class="min-w-full divide-y divide-gray-500 overflow-hidden rounded-xl bg-gray-800">
+          <table class="min-w-full divide-y divide-gray-900 overflow-hidden rounded-xl bg-gray-800">
             <thead>
               <tr class="bg-gray-800">
                 <th
@@ -106,7 +106,7 @@ const sortedData = computed(() => {
               </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-700">
+            <tbody class="divide-y divide-gray-900">
               <!-- Loading -->
               <tr v-if="loading">
                 <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-gray-400">
@@ -122,7 +122,11 @@ const sortedData = computed(() => {
               </tr>
 
               <!-- Data Ada -->
-              <tr v-for="(row, rowIndex) in sortedData" :key="rowIndex" class="hover:bg-gray-700">
+              <tr
+                v-for="(row, rowIndex) in sortedData"
+                :key="rowIndex"
+                class="transition-all hover:bg-gray-700"
+              >
                 <td
                   v-for="(column, colIndex) in columns"
                   :key="colIndex"

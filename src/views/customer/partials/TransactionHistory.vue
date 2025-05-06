@@ -166,6 +166,7 @@ onMounted(() => {
                   </ButtonComponent>
                 </a>
               </template>
+
               <!-- Unggah Bukti Pembayaran -->
               <template v-else>
                 <RouterLink :to="{ name: 'CustomerPayment', query: { orderId: order?.id } }">
@@ -181,10 +182,11 @@ onMounted(() => {
                   </ButtonComponent>
                 </RouterLink>
               </template>
+
               <!-- Lihat Akun -->
               <ButtonComponent variant="solid" size="sm" textColor="black">
                 <EyeIcon class="size-5" />
-                <span>Lihat Akun</span>
+                <span>Lihat Produk</span>
               </ButtonComponent>
             </div>
           </div>

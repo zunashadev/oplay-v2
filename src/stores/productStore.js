@@ -144,7 +144,9 @@ export const useProductStore = defineStore('productStore', () => {
     try {
       const { data, error: fetchError } = await supabase
         .from('products')
-        .select('*, product_categories(*), product_packages (*, product_package_durations (*))')
+        .select(
+          '*, product_categories(*), delivery_types(*), product_packages (*, product_package_durations (*))',
+        )
         .order('created_at', { ascending: false });
 
       if (fetchError) throw fetchError;
@@ -165,6 +167,8 @@ export const useProductStore = defineStore('productStore', () => {
               .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Urutkan paket produk
           : [],
       }));
+
+      handleResponse({ message, error }, 'success', 'mengambil data produk');
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data produk', { err });
     } finally {
@@ -183,14 +187,15 @@ export const useProductStore = defineStore('productStore', () => {
     try {
       const { data, error: fetchError } = await supabase
         .from('products')
-        // .select('*, product_packages (*, product_package_durations (*))')
-        .select('*, product_categories(*), product_packages (*, product_package_durations (*))')
+        .select(
+          '*, product_categories(*), delivery_types(*), product_packages (*, product_package_durations (*))',
+        )
         .eq('slug', slug)
         .single();
 
       if (fetchError) throw fetchError;
 
-      // Urutkan product_packages dan product_package_durations
+      // 📌 Urutkan product_packages dan product_package_durations
       const product = {
         ...data,
         product_packages: data.product_packages
@@ -207,10 +212,11 @@ export const useProductStore = defineStore('productStore', () => {
           : [],
       };
 
+      handleResponse({ message, error }, 'success', 'mengambil detail produk');
       return product;
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil detail produk', { err });
-      return null;
+      throw err;
     } finally {
       loading.value = false;
     }
@@ -227,13 +233,15 @@ export const useProductStore = defineStore('productStore', () => {
     try {
       const { data, error: fetchError } = await supabase
         .from('products')
-        .select('*, product_packages (*, product_package_durations (*))')
+        .select(
+          '*, product_categories(*), delivery_types(*), product_packages (*, product_package_durations (*))',
+        )
         .eq('id', id)
         .single();
 
       if (fetchError) throw fetchError;
 
-      // Urutkan product_packages dan product_package_durations
+      // 📌 Urutkan product_packages dan product_package_durations
       const product = {
         ...data,
         product_packages: data.product_packages
@@ -250,10 +258,11 @@ export const useProductStore = defineStore('productStore', () => {
           : [],
       };
 
+      handleResponse({ message, error }, 'success', 'mengambil produk berdasarkan ID');
       return product;
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil produk berdasarkan ID', { err });
-      return null;
+      throw err;
     } finally {
       loading.value = false;
     }
@@ -265,7 +274,8 @@ export const useProductStore = defineStore('productStore', () => {
 
   const addProduct = async (
     name,
-    category,
+    categoryId,
+    deliveryTypeId,
     description,
     productImageFile,
     productBannerImageFile,
@@ -306,7 +316,8 @@ export const useProductStore = defineStore('productStore', () => {
             user_id,
             name,
             slug,
-            category,
+            category_id: categoryId,
+            delivery_type_id: deliveryTypeId,
             description,
             product_image_path,
             product_banner_image_path,
@@ -321,6 +332,7 @@ export const useProductStore = defineStore('productStore', () => {
       await fetchProducts();
 
       handleResponse({ message, error }, 'success', 'menambah produk');
+      return data;
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menambah produk', { err });
 
@@ -453,7 +465,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       if (updateError) throw updateError;
 
-      // 📌 Fetch ulang produk setelah berhasil menghapus produk
+      // 📌 Fetch ulang produk
       await fetchProducts();
 
       handleResponse({ message, error }, 'success', 'mengedit produk');
@@ -470,17 +482,22 @@ export const useProductStore = defineStore('productStore', () => {
 
   return {
     // 📌 States
-    products,
     loading,
     message,
     error,
 
-    // 📌 Methods
+    products,
+
+    // 📌 Ulitity Functions
     resetMessageState,
     resetProductsState,
+
+    // 📌 Methods
     fetchProducts,
+
     fetchProductBySlug,
     fetchProductById,
+
     addProduct,
     deleteProduct,
     updateProduct,

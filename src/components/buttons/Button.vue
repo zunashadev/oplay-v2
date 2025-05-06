@@ -49,12 +49,27 @@ const props = defineProps({
   },
 });
 
-const sizeClasses = {
-  xs: 'px-2 py-1 text-sm',
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-5 py-2.5 text-base',
-};
+const computedSizeClasses = computed(() => {
+  if (props.variant === 'link') {
+    const sizes = {
+      xs: 'text-sm',
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-base',
+    };
+
+    return sizes[props.size] || sizes.md; // Hanya mengembalikan ukuran teks tanpa padding
+  } else {
+    const sizes = {
+      xs: 'px-2 py-1 text-sm',
+      sm: 'px-3 py-1.5 text-sm',
+      md: 'px-4 py-2 text-base',
+      lg: 'px-5 py-2.5 text-base',
+    };
+
+    return sizes[props.size] || sizes.md; // Mengembalikan padding + ukuran teks
+  }
+});
 
 const colorMap = computed(() => {
   const colors = {
@@ -330,7 +345,7 @@ const buttonClasses = computed(() => {
     link: `border border-transparent ${props.textColor ? customText : color.text} ${color.hoverText} focus:outline-hidden ${color.focusText} ${color.darkText} ${color.darkHoverText} ${color.darkFocusText}`,
   };
 
-  return `${variantClasses[props.variant]} ${sizeClasses[props.size]}`;
+  return `${variantClasses[props.variant]} ${computedSizeClasses.value}`;
 });
 </script>
 

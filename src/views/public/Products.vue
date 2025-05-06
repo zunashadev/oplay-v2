@@ -1,11 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getPublicImageUrl } from '@/utils/storageHelper';
 
 import { useProductStore } from '@/stores/productStore';
-import { useProductPackageStore } from '@/stores/productPackageStore';
-import { useProductPackageDurationStore } from '@/stores/productPackageDurationStore';
 import { useProductCategoryStore } from '@/stores/productCategoryStore';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
@@ -75,28 +72,35 @@ const goToDetail = (slug) => {
           !productStore.loading && (!productStore.products || !productStore.products.length),
       }"
     >
-      <!-- Loading -->
+      <!-- START : Loading -->
       <template v-if="productStore.loading">
         <ProductCardLoadingSkeletonComponent v-for="n in 4" :key="n" />
       </template>
+      <!-- END : Loading -->
 
-      <!-- Produk -->
-      <template v-else-if="productStore.products && productStore.products.length">
-        <ProductCardComponent
-          v-for="product in productStore.products"
-          :key="product.id"
-          :product="product"
-          @click-detail="goToDetail"
-        />
-      </template>
-
-      <!-- Tidak Ada Produk -->
+      <!-- START : Loading Done -->
       <template v-else>
-        <div class="flex flex-col items-center justify-center gap-5">
-          <NotFoundIllustration class="h-min max-w-xs py-5" />
-          <p class="text-lightning-yellow-400 text-2xl font-normal">Produk belum tersedia :(</p>
-        </div>
+        <!-- START : Produk -->
+        <template v-if="productStore.products && productStore.products.length">
+          <ProductCardComponent
+            v-for="product in productStore.products"
+            :key="product.id"
+            :product="product"
+            @click-detail="goToDetail"
+          />
+        </template>
+        <!-- END : Produk -->
+
+        <!-- START : Tidak Ada Produk -->
+        <template v-else>
+          <div class="flex flex-col items-center justify-center gap-5">
+            <NotFoundIllustration class="h-min max-w-xs py-5" />
+            <p class="text-lightning-yellow-400 text-2xl font-normal">Produk belum tersedia :(</p>
+          </div>
+        </template>
+        <!-- END : Tidak Ada Produk -->
       </template>
+      <!-- START : Loading Done -->
     </div>
     <!-- END : List Product -->
   </div>

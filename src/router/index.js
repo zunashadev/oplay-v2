@@ -146,6 +146,16 @@ const router = createRouter({
             requiredRoles: ['admin'],
           },
         },
+        {
+          path: 'delivery-types',
+          name: 'AdminDashboardDeliveryTypes',
+          component: () => import('../views/admin/DeliveryTypes.vue'),
+          meta: {
+            title: 'Daftar Metode Pengiriman',
+            requiresAuth: true,
+            requiredRoles: ['admin'],
+          },
+        },
         // Order
         {
           path: 'orders',

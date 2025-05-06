@@ -26,6 +26,7 @@ const menuItems = ref([
     submenu: [
       { name: 'Daftar Produk', link: 'AdminDashboardProducts' },
       { name: 'Kategori', link: 'AdminDashboardCategories' },
+      { name: 'Metode Pengiriman', link: 'AdminDashboardDeliveryTypes' },
       { name: 'Akun', link: '' },
     ],
   },

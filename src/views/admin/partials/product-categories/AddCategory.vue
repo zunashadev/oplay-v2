@@ -11,6 +11,7 @@ import InputComponent from '@/components/form/Input.vue';
 // 📌 ...
 const productCategoryStore = useProductCategoryStore();
 
+// 📌 ...
 const name = ref('');
 
 // 📌 Add Category

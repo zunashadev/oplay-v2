@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue';
 import UserProfilePartial from './partials/UserProfile.vue';
 import OverviewPartial from './partials/Overview.vue';
 import NotificationPartial from './partials/Notification.vue';
-import ActiveAccountListPartial from './partials/ActiveAccountList.vue';
+import ActiveProductListPartial from './partials/ActiveProductList.vue';
 import TransactionHistoryPartial from './partials/TransactionHistory.vue';
 import UserRewardsPartial from './partials/UserRewards.vue';
 </script>
@@ -35,7 +35,7 @@ import UserRewardsPartial from './partials/UserRewards.vue';
       <div class="flex flex-col gap-3 sm:flex-row">
         <!-- START : ... -->
         <div class="w-full flex-1/2">
-          <ActiveAccountListPartial />
+          <ActiveProductListPartial />
         </div>
         <!-- END : ... -->
 

@@ -5,10 +5,10 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
-        <p class="text-xl font-medium">Akun Aktif</p>
+        <p class="text-xl font-medium">Produk Aktif</p>
       </div>
       <!-- <div>tools</div> -->
     </div>
-    <div>TABLE / LIST AKUN AKTIF</div>
+    <div>Table / list produk aktif</div>
   </div>
 </template>

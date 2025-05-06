@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from './authStore';
+import { useProductDeliveryStore } from './productDeliveryStore';
 
 import { handleResponse } from '@/utils/responseHandler';
 import { storageService } from '@/services/storageService';
@@ -95,10 +96,12 @@ export const useOrderStore = defineStore('orderStore', () => {
     try {
       const { data: ordersData, error: fetchError } = await supabase
         .from('orders')
-        .select('*, profiles(*)')
+        .select('*, profiles(*), product_deliveries(*)')
         .order('created_at', { ascending: false });
 
       if (fetchError) throw fetchError;
+
+      console.log(ordersData);
 
       orders.value = ordersData;
       handleResponse({ message, error }, 'success', 'mengambil semua data pesanan');
@@ -141,7 +144,7 @@ export const useOrderStore = defineStore('orderStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   *    Fetch Order By Id
+   *    Fetch Order By ID
    *------------------------------------------------------------------------**/
 
   const fetchOrderById = async (orderId) => {
@@ -178,7 +181,14 @@ export const useOrderStore = defineStore('orderStore', () => {
    *    Add Order
    *------------------------------------------------------------------------**/
 
-  const addOrder = async (product, pkg, duration, total_price, status = 'pending') => {
+  const addOrder = async (
+    product,
+    pkg,
+    duration,
+    total_price,
+    status = 'pending',
+    productDeliveryMetadata,
+  ) => {
     loading.value = true;
     resetMessageState();
 
@@ -187,7 +197,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       const user_id = useAuthStore().user?.id;
       if (!user_id) throw new Error('User tidak ditemukan/belum login');
 
-      // 📌  ....
+      // 📌 Validasi Input
       if (!product || !pkg || !duration || !total_price) throw new Error('Data kurang lengkap');
 
       // 📌 Insert ke Supabase
@@ -195,12 +205,12 @@ export const useOrderStore = defineStore('orderStore', () => {
         .from('orders')
         .insert([
           {
-            // ...
+            // User ID
             user_id,
 
             // Produk
             product_name: product.name,
-            product_category: product.category,
+            product_category: product.product_categories.name,
             product_image_path: product.product_image_path,
 
             // Paket
@@ -214,7 +224,7 @@ export const useOrderStore = defineStore('orderStore', () => {
             product_package_duration_name: duration.name,
             product_package_duration_value: duration.value,
 
-            // ...
+            // Other
             total_price,
             status,
           },
@@ -225,6 +235,16 @@ export const useOrderStore = defineStore('orderStore', () => {
       if (insertError) throw insertError;
 
       orders.value.unshift(data);
+
+      // 📌 Insert ke Supabase -> product_deliveries
+      const productDeliveryStore = useProductDeliveryStore();
+
+      productDeliveryStore.addProductDelivery(
+        data.id,
+        product.delivery_type_id,
+        'pending',
+        productDeliveryMetadata,
+      );
 
       // 📌 Kirim Notifikasi Bot Telegram
       const botTelegramNotificationPayload = {
@@ -237,7 +257,7 @@ export const useOrderStore = defineStore('orderStore', () => {
 
       const jwtToken = useAuthStore().session?.access_token;
 
-      await sendTelegramNotification(botTelegramNotificationPayload, jwtToken);
+      // await sendTelegramNotification(botTelegramNotificationPayload, jwtToken);
 
       handleResponse({ message, error }, 'success', 'menambahkan pesanan');
       return data;

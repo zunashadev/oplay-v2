@@ -14,20 +14,15 @@ const dialogModalRef = ref(null);
 function resetForm() {
   name.value = '';
   value.value = null;
-  selectedProductId.value = null;
   selectedProductPackageId.value = null;
 }
 
-function openModal(productId, productPackageId) {
-  selectedProductId.value = productId;
+function openModal(productPackageId) {
   selectedProductPackageId.value = productPackageId;
-
   dialogModalRef.value.openModal();
 }
 
 function closeModal() {
-  console.log('Modal ditutup dan nilai direset');
-
   resetForm();
   dialogModalRef.value.closeModal();
 }
@@ -40,15 +35,13 @@ const productPackageDurationStore = useProductPackageDurationStore();
 
 const name = ref('');
 const value = ref('');
-const selectedProductId = ref('');
 const selectedProductPackageId = ref('');
 
 const addProductPackageDuration = async () => {
-  if (!name.value || !value.value || !selectedProductId.value || !selectedProductPackageId.value)
+  if (!name.value || !value.value || !selectedProductPackageId.value)
     return alert('Isi semua field!');
 
   await productPackageDurationStore.addProductPackageDuration(
-    selectedProductId.value,
     selectedProductPackageId.value,
     name.value,
     value.value,

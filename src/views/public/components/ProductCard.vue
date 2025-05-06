@@ -28,17 +28,20 @@ const handleClickDetail = () => {
   <div class="flex flex-col overflow-hidden rounded-4xl">
     <div class="flex flex-1 flex-col bg-white">
       <div class="flex flex-1 flex-col px-5 py-5">
+        <!-- ... -->
         <div class="flex flex-1 flex-col gap-5 pb-5">
-          <div class="flex flex-none items-start justify-between">
+          <div class="flex flex-none items-start justify-between py-2">
             <!-- Logo Produk -->
             <img
               :src="getPublicImageUrl(product.product_image_path, 'product')"
               alt="Produk"
               class="max-h-14"
             />
-            <!-- Kategori Produk -->
-            <div class="rounded-2xl bg-cyan-700 px-4 py-0.5 text-xs">
-              {{ product.product_categories.name }}
+            <!-- Kategori  Produk -->
+            <div class="flex flex-col items-end justify-end gap-2">
+              <div class="w-fit rounded-2xl bg-cyan-700 px-4 py-0.5 text-xs">
+                {{ product.product_categories.name }}
+              </div>
             </div>
           </div>
 

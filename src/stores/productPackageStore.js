@@ -53,6 +53,8 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
       if (fetchError) throw fetchError;
 
       packages.value = data;
+
+      handleResponse({ message, error }, 'success', 'mengambil data paket produk');
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data paket produk', { err });
     } finally {
@@ -77,6 +79,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       if (fetchError) throw fetchError;
 
+      handleResponse({ message, error }, 'success', 'mengambil detail paket produk');
       return data;
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil detail paket produk', { err });
@@ -120,10 +123,10 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
         .from('product_packages')
         .insert([
           {
+            user_id,
             product_id,
             name,
             price,
-            user_id,
             discount_type: discount_type || null, // ini akan mengubah undefined, null, "", dan false menjadi null
             discount_value: discount_value || 0, // ini akan mengubah undefined, null, "", dan false menjadi 0
             is_best_seller,
@@ -155,7 +158,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     resetMessageState();
 
     try {
-      // Hapus paket dari database
+      // 📌 Hapus paket dari database
       const { error: deleteError } = await supabase
         .from('product_packages')
         .delete()
@@ -189,7 +192,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     try {
       if (!packageId) throw new Error('ID paket tidak ditemukan');
 
-      // Validasi jika ada harga/diskon yang diubah
+      // 📌 Validasi jika ada harga/diskon yang diubah
       if ('price' in updatedFields && updatedFields.price <= 0) {
         throw new Error('Harga harus lebih dari 0');
       }
@@ -204,7 +207,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
         throw new Error('Nilai diskon tidak boleh negatif');
       }
 
-      // Update ke database
+      // 📌 Update ke database
       const { data, error: updateError } = await supabase
         .from('product_packages')
         .update(updatedFields)

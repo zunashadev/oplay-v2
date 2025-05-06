@@ -18,6 +18,7 @@ import ConfirmOrderModalComponent from './components/modals/ConfirmOrderModal.vu
 import BoxOpenSolidIcon from '@/components/icons/BoxOpenSolid.vue';
 import AngleSmallLeftIcon from '@/components/icons/AngleSmallLeft.vue';
 
+// 📌 Inisialisasi
 const route = useRoute();
 const authStore = useAuthStore();
 const productStore = useProductStore();
@@ -41,7 +42,7 @@ const selectDuration = (duration) => {
   selectedDuration.value = duration;
 };
 
-// Harga Total
+// 📌 Harga Total
 const totalPrice = computed(() => {
   if (!selectedPackage.value || !selectedDuration.value) return 0;
 
@@ -54,11 +55,11 @@ const totalPrice = computed(() => {
   return finalPrice * selectedDuration.value.value;
 });
 
-// Modal Konfirmasi Pesanan
+// 📌 Modal Konfirmasi Pesanan
 const confirmOrderModalRef = ref(null);
 
 function openConfirmOrderModal() {
-  console.log(selectedPackage.value);
+  // console.log(product.value);
 
   if (!product.value || !selectedPackage.value || !selectedDuration.value)
     return alert('Harap pilih paket dan durasi terlebih dahulu');
@@ -70,23 +71,20 @@ function openConfirmOrderModal() {
     totalPrice: totalPrice.value,
   });
 }
-
-function closeConfirmOrderModal() {
-  confirmOrderModalRef.value.closeModal();
-}
 </script>
 
 <template>
   <ConfirmOrderModalComponent ref="confirmOrderModalRef" />
 
-  <!-- START : Loading -> Page -->
+  <!-- START : Loading -->
   <template v-if="productStore.loading">
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs">
       <WaveLoaderComponent />
     </div>
   </template>
-  <!-- END : Loading -> Page -->
+  <!-- END : Loading -->
 
+  <!-- START : Loading Done -->
   <template v-else>
     <div class="flex flex-col gap-8">
       <!-- START : Header -->
@@ -289,4 +287,5 @@ function closeConfirmOrderModal() {
       <!-- END : Loading -->
     </div>
   </template>
+  <!-- END : Loading Done -->
 </template>

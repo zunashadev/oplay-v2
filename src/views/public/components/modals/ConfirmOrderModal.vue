@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
@@ -9,6 +9,7 @@ import { useOrderStore } from '@/stores/orderStore';
 
 import DialogModalComponent from '@/components/modals/DialogModal.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
+import InputComponent from '@/components/form/Input.vue';
 
 const router = useRouter();
 const orderStore = useOrderStore();
@@ -18,6 +19,63 @@ const product = ref(null);
 const pkg = ref(null);
 const duration = ref(null);
 const totalPrice = ref(0);
+
+const productDeliveryMetadataForm = reactive({});
+
+// Auto inisialisasi field setiap kali metadata berubah
+watch(
+  () => product.value?.delivery_types?.required_metadata_fields,
+  (fields) => {
+    if (!fields) return;
+    fields.forEach((field) => {
+      if (!(field in productDeliveryMetadataForm)) {
+        productDeliveryMetadataForm[field] = '';
+      }
+    });
+  },
+  { immediate: true },
+);
+
+// Validasi Metadata
+const metadataErrors = reactive({});
+
+const validateMetadata = () => {
+  let isValid = true;
+  Object.keys(metadataErrors).forEach((key) => delete metadataErrors[key]);
+
+  const requiredFields = product.value?.delivery_types?.required_metadata_fields || [];
+
+  requiredFields.forEach((field) => {
+    if (!productDeliveryMetadataForm[field]?.trim()) {
+      metadataErrors[field] = `Field ${field} wajib diisi.`;
+      isValid = false;
+    } else {
+      delete metadataErrors[field];
+    }
+  });
+
+  return isValid;
+};
+// End : ...
+
+// Start : ...
+const addOrder = async () => {
+  if (product.value?.delivery_types?.direction === 'customer_to_admin' && !validateMetadata())
+    return alert('Harap lengkapi semua data!');
+
+  const newOrder = await orderStore.addOrder(
+    product.value,
+    pkg.value,
+    duration.value,
+    totalPrice.value,
+    'pending',
+    productDeliveryMetadataForm,
+  );
+
+  closeModal();
+
+  router.push({ name: 'CustomerPayment', query: { orderId: newOrder?.id } });
+};
 // End : ...
 
 // Start : Modal
@@ -38,96 +96,127 @@ function closeModal() {
 
 defineExpose({ openModal, closeModal });
 // End : Modal
-
-// Start : ...
-const addOrder = async () => {
-  const newOrder = await orderStore.addOrder(
-    product.value,
-    pkg.value,
-    duration.value,
-    totalPrice.value,
-    'pending',
-  );
-
-  closeModal();
-
-  router.push({ name: 'CustomerPayment', query: { orderId: newOrder?.id } });
-};
-// End : ...
 </script>
 
 <template>
-  <DialogModalComponent ref="dialogModalRef" title="Konfirmasi Pesanan">
+  <DialogModalComponent ref="dialogModalRef" title="Konfirmasi Pesanan" maxWidth="4xl">
     <div class="flex flex-col gap-5">
-      <!-- START : Produk -->
-      <div class="flex items-center gap-5">
-        <img
-          :src="getPublicImageUrl(product.product_image_path, 'product')"
-          alt="Produk"
-          class="max-h-12"
-        />
-        <div class="flex flex-col gap-1">
-          <p class="text-xl font-semibold">
-            {{ product.name }}
-          </p>
-          <p class="text-sm text-gray-400">{{ pkg.name }}</p>
-          <p class="text-sm text-gray-400">{{ duration.name }}</p>
-        </div>
-      </div>
-      <!-- END : Produk -->
-
-      <hr class="rounded-full border-gray-800" />
-
-      <!-- START : Detail Pesanan -->
-      <div class="flex flex-col gap-5">
-        <div class="flex flex-col gap-1">
-          <!-- Harga Normal -->
-          <div class="flex items-center justify-between">
-            <p class="text-sm font-normal text-gray-400">Harga Normal</p>
-            <p class="text-sm font-normal text-white">{{ formatRupiah(pkg.price) }}</p>
-          </div>
-          <template v-if="pkg.discount_type && pkg.discount_value">
-            <!-- Diskon -->
-            <div class="flex items-center justify-between">
-              <p class="text-sm font-normal text-gray-400">Diskon</p>
-              <p class="text-sm font-normal text-red-500">
-                <span v-if="pkg.discount_type === 'fixed_amount'">
-                  -{{ formatRupiah(pkg.discount_value) }}
-                </span>
-                <span v-if="pkg.discount_type === 'percentage'"> -{{ pkg.discount_value }}% </span>
-              </p>
+      <div class="flex w-full flex-col gap-5 sm:flex-row">
+        <!-- START : Delivery Type Metadata -->
+        <div class="w-full sm:w-1/2">
+          <!-- Customer to Admin -->
+          <template v-if="product.delivery_types.direction === 'customer_to_admin'">
+            <div class="flex flex-col gap-6">
+              <div class="flex flex-col gap-1">
+                <p class="text-lg font-medium">Lengkapi data berikut :</p>
+                <p class="text-sm text-gray-500">
+                  {{ product.delivery_types.label }} - {{ product.delivery_types.description }}
+                </p>
+              </div>
+              <div class="flex flex-col gap-2">
+                <div v-for="field in product.delivery_types.required_metadata_fields" :key="field">
+                  <InputComponent
+                    v-model="productDeliveryMetadataForm[field]"
+                    :label="field.charAt(0).toUpperCase() + field.slice(1)"
+                    :placeholder="`Masukkan ${field}`"
+                    :type="field.includes('password') ? 'password' : 'text'"
+                    required
+                  />
+                </div>
+              </div>
             </div>
-            <!-- Harga Setelah Diskon -->
-            <div class="flex items-center justify-between">
-              <p class="text-sm font-normal text-gray-400">Harga Setelah Diskon</p>
-              <p class="text-sm font-normal text-white">
-                {{
-                  formatRupiah(
-                    calculateFinalPrice(pkg.price, pkg.discount_type, pkg.discount_value),
-                  )
-                }}
+          </template>
+
+          <!-- Admin to Customer -->
+          <template v-else>
+            <div class="flex h-full items-center justify-center">
+              <p class="text-center text-sm">
+                Akun akan dikirim setelah anda mengirim bukti pembayaran.
               </p>
             </div>
           </template>
-          <!-- Durasi -->
-          <div class="flex items-center justify-between">
-            <p class="text-sm font-normal text-gray-400">Durasi</p>
-            <p class="text-sm font-normal text-white">{{ duration.name }}</p>
+        </div>
+        <!-- END : Delivery Type Metadata -->
+
+        <!-- START : Order Detail -->
+        <div class="flex w-full flex-col gap-5 sm:w-1/2">
+          <!-- START : Produk -->
+          <div class="flex items-center gap-5">
+            <img
+              :src="getPublicImageUrl(product.product_image_path, 'product')"
+              alt="Produk"
+              class="max-h-12"
+            />
+            <div class="flex flex-col gap-1">
+              <p class="text-xl font-semibold">
+                {{ product.name }}
+              </p>
+              <p class="text-sm text-gray-400">{{ pkg.name }}</p>
+              <p class="text-sm text-gray-400">{{ duration.name }}</p>
+            </div>
           </div>
-        </div>
+          <!-- END : Produk -->
 
-        <hr class="rounded-full border-gray-800" />
+          <hr class="rounded-full border-gray-800" />
 
-        <!-- Total Harga -->
-        <div class="flex items-center justify-between">
-          <p class="text-sm font-normal text-gray-400">Total Harga</p>
-          <p class="text-lightning-yellow-400 text-xl font-normal">
-            {{ formatRupiah(totalPrice) }}
-          </p>
+          <!-- START : Detail Pesanan -->
+          <div class="flex flex-col gap-5">
+            <div class="flex flex-col gap-1">
+              <!-- Harga Normal -->
+              <div class="flex items-center justify-between">
+                <p class="text-sm font-normal text-gray-400">Harga Normal</p>
+                <p class="text-sm font-normal text-white">{{ formatRupiah(pkg.price) }}</p>
+              </div>
+              <template v-if="pkg.discount_type && pkg.discount_value">
+                <!-- Diskon -->
+                <div class="flex items-center justify-between">
+                  <p class="text-sm font-normal text-gray-400">Diskon</p>
+                  <p class="text-sm font-normal text-red-500">
+                    <span v-if="pkg.discount_type === 'fixed_amount'">
+                      -{{ formatRupiah(pkg.discount_value) }}
+                    </span>
+                    <span v-if="pkg.discount_type === 'percentage'">
+                      -{{ pkg.discount_value }}%
+                    </span>
+                  </p>
+                </div>
+                <!-- Harga Setelah Diskon -->
+                <div class="flex items-center justify-between">
+                  <p class="text-sm font-normal text-gray-400">Harga Setelah Diskon</p>
+                  <p class="text-sm font-normal text-white">
+                    {{
+                      formatRupiah(
+                        calculateFinalPrice(pkg.price, pkg.discount_type, pkg.discount_value),
+                      )
+                    }}
+                  </p>
+                </div>
+              </template>
+              <!-- Durasi -->
+              <div class="flex items-center justify-between">
+                <p class="text-sm font-normal text-gray-400">Durasi</p>
+                <p class="text-sm font-normal text-white">{{ duration.name }}</p>
+              </div>
+            </div>
+
+            <hr class="rounded-full border-gray-800" />
+
+            <!-- Total Harga -->
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-normal text-gray-400">Total Harga</p>
+              <p class="text-lightning-yellow-400 text-xl font-normal">
+                {{ formatRupiah(totalPrice) }}
+              </p>
+            </div>
+          </div>
+          <!-- END : Detail Pesanan -->
         </div>
+        <!-- END : Order Detail -->
       </div>
-      <!-- END : Detail Pesanan -->
 
+      <hr class="rounded-full border-gray-800" />
+
+      <!-- Confirm Button -->
       <div class="flex">
         <ButtonComponent
           @click="addOrder"

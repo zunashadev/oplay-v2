@@ -4,6 +4,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 // 📌 Stores
 import { useProductStore } from '@/stores/productStore';
 import { useProductCategoryStore } from '@/stores/productCategoryStore';
+import { useDeliveryTypeStore } from '@/stores/deliveryTypeStore';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
@@ -12,35 +13,46 @@ import TextAreaComponent from '@/components/form/TextArea.vue';
 import FileInputComponent from '@/components/form/FileInput.vue';
 import SelectComponent from '@/components/form/Select.vue';
 
-// 📌 ...
+// 📌 Inisialisasi Stores
 const productStore = useProductStore();
 const productCategoryStore = useProductCategoryStore();
+const deliveryTypeStore = useDeliveryTypeStore();
 
-// 📌 Fetch Categories
+// 📌 Fetch Categories & Delivery Types
 onMounted(() => {
   productCategoryStore.fetchCategories();
+  deliveryTypeStore.fetchDeliveryTypes();
 });
 
 onUnmounted(() => {
   productCategoryStore.resetCategoriesState();
+  deliveryTypeStore.resetDeliveryTypesState();
 });
 
 // 📌 ...
 const name = ref('');
-const category = ref('');
+const categoryId = ref('');
+const deliveryTypeId = ref('');
 const description = ref('');
 const productImageFile = ref(null);
 const productBannerImageFile = ref(null);
 
 // 📌 Add Product
 const addProduct = async () => {
-  if (!name.value || !category.value || !productImageFile.value || !productBannerImageFile.value)
+  if (
+    !name.value ||
+    !categoryId.value ||
+    !deliveryTypeId.value ||
+    !productImageFile.value ||
+    !productBannerImageFile.value
+  )
     return alert('Isi semua field!');
 
   try {
     await productStore.addProduct(
       name.value,
-      category.value,
+      categoryId.value,
+      deliveryTypeId.value,
       description.value,
       productImageFile.value,
       productBannerImageFile.value,
@@ -48,7 +60,8 @@ const addProduct = async () => {
 
     // Reset form
     name.value = '';
-    category.value = '';
+    categoryId.value = '';
+    deliveryTypeId.value = '';
     description.value = '';
     productImageFile.value = null;
     productBannerImageFile.value = null;
@@ -73,12 +86,25 @@ const addProduct = async () => {
           <!-- Kategori -->
           <SelectComponent
             class="w-full"
-            v-model="category"
+            v-model="categoryId"
             :options="productCategoryStore.categories"
             label="Kategori"
             labelKey="name"
             valueKey="id"
             placeholder="Pilih kategori"
+            required
+          >
+          </SelectComponent>
+
+          <!-- Tipe Pengiriman -->
+          <SelectComponent
+            class="w-full"
+            v-model="deliveryTypeId"
+            :options="deliveryTypeStore.deliveryTypes"
+            label="Tipe Pengiriman"
+            labelKey="label"
+            valueKey="id"
+            placeholder="Pilih tipe pengiriman"
             required
           >
           </SelectComponent>
@@ -102,7 +128,7 @@ const addProduct = async () => {
           type="submit"
           variant="solid"
           textColor="black"
-          :disabled="productStore.loading"
+          :disabled="productStore?.loading"
         >
           Tambah Produk
         </ButtonComponent>

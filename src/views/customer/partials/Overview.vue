@@ -31,7 +31,7 @@ onMounted(() => {
           <div class="flex-none rounded-xl bg-gray-800 p-3">
             <img src="/images/apps.png" class="h-6 w-auto sm:h-8" />
           </div>
-          <p class="font-medium text-white">Akun</p>
+          <p class="font-medium text-white">Produk Aktif</p>
         </div>
         <div>
           <div class="rounded-full border border-gray-700 p-2">
@@ -42,7 +42,7 @@ onMounted(() => {
       <!-- Bottom -->
       <div class="w-full text-end">
         <p class="text-3xl font-medium text-white">12</p>
-        <p class="text-xs text-gray-500">Akun</p>
+        <p class="text-xs text-gray-500">Produk</p>
       </div>
     </div>
     <!-- 📌 END : Jumlah Akun -->
