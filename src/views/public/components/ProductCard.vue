@@ -35,7 +35,7 @@ const handleClickDetail = () => {
             <img
               :src="getPublicImageUrl(product.product_image_path, 'product')"
               alt="Produk"
-              class="max-h-14"
+              class="max-h-14 max-w-24"
             />
             <!-- Kategori  Produk -->
             <div class="flex flex-col items-end justify-end gap-2">

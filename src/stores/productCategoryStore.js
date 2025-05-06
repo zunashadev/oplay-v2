@@ -64,7 +64,9 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
       // 📌 Simpan hasil fetch ke state
       categories.value = data || [];
 
-      handleResponse({ message, error }, 'success', 'mengambil data kategori');
+      handleResponse({ message, error }, 'success', 'mengambil data kategori', {
+        showToast: false,
+      });
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data kategori', { err });
     } finally {

@@ -168,7 +168,7 @@ export const useProductStore = defineStore('productStore', () => {
           : [],
       }));
 
-      handleResponse({ message, error }, 'success', 'mengambil data produk');
+      handleResponse({ message, error }, 'success', 'mengambil data produk', { showToast: false });
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data produk', { err });
     } finally {
