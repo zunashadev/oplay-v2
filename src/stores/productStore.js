@@ -13,12 +13,13 @@ export const useProductStore = defineStore('productStore', () => {
    **   STATE & COMPUTED
    *========================================================================**/
 
-  // 📌 State
+  // 📌 States
   const loading = ref(false);
   const message = ref(null);
   const error = ref(null);
 
   const products = ref([]);
+  const currentProduct = ref(null);
 
   /**========================================================================
    **   UTILITY FUNCTIONS
@@ -40,6 +41,28 @@ export const useProductStore = defineStore('productStore', () => {
   const resetProductsState = () => {
     products.value = [];
   };
+
+  /**------------------------------------------------------------------------
+   *    Product Normalizer
+   *------------------------------------------------------------------------**/
+
+  function normalizeProductPackages(product) {
+    return {
+      ...product,
+      product_packages: product.product_packages
+        ? product.product_packages
+            .map((pkg) => ({
+              ...pkg,
+              product_package_durations: pkg.product_package_durations
+                ? pkg.product_package_durations.sort(
+                    (a, b) => new Date(b.created_at) - new Date(a.created_at),
+                  )
+                : [],
+            }))
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        : [],
+    };
+  }
 
   /**========================================================================
    **   FILE HANDLING
@@ -152,25 +175,13 @@ export const useProductStore = defineStore('productStore', () => {
       if (fetchError) throw fetchError;
 
       // 📌 Isi products dan urutkan product_packages serta product_package_durations secara manual
-      products.value = data.map((product) => ({
-        ...product,
-        product_packages: product.product_packages
-          ? product.product_packages
-              .map((productPackage) => ({
-                ...productPackage,
-                product_package_durations: productPackage.product_package_durations
-                  ? productPackage.product_package_durations.sort(
-                      (a, b) => new Date(b.created_at) - new Date(a.created_at),
-                    )
-                  : [],
-              }))
-              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Urutkan paket produk
-          : [],
-      }));
+      products.value = data.map(normalizeProductPackages);
 
-      handleResponse({ message, error }, 'success', 'mengambil data produk', { showToast: false });
+      handleResponse({ message, error }, 'success', 'mengambil daftar produk', {
+        showToast: false,
+      });
     } catch (err) {
-      handleResponse({ message, error }, 'error', 'mengambil data produk', { err });
+      handleResponse({ message, error }, 'error', 'mengambil daftar produk', { err });
     } finally {
       loading.value = false;
     }
@@ -196,25 +207,13 @@ export const useProductStore = defineStore('productStore', () => {
       if (fetchError) throw fetchError;
 
       // 📌 Urutkan product_packages dan product_package_durations
-      const product = {
-        ...data,
-        product_packages: data.product_packages
-          ? data.product_packages
-              .map((productPackage) => ({
-                ...productPackage,
-                product_package_durations: productPackage.product_package_durations
-                  ? productPackage.product_package_durations.sort(
-                      (a, b) => new Date(b.created_at) - new Date(a.created_at),
-                    )
-                  : [],
-              }))
-              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-          : [],
-      };
+      const product = normalizeProductPackages(data);
 
+      currentProduct.value = product;
       handleResponse({ message, error }, 'success', 'mengambil detail produk');
       return product;
     } catch (err) {
+      currentProduct.value = null;
       handleResponse({ message, error }, 'error', 'mengambil detail produk', { err });
       throw err;
     } finally {
@@ -242,27 +241,57 @@ export const useProductStore = defineStore('productStore', () => {
       if (fetchError) throw fetchError;
 
       // 📌 Urutkan product_packages dan product_package_durations
-      const product = {
-        ...data,
-        product_packages: data.product_packages
-          ? data.product_packages
-              .map((productPackage) => ({
-                ...productPackage,
-                product_package_durations: productPackage.product_package_durations
-                  ? productPackage.product_package_durations.sort(
-                      (a, b) => new Date(b.created_at) - new Date(a.created_at),
-                    )
-                  : [],
-              }))
-              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-          : [],
-      };
+      const product = normalizeProductPackages(data);
 
+      currentProduct.value = product;
       handleResponse({ message, error }, 'success', 'mengambil produk berdasarkan ID');
       return product;
     } catch (err) {
+      currentProduct.value = null;
       handleResponse({ message, error }, 'error', 'mengambil produk berdasarkan ID', { err });
       throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**------------------------------------------------------------------------
+   *    Search and Filter Product
+   *------------------------------------------------------------------------**/
+
+  const searchAndFilterProducts = async ({ keyword = '', categoryId = null }) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      let query = supabase
+        .from('products')
+        .select(
+          '*, product_categories(*), delivery_types(*), product_packages (*, product_package_durations (*))',
+        )
+        .order('created_at', { ascending: false });
+
+      // 🔍 Filter by keyword (nama produk)
+      if (keyword) {
+        query = query.ilike('name', `%${keyword}%`);
+      }
+
+      // 🏷️ Filter by category_id
+      if (categoryId) {
+        query = query.eq('category_id', categoryId);
+      }
+
+      const { data, error: fetchError } = await query;
+
+      if (fetchError) throw fetchError;
+
+      products.value = data.map(normalizeProductPackages);
+
+      handleResponse({ message, error }, 'success', 'menyaring produk', {
+        showToast: false,
+      });
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'menyaring produk', { err });
     } finally {
       loading.value = false;
     }
@@ -353,60 +382,6 @@ export const useProductStore = defineStore('productStore', () => {
   };
 
   /**------------------------------------------------------------------------
-   *    Delete Product
-   *!   Belum bisa rollback gambar yang sudah terhapus (disini ada 2 gambar) -> harusnya sudah aman selama kode hapus file(gambar) sudah benar
-   *------------------------------------------------------------------------**/
-
-  const deleteProduct = async (productId) => {
-    loading.value = true;
-    resetMessageState();
-
-    try {
-      // 📌 Ambil produk berdasarkan ID -> untuk hapus gambar dari supabase storage
-      const { data: product, error: fetchError } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', productId)
-        .single();
-
-      if (fetchError) throw fetchError;
-
-      // 📌 Hapus gambar produk jika ada
-      if (product?.product_image_path) {
-        const produkImageDeleted = await deleteProductImage(product.product_image_path);
-
-        if (!produkImageDeleted)
-          throw new Error('Gagal menghapus gambar produk, produk tidak akan dihapus.');
-      }
-
-      // 📌 Hapus gambar banner produk jika ada
-      if (product?.product_banner_image_path) {
-        const produkBannerImageDeleted = await deleteProductBannerImage(
-          product.product_banner_image_path,
-        );
-
-        if (!produkBannerImageDeleted) {
-          throw new Error('Gagal menghapus gambar banner produk, produk tidak akan dihapus.');
-        }
-      }
-
-      // 📌 Hapus produk dari database
-      const { error: deleteError } = await supabase.from('products').delete().eq('id', productId);
-
-      if (deleteError) throw deleteError;
-
-      // 📌 Fetch ulang data produk setelah penghapusan
-      await fetchProducts();
-
-      handleResponse({ message, error }, 'success', 'menghapus produk');
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'menghapus produk', { err });
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  /**------------------------------------------------------------------------
    *    Update Product
    *------------------------------------------------------------------------**/
 
@@ -476,6 +451,60 @@ export const useProductStore = defineStore('productStore', () => {
     }
   };
 
+  /**------------------------------------------------------------------------
+   *    Delete Product
+   *!   Belum bisa rollback gambar yang sudah terhapus (disini ada 2 gambar) -> harusnya sudah aman selama kode hapus file(gambar) sudah benar
+   *------------------------------------------------------------------------**/
+
+  const deleteProduct = async (productId) => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      // 📌 Ambil produk berdasarkan ID -> untuk hapus gambar dari supabase storage
+      const { data: product, error: fetchError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // 📌 Hapus gambar produk jika ada
+      if (product?.product_image_path) {
+        const produkImageDeleted = await deleteProductImage(product.product_image_path);
+
+        if (!produkImageDeleted)
+          throw new Error('Gagal menghapus gambar produk, produk tidak akan dihapus.');
+      }
+
+      // 📌 Hapus gambar banner produk jika ada
+      if (product?.product_banner_image_path) {
+        const produkBannerImageDeleted = await deleteProductBannerImage(
+          product.product_banner_image_path,
+        );
+
+        if (!produkBannerImageDeleted) {
+          throw new Error('Gagal menghapus gambar banner produk, produk tidak akan dihapus.');
+        }
+      }
+
+      // 📌 Hapus produk dari database
+      const { error: deleteError } = await supabase.from('products').delete().eq('id', productId);
+
+      if (deleteError) throw deleteError;
+
+      // 📌 Fetch ulang data produk setelah penghapusan
+      await fetchProducts();
+
+      handleResponse({ message, error }, 'success', 'menghapus produk');
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'menghapus produk', { err });
+    } finally {
+      loading.value = false;
+    }
+  };
+
   /**========================================================================
    **   RETURNS
    *========================================================================**/
@@ -487,6 +516,7 @@ export const useProductStore = defineStore('productStore', () => {
     error,
 
     products,
+    currentProduct,
 
     // 📌 Ulitity Functions
     resetMessageState,
@@ -498,8 +528,10 @@ export const useProductStore = defineStore('productStore', () => {
     fetchProductBySlug,
     fetchProductById,
 
+    searchAndFilterProducts,
+
     addProduct,
-    deleteProduct,
     updateProduct,
+    deleteProduct,
   };
 });

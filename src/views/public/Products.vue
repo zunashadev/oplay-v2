@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useProductStore } from '@/stores/productStore';
@@ -7,6 +7,7 @@ import { useProductCategoryStore } from '@/stores/productCategoryStore';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
 import InputComponent from '@/components/form/Input.vue';
+import ListboxSelectComponent from '@/components/form/ListboxSelect.vue';
 
 import ProductCardComponent from './components/ProductCard.vue';
 import ProductCardLoadingSkeletonComponent from './components/ProductCardLoadingSkeleton.vue';
@@ -28,39 +29,57 @@ onMounted(() => {
 const goToDetail = (slug) => {
   router.push({ name: 'PublicProductDetail', params: { slug } });
 };
+
+// 📌 Search & Filter
+const keyword = ref('');
+const selectedCategory = ref(null);
+
+watch([keyword, selectedCategory], () => {
+  productStore.searchAndFilterProducts({
+    keyword: keyword.value,
+    categoryId: selectedCategory.value,
+  });
+});
 </script>
 
 <template>
   <div class="flex flex-col gap-8">
     <!-- START : Header -->
-    <div class="page-padding-x reset-page-padding-x bg-gray-900 py-6">
+    <div
+      class="page-padding-x reset-page-padding-x flex flex-col items-center justify-between gap-12 bg-gray-900 py-6 sm:flex-row"
+    >
+      <!-- START : Title -->
       <div class="">
         <p class="text-2xl font-semibold">Daftar Produk</p>
       </div>
+      <!-- END : Title -->
+
+      <!-- START : Filter -->
+      <div
+        class="flex w-full flex-col items-center justify-end gap-4 rounded-2xl sm:w-1/2 lg:flex-row"
+      >
+        <!-- 📌 Search -->
+        <div class="w-full sm:max-w-96">
+          <InputComponent v-model="keyword" placeholder="Cari produk..." />
+        </div>
+
+        <!-- 📌 Filter -->
+        <template v-if="categoryStore.categories.length">
+          <ListboxSelectComponent
+            class="w-full sm:max-w-52"
+            v-model="selectedCategory"
+            :options="categoryStore.categories"
+            labelKey="name"
+            valueKey="id"
+            placeholder="Pilih kategori"
+            required
+          >
+          </ListboxSelectComponent>
+        </template>
+      </div>
+      <!-- END : Filter -->
     </div>
     <!-- END : Header -->
-
-    <!-- START : Filter -->
-    <div class="flex items-center justify-between rounded-full">
-      <!-- 📌 Search -->
-      <div class="w-96">
-        <InputComponent placeholder="Cari produk..." />
-      </div>
-
-      <!-- 📌 Filter -->
-      <template v-if="categoryStore.categories.length">
-        <div class="flex items-center gap-3">
-          <div
-            v-for="(item, index) in categoryStore.categories"
-            :key="index"
-            class="rounded-full px-6 py-2 text-sm outline outline-gray-500 hover:cursor-pointer"
-          >
-            {{ item.name }}
-          </div>
-        </div>
-      </template>
-    </div>
-    <!-- END : Filter -->
 
     <!-- START : List Product -->
     <div

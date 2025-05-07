@@ -20,7 +20,7 @@ export const useOrderStore = defineStore('orderStore', () => {
   const error = ref(null);
 
   const orders = ref([]);
-  const currentOrder = ref(null); // order yang sedang diakses per id
+  const currentOrder = ref(null);
 
   /**========================================================================
    **   UTILITY FUNCTIONS
