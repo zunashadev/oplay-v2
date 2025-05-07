@@ -8,6 +8,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
 
 import BoxOpenSolidIcon from '@/components/icons/BoxOpenSolid.vue';
 import NotFoundMagnifyingGlass from '@/components/icons/NotFoundMagnifyingGlass.vue';
+import ArrowCircleRightIcon from '@/components/icons/ArrowCircleRight.vue';
 
 const props = defineProps({
   product: {
@@ -116,8 +117,30 @@ const handleClickDetail = () => {
         <div class="flex flex-col gap-4">
           <hr class="-mx-5 rounded-full border-gray-200" />
           <div class="flex flex-col flex-wrap gap-2">
-            <ButtonComponent @click="handleClickDetail" variant="solid" textColor="black">
-              Lihat Detail
+            <!-- <ButtonComponent
+              @click="handleClickDetail"
+              variant="solid"
+              textColor="black"
+              class="group"
+            >
+              <div class="flex items-center gap-2 transition-all group-hover:gap-3">
+                <p class="">Lihat Detail</p>
+                <ArrowCircleRightIcon class="size-4 text-black" />
+              </div>
+            </ButtonComponent> -->
+
+            <ButtonComponent
+              @click="handleClickDetail"
+              variant="solid"
+              textColor="black"
+              class="group"
+            >
+              <div class="flex items-center gap-0 transition-all group-hover:gap-6">
+                <p class="-mr-4">Lihat Detail</p>
+                <ArrowCircleRightIcon
+                  class="size-4 text-black opacity-0 transition-all group-hover:opacity-100"
+                />
+              </div>
             </ButtonComponent>
           </div>
         </div>
