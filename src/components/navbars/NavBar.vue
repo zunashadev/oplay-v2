@@ -45,7 +45,7 @@ const authStore = useAuthStore();
               <RouterLink :to="{ name: 'AuthRegister' }">
                 <button
                   type="button"
-                  class="hover:text-lightning-yellow-400 inline-flex items-center gap-x-2 rounded-2xl border border-transparent px-4 py-2 text-sm font-normal text-white transition-all hover:cursor-pointer focus:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+                  class="inline-flex items-center gap-x-2 rounded-2xl border border-transparent px-4 py-2 text-sm font-normal text-white transition-all hover:cursor-pointer hover:text-yellow-500 focus:outline-hidden disabled:pointer-events-none disabled:opacity-50"
                 >
                   Register
                 </button>
@@ -53,7 +53,7 @@ const authStore = useAuthStore();
               <RouterLink :to="{ name: 'AuthLogin' }">
                 <button
                   type="button"
-                  class="bg-lightning-yellow-400 hover:bg-lightning-yellow-500 focus:bg-lightning-yellow-500 inline-flex items-center gap-x-2 rounded-2xl border border-transparent px-4 py-1.5 text-sm font-medium text-black transition-all hover:cursor-pointer focus:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+                  class="inline-flex items-center gap-x-2 rounded-2xl border border-transparent bg-yellow-500 px-4 py-1.5 text-sm font-medium text-black transition-all hover:cursor-pointer hover:bg-yellow-600 focus:bg-yellow-600 focus:outline-hidden disabled:pointer-events-none disabled:opacity-50"
                 >
                   Login
                 </button>

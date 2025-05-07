@@ -7,7 +7,6 @@ import { getPublicImageUrl } from '@/utils/storageHelper';
 import ButtonComponent from '@/components/buttons/Button.vue';
 
 import BoxOpenSolidIcon from '@/components/icons/BoxOpenSolid.vue';
-import BrokenImageIcon from '@/components/icons/BrokenImage.vue';
 import NotFoundMagnifyingGlass from '@/components/icons/NotFoundMagnifyingGlass.vue';
 
 const props = defineProps({
@@ -47,7 +46,7 @@ const handleClickDetail = () => {
 
           <div class="flex-none">
             <p class="text-2xl font-bold text-gray-950">{{ product.name }}</p>
-            <p class="line-clamp-2 text-sm font-normal text-gray-500">
+            <p class="line-clamp-2 text-xs font-normal text-gray-500 sm:text-sm">
               {{ product.description }}
             </p>
           </div>

@@ -43,13 +43,23 @@ watch([keyword, selectedCategory], () => {
 </script>
 
 <template>
+  <!-- 📌 Background -> Pattern -->
+
   <div class="flex flex-col gap-8">
     <!-- START : Header -->
     <div
-      class="page-padding-x reset-page-padding-x flex flex-col items-center justify-between gap-12 bg-gray-900 py-6 sm:flex-row"
+      class="page-padding-x reset-page-padding-x relative flex flex-col items-center justify-between gap-6 bg-gray-900 py-6 sm:flex-row sm:gap-12"
     >
+      <!-- START : Background -->
+      <div class="absolute inset-0 -z-0 h-full">
+        <div class="bg-pattern relative h-full w-full">
+          <div class="absolute inset-0 z-10 bg-gray-950/75"></div>
+        </div>
+      </div>
+      <!-- END : Background -->
+
       <!-- START : Title -->
-      <div class="">
+      <div class="z-10">
         <p class="text-2xl font-semibold">Daftar Produk</p>
       </div>
       <!-- END : Title -->
@@ -93,7 +103,7 @@ watch([keyword, selectedCategory], () => {
     >
       <!-- START : Loading -->
       <template v-if="productStore.loading">
-        <ProductCardLoadingSkeletonComponent v-for="n in 4" :key="n" />
+        <ProductCardLoadingSkeletonComponent v-for="n in 8" :key="n" />
       </template>
       <!-- END : Loading -->
 
@@ -112,9 +122,20 @@ watch([keyword, selectedCategory], () => {
 
         <!-- START : Tidak Ada Produk -->
         <template v-else>
-          <div class="flex flex-col items-center justify-center gap-5">
-            <NotFoundIllustration class="h-min max-w-xs py-5" />
-            <p class="text-lightning-yellow-400 text-2xl font-normal">Produk belum tersedia :(</p>
+          <div class="flex flex-col items-center justify-center gap-12 py-24">
+            <img
+              src="/images/illustrations/UndrawNoData.svg"
+              class="max-w-[8rem] sm:max-w-[12rem]"
+            />
+
+            <div class="flex flex-col items-center gap-2">
+              <p class="text-center text-base font-medium text-white sm:text-2xl">
+                Produk Tidak Ditemukan
+              </p>
+              <p class="text-center text-xs text-gray-500 sm:text-sm">
+                Kami tidak menemukan produk yang sesuai dengan pencarian Anda.
+              </p>
+            </div>
           </div>
         </template>
         <!-- END : Tidak Ada Produk -->
@@ -124,3 +145,12 @@ watch([keyword, selectedCategory], () => {
     <!-- END : List Product -->
   </div>
 </template>
+
+<style scoped>
+.bg-pattern {
+  background-image: url('/images/patterns/graph-paper.svg');
+  background-repeat: repeat;
+  background-size: auto; /* bisa diubah jadi 'contain', 'cover', atau ukuran tertentu */
+  background-position: center;
+}
+</style>

@@ -204,7 +204,7 @@ defineExpose({ openModal, closeModal });
             <!-- Total Harga -->
             <div class="flex items-center justify-between">
               <p class="text-sm font-normal text-gray-400">Total Harga</p>
-              <p class="text-lightning-yellow-400 text-xl font-normal">
+              <p class="text-xl font-normal text-yellow-500">
                 {{ formatRupiah(totalPrice) }}
               </p>
             </div>
