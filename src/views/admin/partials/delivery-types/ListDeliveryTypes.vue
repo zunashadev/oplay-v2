@@ -26,7 +26,7 @@ const columns = [
   { label: 'Direction', key: 'direction' },
   { label: 'Key', key: 'key' },
   { label: 'Label', key: 'label' },
-  { label: 'Deskripsi', key: 'description' },
+  { label: 'Description', key: 'description' },
   { label: 'Required Metadata Fields', key: 'required_metadata_fields' },
   { label: 'Action', key: 'action', align: 'right' },
 ];

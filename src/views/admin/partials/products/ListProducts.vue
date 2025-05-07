@@ -22,6 +22,9 @@ import DeleteProductPackageDurationComponent from '../../components/products/Del
 import CrossIcon from '@/components/icons/Cross.vue';
 import PlusIcon from '@/components/icons/Plus.vue';
 
+import EditIcon from '@/components/icons/Edit.vue';
+import TrashIcon from '@/components/icons/Trash.vue';
+
 // 📌 ...
 const productStore = useProductStore();
 
@@ -225,19 +228,20 @@ const openDeleteProductPackageDurationModal = async (id) => {
                   />
                 </div>
               </div>
+
               <template v-if="product.product_packages && product.product_packages.length">
                 <div class="flex flex-col gap-1">
                   <div
                     v-for="pkg in product.product_packages"
                     :key="pkg.id"
-                    class="flex items-center justify-between gap-3 rounded-md border border-l-6 border-gray-600 bg-gray-800 px-4 py-2"
+                    class="flex items-start justify-between gap-3 rounded-md border border-l-6 border-gray-600 bg-gray-800 px-5 py-5"
                   >
                     <div class="flex w-full flex-col gap-3">
                       <div class="flex items-center gap-3">
                         <p class="text-lg font-medium">{{ pkg.name }}</p>
                         <p
                           v-if="pkg.is_best_seller"
-                          class="bg-lightning-yellow-400 rounded-md px-3 py-0.5 text-xs font-medium text-black"
+                          class="rounded-md bg-yellow-500 px-3 py-0.5 text-xs font-medium text-black"
                         >
                           🔥 Terlaris
                         </p>
@@ -264,7 +268,7 @@ const openDeleteProductPackageDurationModal = async (id) => {
                               </span>
                             </p>
                             <!-- Harga Akhir -->
-                            <p class="text-lightning-yellow-400 text-sm font-normal">
+                            <p class="text-sm font-normal text-yellow-500">
                               Harga Akhir :
                               {{
                                 formatRupiah(
@@ -312,7 +316,7 @@ const openDeleteProductPackageDurationModal = async (id) => {
                             <!-- Add Duration -->
                             <div
                               @click="openAddDurationModal(pkg.id)"
-                              class="group hover:bg-lightning-yellow-400 flex items-center justify-center rounded-full border border-dashed border-gray-600 bg-gray-200 px-3 transition-all hover:cursor-pointer hover:border-black"
+                              class="group flex items-center justify-center rounded-full border border-dashed border-gray-600 bg-gray-200 px-3 transition-all hover:cursor-pointer hover:border-black hover:bg-yellow-500"
                             >
                               <span class="text-xs text-gray-600 group-hover:text-black"
                                 >Tambah Durasi
@@ -322,35 +326,24 @@ const openDeleteProductPackageDurationModal = async (id) => {
                         </div>
                       </div>
                     </div>
-                    <div class="flex flex-none flex-col gap-1">
-                      <!-- <ButtonComponent
-                      type="button"
-                      variant="solid"
-                      size="sm"
-                      color="blue"
-                      textColor="black"
-                    >
-                      Atur Sebagai Terlaris 🔥
-                    </ButtonComponent> -->
+
+                    <div class="flex flex-none gap-2">
+                      <!-- Edit -->
                       <ButtonComponent
                         @click="openEditProductPackageModal(pkg.id)"
-                        type="button"
-                        variant="solid"
-                        size="sm"
-                        color="lightning-yellow"
-                        textColor="black"
+                        variant="link"
+                        color="yellow"
                       >
-                        Edit
+                        <EditIcon class="size-5" />
                       </ButtonComponent>
+
+                      <!-- Delete -->
                       <ButtonComponent
                         @click="openDeleteProductPackageModal(pkg.id)"
-                        type="button"
-                        variant="solid"
-                        size="sm"
+                        variant="link"
                         color="red"
-                        textColor="black"
                       >
-                        Delete
+                        <TrashIcon class="size-5" />
                       </ButtonComponent>
                     </div>
                   </div>
