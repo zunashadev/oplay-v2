@@ -131,7 +131,7 @@ function goBack() {
         <!-- END : Product -->
 
         <!-- START : Detail Produk -->
-        <div class="mt-28 flex w-full flex-col gap-5 md:flex-row">
+        <div class="mt-28 flex w-full flex-col gap-8 md:flex-row md:gap-5">
           <!-- START : Left -->
           <div class="flex w-full flex-col gap-5 md:w-2/3">
             <div class="flex flex-col gap-3">
