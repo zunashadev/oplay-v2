@@ -20,6 +20,7 @@ import AngleSmallLeftIcon from '@/components/icons/AngleSmallLeft.vue';
 
 // 📌 Inisialisasi
 const route = useRoute();
+const router = useRouter();
 const authStore = useAuthStore();
 const productStore = useProductStore();
 const orderStore = useOrderStore();
@@ -71,6 +72,11 @@ function openConfirmOrderModal() {
     totalPrice: totalPrice.value,
   });
 }
+
+// 📌 Page Page
+function goBack() {
+  router.back(); // atau router.go(-1)
+}
 </script>
 
 <template>
@@ -89,7 +95,10 @@ function openConfirmOrderModal() {
     <div class="flex flex-col gap-8">
       <!-- START : Header -->
       <div class="flex items-center gap-6">
-        <div class="rounded-full bg-gray-800 p-1.5">
+        <div
+          @click="goBack"
+          class="rounded-full bg-gray-800 p-1.5 transition-all hover:cursor-pointer hover:bg-gray-700"
+        >
           <AngleSmallLeftIcon class="size-5" />
         </div>
         <p class="text-xl font-medium">Detail Produk</p>
@@ -105,9 +114,9 @@ function openConfirmOrderModal() {
             alt="Gambar"
             class="h-44 w-full rounded-2xl object-cover"
           />
-          <div class="absolute -bottom-16 w-full px-12">
+          <div class="absolute -bottom-16 w-full px-6 sm:px-12">
             <div
-              class="flex items-center gap-3 rounded-2xl bg-gray-900 px-3 py-3 backdrop-blur-sm sm:gap-5 sm:px-6 sm:py-5"
+              class="flex flex-col items-center gap-3 rounded-2xl bg-gray-900/50 px-3 py-3 backdrop-blur-sm sm:flex-row sm:gap-5 sm:px-6 sm:py-5"
             >
               <img
                 :src="getPublicImageUrl(product.product_image_path, 'product')"
@@ -115,14 +124,7 @@ function openConfirmOrderModal() {
                 class="max-h-16 w-fit sm:max-h-16"
               />
 
-              <div
-                class="flex w-full flex-col justify-between gap-1 sm:flex-row sm:items-center sm:gap-4"
-              >
-                <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
-                <p class="w-fit rounded-sm bg-cyan-700 px-3 py-0.5 text-xs text-white sm:text-sm">
-                  {{ product.product_categories.name }}
-                </p>
-              </div>
+              <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
             </div>
           </div>
         </div>
@@ -131,7 +133,24 @@ function openConfirmOrderModal() {
         <!-- START : Detail Produk -->
         <div class="mt-28 flex w-full flex-col gap-5 md:flex-row">
           <!-- START : Left -->
-          <div class="w-full md:w-2/3">
+          <div class="flex w-full flex-col gap-5 md:w-2/3">
+            <div class="flex flex-col gap-3">
+              <!-- Kategori -->
+              <div class="flex flex-col gap-1">
+                <p class="text-xs font-medium text-white sm:text-base">Kategori :</p>
+                <p class="w-fit rounded-sm bg-cyan-700 px-3 py-0.5 text-xs text-white sm:text-sm">
+                  {{ product.product_categories.name }}
+                </p>
+              </div>
+              <!-- Metode Pengiriman -->
+              <div class="flex flex-col gap-1">
+                <p class="text-xs font-medium text-white sm:text-base">Metode Pengiriman :</p>
+                <p class="w-fit rounded-sm bg-yellow-700 px-3 py-0.5 text-xs text-white sm:text-sm">
+                  {{ product.delivery_types.label }}
+                </p>
+              </div>
+            </div>
+
             <!-- Deskripsi -->
             <div class="flex flex-col gap-3">
               <p class="text-xl font-semibold text-white">Deskripsi</p>

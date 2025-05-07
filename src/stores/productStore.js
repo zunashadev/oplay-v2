@@ -210,11 +210,15 @@ export const useProductStore = defineStore('productStore', () => {
       const product = normalizeProductPackages(data);
 
       currentProduct.value = product;
-      handleResponse({ message, error }, 'success', 'mengambil detail produk');
+      handleResponse({ message, error }, 'success', 'mengambil detail produk berdasarkan slug', {
+        showToast: false,
+      });
       return product;
     } catch (err) {
       currentProduct.value = null;
-      handleResponse({ message, error }, 'error', 'mengambil detail produk', { err });
+      handleResponse({ message, error }, 'error', 'mengambil detail produk berdasarkan slug', {
+        err,
+      });
       throw err;
     } finally {
       loading.value = false;
@@ -244,7 +248,9 @@ export const useProductStore = defineStore('productStore', () => {
       const product = normalizeProductPackages(data);
 
       currentProduct.value = product;
-      handleResponse({ message, error }, 'success', 'mengambil produk berdasarkan ID');
+      handleResponse({ message, error }, 'success', 'mengambil produk berdasarkan ID', {
+        showToast: false,
+      });
       return product;
     } catch (err) {
       currentProduct.value = null;
