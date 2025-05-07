@@ -58,7 +58,7 @@ const handleClickDetail = () => {
             <div class="flex flex-col gap-3">
               <template v-for="pkg in product.product_packages" :key="pkg.id">
                 <div class="flex items-center gap-3">
-                  <BoxOpenSolidIcon class="size-4 text-gray-500" />
+                  <BoxOpenSolidIcon class="size-4 text-gray-400" />
                   <div>
                     <p class="text-xs font-normal text-gray-500">
                       {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
