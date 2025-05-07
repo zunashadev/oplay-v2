@@ -104,7 +104,7 @@ const selected = computed({
             >
               <li
                 :class="[
-                  'relative cursor-default py-2 pr-4 pl-10 select-none',
+                  'relative cursor-default py-2 pr-10 pl-4 select-none',
                   active ? 'bg-gray-700 text-yellow-500' : 'text-white',
                 ]"
               >
@@ -118,7 +118,7 @@ const selected = computed({
                 </span>
                 <span
                   v-if="selected"
-                  class="absolute inset-y-0 left-0 flex items-center pl-3 text-yellow-500"
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 text-yellow-500"
                 >
                   <CheckIcon class="h-4 w-4" aria-hidden="true" />
                 </span>
