@@ -47,9 +47,6 @@ const handleClickDetail = () => {
 
           <div class="flex-none">
             <p class="text-2xl font-bold text-gray-950">{{ product.name }}</p>
-            <p class="line-clamp-2 text-xs font-normal text-gray-500 sm:text-sm">
-              {{ product.description }}
-            </p>
           </div>
 
           <hr class="-mx-5 rounded-full border-gray-200" />
@@ -117,18 +114,6 @@ const handleClickDetail = () => {
         <div class="flex flex-col gap-4">
           <hr class="-mx-5 rounded-full border-gray-200" />
           <div class="flex flex-col flex-wrap gap-2">
-            <!-- <ButtonComponent
-              @click="handleClickDetail"
-              variant="solid"
-              textColor="black"
-              class="group"
-            >
-              <div class="flex items-center gap-2 transition-all group-hover:gap-3">
-                <p class="">Lihat Detail</p>
-                <ArrowCircleRightIcon class="size-4 text-black" />
-              </div>
-            </ButtonComponent> -->
-
             <ButtonComponent
               @click="handleClickDetail"
               variant="solid"
