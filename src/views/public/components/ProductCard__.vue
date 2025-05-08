@@ -92,7 +92,6 @@ const handleClickDetail = () => {
               @click="handleClickDetail"
               variant="solid"
               textColor="black"
-              color="yellow"
               class="group"
             >
               <div class="flex items-center gap-0 transition-all group-hover:gap-6">
