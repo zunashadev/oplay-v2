@@ -120,11 +120,11 @@ function goBack() {
           <img
             :src="getPublicImageUrl(product.product_banner_image_path, 'banner')"
             alt="Gambar"
-            class="h-full max-h-32 w-full rounded-2xl object-cover sm:max-h-44"
+            class="h-full max-h-32 w-full rounded-2xl object-cover sm:max-h-32"
           />
-          <div class="absolute -bottom-16 w-full px-6 sm:px-12">
+          <div class="absolute -bottom-12 w-full px-6 sm:-bottom-8 sm:px-12">
             <div
-              class="flex flex-col items-center gap-3 rounded-2xl bg-gray-900/50 px-3 py-3 backdrop-blur-sm sm:flex-row sm:gap-5 sm:px-6 sm:py-5"
+              class="flex flex-col items-center gap-3 rounded-2xl bg-gray-900/70 px-3 py-3 backdrop-blur-sm sm:flex-row sm:gap-5 sm:px-6 sm:py-5"
             >
               <img
                 :src="getPublicImageUrl(product.product_image_path, 'product')"
@@ -139,7 +139,7 @@ function goBack() {
         <!-- END : Product -->
 
         <!-- START : Detail Produk -->
-        <div class="mt-28 flex w-full flex-col gap-8 md:flex-row md:gap-5">
+        <div class="mt-20 flex w-full flex-col gap-8 sm:mt-16 md:flex-row md:gap-5">
           <!-- START : Left -->
           <div class="flex h-fit w-full flex-col gap-5 rounded-2xl bg-gray-900 px-5 py-5 md:w-2/3">
             <div class="flex flex-col gap-3">
