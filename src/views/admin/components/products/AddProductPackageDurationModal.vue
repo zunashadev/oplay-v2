@@ -65,10 +65,17 @@ const addProductPackageDuration = async () => {
       <form @submit.prevent="addProductPackageDuration" class="flex flex-col gap-5">
         <div class="flex flex-col gap-2">
           <!-- Name -->
-          <InputComponent v-model="name" placeholder="Masukkan nama durasi" type="text" required />
+          <InputComponent
+            v-model="name"
+            label="Nama Durasi"
+            placeholder="Masukkan nama durasi"
+            type="text"
+            required
+          />
           <!-- Value -->
           <InputComponent
             v-model="value"
+            label="Nilai Durasi"
             placeholder="Masukkan nilai durasi"
             type="number"
             required

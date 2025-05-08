@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useProductStore } from '@/stores/productStore';
 import { useProductPackageStore } from '@/stores/productPackageStore';
 
@@ -49,6 +49,12 @@ const discountTypes = [
   { label: 'Potongan Harga (Rp)', value: 'fixed_amount' },
 ];
 
+watch(discountType, (newVal) => {
+  if (!newVal) {
+    discountValue.value = 0;
+  }
+});
+
 onMounted(() => {
   productStore.fetchProducts();
 });
@@ -64,8 +70,8 @@ const addProductPackage = async () => {
     selectedProductId.value,
     name.value,
     price.value,
-    discountType.value, // Kirim jenis diskon
-    discountValue.value, // Kirim nilai diskon
+    discountType.value ? discountType.value : null,
+    discountType.value ? Number(discountValue.value) : 0,
     isBestSeller.value,
   );
 
@@ -91,6 +97,7 @@ const addProductPackage = async () => {
         <!-- Dropdown Pilih Produk -->
         <SelectComponent
           v-model="selectedProductId"
+          label="Produk"
           :options="productStore.products"
           labelKey="name"
           valueKey="id"
@@ -100,14 +107,27 @@ const addProductPackage = async () => {
         </SelectComponent>
 
         <!-- Name -->
-        <InputComponent v-model="name" placeholder="Masukkan nama paket" type="text" required />
+        <InputComponent
+          v-model="name"
+          label="Nama Paket"
+          placeholder="Masukkan nama paket"
+          type="text"
+          required
+        />
 
         <!-- Price -->
-        <InputComponent v-model="price" placeholder="Masukkan harga" type="number" required />
+        <InputComponent
+          v-model="price"
+          label="Harga"
+          placeholder="Masukkan harga"
+          type="number"
+          required
+        />
 
         <!-- Diskon Type -->
         <SelectComponent
           v-model="discountType"
+          label="Tipe Diskon"
           :options="discountTypes"
           placeholder="Pilih jenis diskon"
         >
@@ -116,9 +136,11 @@ const addProductPackage = async () => {
         <!-- Diskon Value -->
         <InputComponent
           v-model="discountValue"
+          label="Nilai Diskon"
           placeholder="Masukkan nilai diskon"
           type="number"
           :disabled="!discountType"
+          :required="!!discountType"
         />
 
         <!-- Is Best Seller -->

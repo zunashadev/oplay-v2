@@ -1,14 +1,18 @@
 <script setup>
-import { ref, onMounted, nextTick, onUnmounted } from 'vue';
+import { ref, onMounted, nextTick, onUnmounted, watch } from 'vue';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
 import { getPublicImageUrl } from '@/utils/storageHelper';
 
 // 📌 Stores
 import { useProductStore } from '@/stores/productStore';
+import { useProductCategoryStore } from '@/stores/productCategoryStore';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
+
+import InputComponent from '@/components/form/Input.vue';
+import ListboxSelectComponent from '@/components/form/ListboxSelect.vue';
 
 import AddProductPackageModalComponent from '../../components/products/AddProductPackageModal.vue';
 import AddProductPackageDurationModalComponent from '../../components/products/AddProductPackageDurationModal.vue';
@@ -25,8 +29,9 @@ import PlusIcon from '@/components/icons/Plus.vue';
 import EditIcon from '@/components/icons/Edit.vue';
 import TrashIcon from '@/components/icons/Trash.vue';
 
-// 📌 ...
+// 📌 Inisialisasi Store
 const productStore = useProductStore();
+const categoryStore = useProductCategoryStore();
 
 // 📌 Fetch Product
 onMounted(() => {
@@ -95,6 +100,43 @@ const deleteProductPackageDurationModalRef = ref(null);
 const openDeleteProductPackageDurationModal = async (id) => {
   deleteProductPackageDurationModalRef.value.openModal(id);
 };
+
+// 📌 Search & Filter
+const keyword = ref('');
+const selectedCategory = ref(null);
+
+watch([keyword, selectedCategory], () => {
+  productStore.searchAndFilterProducts({
+    keyword: keyword.value,
+    categoryId: selectedCategory.value,
+  });
+});
+
+// 📌 Expand Description
+const maxLength = 200;
+const isExpanded = ref([]);
+
+// Reset state saat komponen dihancurkan
+onUnmounted(() => {
+  isExpanded.value = [];
+});
+
+// Inisialisasi isExpanded setelah produk di-fetch
+watch(
+  () => productStore.products,
+  (products) => {
+    isExpanded.value = products.map(() => false);
+  },
+  { immediate: true },
+);
+
+function toggleExpanded(index) {
+  isExpanded.value[index] = !isExpanded.value[index];
+}
+
+function truncated(text) {
+  return text.length <= maxLength ? text : text.slice(0, maxLength) + '...';
+}
 </script>
 
 <template>
@@ -120,6 +162,31 @@ const openDeleteProductPackageDurationModal = async (id) => {
     </div>
     <!-- END : HEADER -->
 
+    <!-- START : Filter -->
+    <div
+      class="flex w-full flex-row items-center justify-between gap-4 rounded-xl bg-gray-800 px-3 py-3"
+    >
+      <!-- 📌 Search -->
+      <div class="w-full sm:max-w-96">
+        <InputComponent v-model="keyword" placeholder="Cari produk..." />
+      </div>
+
+      <!-- 📌 Filter -->
+      <template v-if="categoryStore.categories.length">
+        <ListboxSelectComponent
+          class="w-full sm:max-w-52"
+          v-model="selectedCategory"
+          :options="categoryStore.categories"
+          labelKey="name"
+          valueKey="id"
+          placeholder="Pilih kategori"
+          required
+        >
+        </ListboxSelectComponent>
+      </template>
+    </div>
+    <!-- END : Filter -->
+
     <!-- START : LIST PRODUCTS -->
     <!-- loading -->
     <template v-if="productStore.loading">
@@ -139,7 +206,7 @@ const openDeleteProductPackageDurationModal = async (id) => {
       <!-- Products -->
       <template v-else>
         <div
-          v-for="product in productStore.products"
+          v-for="(product, index) in productStore.products"
           :key="product.id"
           class="overflow-hidden rounded-xl bg-gray-900"
         >
@@ -199,15 +266,24 @@ const openDeleteProductPackageDurationModal = async (id) => {
               <div class="flex flex-col gap-2">
                 <div>
                   <p class="text-xs font-normal text-gray-400">Category</p>
-                  <p>{{ product.product_categories.name }}</p>
+                  <p class="text-sm">{{ product.product_categories.name }}</p>
                 </div>
                 <div>
                   <p class="text-xs font-normal text-gray-400">Delivery Type</p>
-                  <p>{{ product.delivery_types.label }}</p>
+                  <p class="text-sm">{{ product.delivery_types.label }}</p>
                 </div>
                 <div>
                   <p class="text-xs font-normal text-gray-400">Description</p>
-                  <p>{{ product.description }}</p>
+                  <p class="text-sm text-white">
+                    {{ isExpanded[index] ? product.description : truncated(product.description) }}
+                    <button
+                      v-if="product.description.length > maxLength"
+                      @click="toggleExpanded(index)"
+                      class="ml-1 text-blue-500 hover:cursor-pointer hover:underline"
+                    >
+                      {{ isExpanded[index] ? 'Read less' : 'Read more' }}
+                    </button>
+                  </p>
                 </div>
               </div>
             </div>
@@ -247,7 +323,7 @@ const openDeleteProductPackageDurationModal = async (id) => {
                         </p>
                       </div>
                       <div class="flex w-full flex-col gap-6 text-gray-400">
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                           <!-- Harga Normal -->
                           <p class="text-sm font-normal">
                             Harga Normal : {{ formatRupiah(pkg.price) }}

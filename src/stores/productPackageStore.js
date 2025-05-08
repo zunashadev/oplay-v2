@@ -54,7 +54,9 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       packages.value = data;
 
-      handleResponse({ message, error }, 'success', 'mengambil data paket produk');
+      handleResponse({ message, error }, 'success', 'mengambil data paket produk', {
+        showToast: false,
+      });
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data paket produk', { err });
     } finally {
@@ -79,7 +81,9 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
       if (fetchError) throw fetchError;
 
-      handleResponse({ message, error }, 'success', 'mengambil detail paket produk');
+      handleResponse({ message, error }, 'success', 'mengambil detail paket produk', {
+        showToast: false,
+      });
       return data;
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil detail paket produk', { err });
