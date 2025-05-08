@@ -5,7 +5,6 @@ import { calculateFinalPrice } from '@/utils/priceCalculator';
 import { getPublicImageUrl } from '@/utils/storageHelper';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
-import DiscountPriceComponent from '@/components/discounts/DiscountPrice.vue';
 
 import BoxOpenSolidIcon from '@/components/icons/BoxOpenSolid.vue';
 import NotFoundMagnifyingGlass from '@/components/icons/NotFoundMagnifyingGlass.vue';
@@ -27,7 +26,7 @@ const handleClickDetail = () => {
 
 <template>
   <div class="flex flex-col overflow-hidden rounded-4xl">
-    <div class="flex flex-1 flex-col bg-gradient-to-t from-yellow-50 to-cyan-100">
+    <div class="flex flex-1 flex-col bg-white">
       <div class="flex flex-1 flex-col px-5 py-5">
         <!-- ... -->
         <div class="flex flex-1 flex-col gap-5 pb-5">
@@ -38,7 +37,6 @@ const handleClickDetail = () => {
               alt="Produk"
               class="max-h-14 max-w-24"
             />
-
             <!-- Kategori  Produk -->
             <div class="flex flex-col items-end justify-end gap-2">
               <div class="w-fit rounded-2xl bg-cyan-700 px-4 py-0.5 text-xs">
@@ -63,11 +61,39 @@ const handleClickDetail = () => {
                     <p class="text-xs font-normal text-gray-500">
                       {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
                     </p>
-                    <DiscountPriceComponent
-                      :price="pkg.price"
-                      :discount-type="pkg.discount_type"
-                      :discount-value="pkg.discount_value"
-                    />
+
+                    <template v-if="pkg.discount_type && pkg.discount_value > 0">
+                      <div class="flex items-center gap-1">
+                        <p class="text-xs font-normal text-gray-500 line-through">
+                          {{ formatRupiah(pkg.price) }}
+                        </p>
+                        <p class="text-base font-normal text-yellow-500">
+                          {{
+                            formatRupiah(
+                              calculateFinalPrice(pkg.price, pkg.discount_type, pkg.discount_value),
+                            )
+                          }}
+                        </p>
+                        <span
+                          v-if="pkg.discount_type === 'fixed_amount'"
+                          class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
+                        >
+                          -{{ formatRupiah(pkg.discount_value) }}
+                        </span>
+                        <span
+                          v-if="pkg.discount_type === 'percentage'"
+                          class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
+                        >
+                          -{{ pkg.discount_value }}%
+                        </span>
+                      </div>
+                    </template>
+
+                    <template v-else>
+                      <p class="text-base font-normal text-yellow-500">
+                        {{ formatRupiah(pkg.price) }}
+                      </p>
+                    </template>
                   </div>
                 </div>
               </template>

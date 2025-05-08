@@ -12,11 +12,14 @@ import { useOrderStore } from '@/stores/orderStore';
 // 📌 Components
 import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
+import DiscountPriceComponent from '@/components/discounts/DiscountPrice.vue';
+
 import ConfirmOrderModalComponent from './components/modals/ConfirmOrderModal.vue';
 
 // 📌 Icons
 import BoxOpenSolidIcon from '@/components/icons/BoxOpenSolid.vue';
 import AngleSmallLeftIcon from '@/components/icons/AngleSmallLeft.vue';
+import WhatsAppIcon from '@/components/icons/social-media/WhatsApp.vue';
 
 // 📌 Inisialisasi
 const route = useRoute();
@@ -56,7 +59,7 @@ const totalPrice = computed(() => {
   return finalPrice * selectedDuration.value.value;
 });
 
-// 📌 Modal Konfirmasi Pesanan
+// 📌 Modal Konfirmasi Pesanan (Website)
 const confirmOrderModalRef = ref(null);
 
 function openConfirmOrderModal() {
@@ -71,6 +74,11 @@ function openConfirmOrderModal() {
     duration: selectedDuration.value,
     totalPrice: totalPrice.value,
   });
+}
+
+// 📌 Modal Konfirmasi Pesanan (WhatsApp)
+function openConfirmOrderModalViaWhatsapp() {
+  alert('Buat pesanan lewat WhatsApp');
 }
 
 // 📌 Page Page
@@ -94,14 +102,14 @@ function goBack() {
   <template v-else>
     <div class="flex flex-col gap-8">
       <!-- START : Header -->
-      <div class="flex items-center gap-6">
+      <div class="flex items-center gap-3 sm:gap-6">
         <div
           @click="goBack"
           class="rounded-full bg-gray-800 p-1.5 transition-all hover:cursor-pointer hover:bg-gray-700"
         >
           <AngleSmallLeftIcon class="size-5" />
         </div>
-        <p class="text-xl font-medium">Detail Produk</p>
+        <p class="text-lg font-medium sm:text-xl">Detail Produk</p>
       </div>
       <!-- END : Header -->
 
@@ -112,7 +120,7 @@ function goBack() {
           <img
             :src="getPublicImageUrl(product.product_banner_image_path, 'banner')"
             alt="Gambar"
-            class="h-44 w-full rounded-2xl object-cover"
+            class="h-full max-h-32 w-full rounded-2xl object-cover sm:max-h-44"
           />
           <div class="absolute -bottom-16 w-full px-6 sm:px-12">
             <div
@@ -133,7 +141,7 @@ function goBack() {
         <!-- START : Detail Produk -->
         <div class="mt-28 flex w-full flex-col gap-8 md:flex-row md:gap-5">
           <!-- START : Left -->
-          <div class="flex w-full flex-col gap-5 md:w-2/3">
+          <div class="flex h-fit w-full flex-col gap-5 rounded-2xl bg-gray-900 px-5 py-5 md:w-2/3">
             <div class="flex flex-col gap-3">
               <!-- Kategori -->
               <div class="flex flex-col gap-1">
@@ -160,11 +168,12 @@ function goBack() {
           <!-- END : Left -->
 
           <!-- START : Right -->
-          <div class="flex w-full flex-col gap-5 rounded-lg bg-gray-900 px-5 py-5 md:w-1/3">
+          <div class="flex h-fit w-full flex-col gap-5 rounded-2xl bg-gray-900 px-5 py-5 md:w-1/3">
             <p class="text-xl font-medium">📋 Buat Pesanan</p>
             <!-- Pilih Paket -->
             <div class="flex flex-col gap-3">
               <p class="text-sm text-gray-400">Pilih paket :</p>
+
               <template v-if="product.product_packages && product.product_packages.length">
                 <div class="flex flex-col gap-2">
                   <template v-for="pkg in product.product_packages" :key="pkg.id">
@@ -182,51 +191,19 @@ function goBack() {
                         <p class="text-xs font-normal text-gray-200">
                           {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
                         </p>
-                        <!-- Discount -->
-                        <template
-                          v-if="
-                            pkg.discount_type && pkg.discount_type !== '' && pkg.discount_value > 0
-                          "
-                        >
-                          <div class="flex items-center gap-1">
-                            <p class="text-xs font-normal text-gray-400 line-through">
-                              {{ formatRupiah(pkg.price) }}
-                            </p>
-                            <p class="text-lightning-yellow-400 text-base font-normal">
-                              {{
-                                formatRupiah(
-                                  calculateFinalPrice(
-                                    pkg.price,
-                                    pkg.discount_type,
-                                    pkg.discount_value,
-                                  ),
-                                )
-                              }}
-                            </p>
-                            <span
-                              v-if="pkg.discount_type === 'fixed_amount'"
-                              class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                              >-{{ formatRupiah(pkg.discount_value) }}</span
-                            >
-                            <span
-                              v-if="pkg.discount_type === 'percentage'"
-                              class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                              >-{{ pkg.discount_value }}%</span
-                            >
-                          </div>
-                        </template>
-                        <!-- No Discount -->
-                        <template v-else>
-                          <div>
-                            <p class="text-base font-normal text-gray-200">
-                              {{ formatRupiah(pkg.price) }}
-                            </p>
-                          </div>
-                        </template>
+                        <DiscountPriceComponent
+                          :price="pkg.price"
+                          :discount-type="pkg.discount_type"
+                          :discount-value="pkg.discount_value"
+                        />
                       </div>
                     </div>
                   </template>
                 </div>
+              </template>
+
+              <template v-else>
+                <p class="text-sm text-gray-600">Paket belum tersedia</p>
               </template>
             </div>
             <!-- Pilih Durasi -->
@@ -236,6 +213,7 @@ function goBack() {
               <template v-if="!selectedPackage">
                 <p class="text-sm font-normal text-gray-600">Pilih paket untuk melihat durasi</p>
               </template>
+
               <template v-else>
                 <template
                   v-if="
@@ -270,28 +248,34 @@ function goBack() {
               </template>
             </div>
 
+            <hr class="rounded-full border-gray-700" />
+
             <!-- Total Harga -->
             <div class="flex items-center justify-between">
-              <p>Total Harga :</p>
-              <p>{{ formatRupiah(totalPrice) }}</p>
+              <p class="text-gray-400">Total Harga :</p>
+              <p class="text-xl text-yellow-500">{{ formatRupiah(totalPrice) }}</p>
             </div>
-            <!-- Buat Pesanan -->
-            <ButtonComponent
-              v-if="!authStore.isAuthenticated"
-              variant="solid"
-              textColor="black"
-              disabled=""
-            >
-              Buat Pesanan
-            </ButtonComponent>
-            <ButtonComponent
-              v-else
-              @click="openConfirmOrderModal()"
-              variant="solid"
-              textColor="black"
-            >
-              Buat Pesanan
-            </ButtonComponent>
+
+            <!-- Tombol Buat Pesanan -->
+            <div class="flex w-full flex-col gap-2">
+              <ButtonComponent
+                @click="openConfirmOrderModal()"
+                variant="solid"
+                textColor="black"
+                :disabled="!authStore.isAuthenticated"
+              >
+                Buat Pesanan 🚀
+              </ButtonComponent>
+              <ButtonComponent
+                @click="openConfirmOrderModalViaWhatsapp()"
+                variant="solid"
+                color="green"
+                textColor="black"
+              >
+                <span>Buat Pesanan</span>
+                <WhatsAppIcon class="size-5" />
+              </ButtonComponent>
+            </div>
           </div>
           <!-- END : Right -->
         </div>
