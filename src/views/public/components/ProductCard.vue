@@ -28,7 +28,7 @@ const handleClickDetail = () => {
 <template>
   <div class="flex flex-col overflow-hidden rounded-4xl">
     <div class="flex flex-1 flex-col bg-white">
-      <div class="flex flex-1 flex-col px-5 py-5">
+      <div class="flex flex-1 flex-col px-3 py-3 sm:px-5 sm:py-5">
         <!-- ... -->
         <div class="flex flex-1 flex-col gap-5 pb-5">
           <div class="flex flex-none items-start justify-between py-2">
@@ -57,8 +57,10 @@ const handleClickDetail = () => {
           <template v-if="product.product_packages && product.product_packages.length">
             <div class="flex flex-col gap-3">
               <template v-for="pkg in product.product_packages" :key="pkg.id">
-                <div class="flex items-center gap-3">
-                  <BoxOpenSolidIcon class="size-4 text-gray-400" />
+                <div class="flex items-center gap-1.5 sm:gap-3">
+                  <div class="flex-none">
+                    <BoxOpenSolidIcon class="size-3 text-gray-400 sm:size-4" />
+                  </div>
                   <div>
                     <p class="text-xs font-normal text-gray-500">
                       {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
@@ -77,7 +79,7 @@ const handleClickDetail = () => {
           <template v-else>
             <div class="flex flex-1 flex-col items-center justify-center gap-3">
               <NotFoundMagnifyingGlass class="size-8 text-gray-500" />
-              <p class="text-xs font-normal text-gray-500">
+              <p class="text-center text-xs font-normal text-gray-500">
                 Maaf, untuk saat ini paket belum tersedia
               </p>
             </div>
