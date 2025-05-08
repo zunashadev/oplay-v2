@@ -116,33 +116,32 @@ function goBack() {
       <!-- START : Detail Produk -->
       <div v-if="product">
         <!-- START : Product -->
-        <div class="relative">
-          <!-- <div class="h-32 rounded-2xl bg-gray-700"></div> -->
-          <img
-            :src="getPublicImageUrl(product.product_banner_image_path, 'banner')"
-            alt="Gambar"
-            class="h-full max-h-32 w-full rounded-2xl object-cover sm:max-h-32"
-          />
-          <div class="absolute -bottom-12 w-full px-6 sm:-bottom-8 sm:px-12">
-            <div
-              class="flex flex-col items-center gap-3 rounded-2xl bg-gray-900/70 px-3 py-3 backdrop-blur-sm sm:flex-row sm:gap-5 sm:px-6 sm:py-5"
-            >
-              <img
-                :src="getPublicImageUrl(product.product_image_path, 'product')"
-                alt="Produk"
-                class="max-h-16 w-fit sm:max-h-16"
-              />
-
-              <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
+        <div class="rounded-4xl bg-gray-900 px-2 py-2">
+          <div class="relative">
+            <!-- <div class="h-32 rounded-2xl bg-gray-700"></div> -->
+            <img
+              :src="getPublicImageUrl(product.product_banner_image_path, 'banner')"
+              alt="Gambar"
+              class="h-full max-h-32 w-full rounded-3xl object-cover sm:max-h-32"
+            />
+            <div class="absolute -bottom-12 w-full px-6 sm:-bottom-8 sm:px-12">
+              <div
+                class="flex flex-col items-center gap-3 rounded-3xl bg-gray-900/50 px-3 py-3 backdrop-blur-sm sm:flex-row sm:gap-5 sm:px-6 sm:py-5"
+              >
+                <img
+                  :src="getPublicImageUrl(product.product_image_path, 'product')"
+                  alt="Produk"
+                  class="max-h-16 w-fit sm:max-h-16"
+                />
+                <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
+              </div>
             </div>
           </div>
         </div>
         <!-- END : Product -->
 
         <!-- START : Detail Produk -->
-        <div
-          class="mt-20 flex w-full flex-col gap-2 rounded-4xl bg-gray-800 px-2 py-2 sm:mt-16 md:flex-row md:gap-2"
-        >
+        <div class="mt-20 flex w-full flex-col gap-2 sm:mt-16 md:flex-row md:gap-2">
           <!-- START : Left -->
           <div class="flex w-full flex-col gap-5 rounded-3xl bg-gray-900 px-5 py-5 md:w-2/3">
             <div class="flex flex-col gap-3">
@@ -156,7 +155,7 @@ function goBack() {
               <!-- Metode Pengiriman -->
               <div class="flex flex-col gap-2">
                 <p class="text-xs font-normal text-white sm:text-base">Metode Pengiriman :</p>
-                <p class="w-fit rounded-full bg-gray-600 px-3 py-0.5 text-xs text-white sm:text-sm">
+                <p class="text-xs text-white sm:text-sm">
                   {{ product.delivery_types.label }}
                 </p>
               </div>
