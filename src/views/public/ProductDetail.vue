@@ -113,7 +113,8 @@ function goBack() {
       </div>
       <!-- END : Header -->
 
-      <div v-if="product" class="">
+      <!-- START : Detail Produk -->
+      <div v-if="product">
         <!-- START : Product -->
         <div class="relative">
           <!-- <div class="h-32 rounded-2xl bg-gray-700"></div> -->
@@ -139,9 +140,11 @@ function goBack() {
         <!-- END : Product -->
 
         <!-- START : Detail Produk -->
-        <div class="mt-20 flex w-full flex-col gap-8 sm:mt-16 md:flex-row md:gap-5">
+        <div
+          class="mt-20 flex w-full flex-col gap-2 rounded-4xl bg-gray-800 px-2 py-2 sm:mt-16 md:flex-row md:gap-2"
+        >
           <!-- START : Left -->
-          <div class="flex w-full flex-col gap-5 rounded-2xl bg-gray-900 px-5 py-5 md:w-2/3">
+          <div class="flex w-full flex-col gap-5 rounded-3xl bg-gray-900 px-5 py-5 md:w-2/3">
             <div class="flex flex-col gap-3">
               <!-- Kategori -->
               <div class="flex flex-col gap-2">
@@ -159,7 +162,7 @@ function goBack() {
               </div>
             </div>
 
-            <hr class="rounded-full border-gray-700" />
+            <hr class="rounded-full border-gray-800" />
 
             <!-- Deskripsi -->
             <div class="flex flex-col gap-1">
@@ -169,7 +172,7 @@ function goBack() {
           <!-- END : Left -->
 
           <!-- START : Right -->
-          <div class="flex h-fit w-full flex-col gap-5 rounded-2xl bg-gray-900 px-5 py-5 md:w-1/3">
+          <div class="flex h-full w-full flex-col gap-5 rounded-3xl bg-gray-900 px-5 py-5 md:w-1/3">
             <p class="text-xl font-medium">📋 Buat Pesanan</p>
             <!-- Pilih Paket -->
             <div class="flex flex-col gap-3">
@@ -249,13 +252,15 @@ function goBack() {
               </template>
             </div>
 
-            <hr class="rounded-full border-gray-700" />
+            <hr class="rounded-full border-gray-800" />
 
             <!-- Total Harga -->
             <div class="flex items-center justify-between">
               <p class="text-gray-400">Total Harga :</p>
               <p class="text-xl text-yellow-500">{{ formatRupiah(totalPrice) }}</p>
             </div>
+
+            <hr class="rounded-full border-gray-800" />
 
             <!-- Tombol Buat Pesanan -->
             <div class="flex w-full flex-col gap-2">
@@ -282,6 +287,7 @@ function goBack() {
         </div>
         <!-- END : Detail Produk -->
       </div>
+      <!-- END : Detail Produk -->
 
       <!-- START : Loading -->
       <!-- ! Perlu diperhatikan lagi -->

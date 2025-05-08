@@ -176,7 +176,7 @@ defineExpose({ openModal, closeModal });
         </div>
         <!-- END : Order Detail -->
 
-        <hr class="rounded-full border-gray-700 sm:hidden" />
+        <hr class="rounded-full border-gray-800 sm:hidden" />
 
         <!-- START : Delivery Type Metadata -->
         <div class="w-full sm:w-1/2">
