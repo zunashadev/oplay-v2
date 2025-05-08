@@ -57,7 +57,7 @@ const handleClickDetail = () => {
 
           <!-- Paket -->
           <template v-if="product.product_packages && product.product_packages.length">
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-2 sm:gap-3">
               <template v-for="pkg in product.product_packages" :key="pkg.id">
                 <div class="flex items-center gap-1.5 sm:gap-3">
                   <div class="flex-none">
