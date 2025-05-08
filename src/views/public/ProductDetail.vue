@@ -146,14 +146,16 @@ function goBack() {
               <!-- Kategori -->
               <div class="flex flex-col gap-1">
                 <p class="text-xs font-medium text-white sm:text-base">Kategori :</p>
-                <p class="w-fit rounded-sm bg-cyan-700 px-3 py-0.5 text-xs text-white sm:text-sm">
+                <p class="w-fit rounded-full bg-cyan-700 px-3 py-0.5 text-xs text-white sm:text-sm">
                   {{ product.product_categories.name }}
                 </p>
               </div>
               <!-- Metode Pengiriman -->
               <div class="flex flex-col gap-1">
                 <p class="text-xs font-medium text-white sm:text-base">Metode Pengiriman :</p>
-                <p class="w-fit rounded-sm bg-yellow-700 px-3 py-0.5 text-xs text-white sm:text-sm">
+                <p
+                  class="w-fit rounded-full bg-yellow-700 px-3 py-0.5 text-xs text-white sm:text-sm"
+                >
                   {{ product.delivery_types.label }}
                 </p>
               </div>
