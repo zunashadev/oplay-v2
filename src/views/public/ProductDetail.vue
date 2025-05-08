@@ -159,10 +159,11 @@ function goBack() {
               </div>
             </div>
 
+            <hr class="rounded-full border-gray-700" />
+
             <!-- Deskripsi -->
-            <div class="flex flex-col gap-3">
-              <p class="text-xl font-semibold text-white">Deskripsi</p>
-              <p class="text-sm font-normal text-white">{{ product.description }}</p>
+            <div class="flex flex-col gap-1">
+              <p class="text-xs font-normal text-white sm:text-sm">{{ product.description }}</p>
             </div>
           </div>
           <!-- END : Left -->
