@@ -141,21 +141,19 @@ function goBack() {
         <!-- START : Detail Produk -->
         <div class="mt-20 flex w-full flex-col gap-8 sm:mt-16 md:flex-row md:gap-5">
           <!-- START : Left -->
-          <div class="flex h-fit w-full flex-col gap-5 rounded-2xl bg-gray-900 px-5 py-5 md:w-2/3">
+          <div class="flex w-full flex-col gap-5 rounded-2xl bg-gray-900 px-5 py-5 md:w-2/3">
             <div class="flex flex-col gap-3">
               <!-- Kategori -->
-              <div class="flex flex-col gap-1">
-                <p class="text-xs font-medium text-white sm:text-base">Kategori :</p>
-                <p class="w-fit rounded-full bg-cyan-700 px-3 py-0.5 text-xs text-white sm:text-sm">
+              <div class="flex flex-col gap-2">
+                <p class="text-xs font-normal text-white sm:text-base">Kategori :</p>
+                <p class="w-fit rounded-full bg-cyan-600 px-3 py-0.5 text-xs text-white sm:text-sm">
                   {{ product.product_categories.name }}
                 </p>
               </div>
               <!-- Metode Pengiriman -->
-              <div class="flex flex-col gap-1">
-                <p class="text-xs font-medium text-white sm:text-base">Metode Pengiriman :</p>
-                <p
-                  class="w-fit rounded-full bg-yellow-700 px-3 py-0.5 text-xs text-white sm:text-sm"
-                >
+              <div class="flex flex-col gap-2">
+                <p class="text-xs font-normal text-white sm:text-base">Metode Pengiriman :</p>
+                <p class="w-fit rounded-full bg-gray-600 px-3 py-0.5 text-xs text-white sm:text-sm">
                   {{ product.delivery_types.label }}
                 </p>
               </div>

@@ -99,7 +99,7 @@ defineExpose({ openModal, closeModal });
 </script>
 
 <template>
-  <DialogModalComponent ref="dialogModalRef" title="Konfirmasi Pesanan" maxWidth="7xl">
+  <DialogModalComponent ref="dialogModalRef" title="Konfirmasi Pesanan" maxWidth="5xl">
     <div class="flex w-full flex-col gap-5">
       <div class="flex w-full flex-col gap-5 sm:flex-row">
         <!-- START : Order Detail -->

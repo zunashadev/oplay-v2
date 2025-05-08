@@ -33,7 +33,7 @@ const handleClickDetail = () => {
         <div class="flex flex-1 flex-col gap-3 pb-3 sm:gap-5 sm:pb-5">
           <!-- Kategori  Produk -->
           <div
-            class="mx-auto w-fit flex-none rounded-2xl bg-cyan-700 px-2.5 py-0.5 text-center text-xs sm:mx-0 sm:w-fit sm:px-4"
+            class="mx-auto w-fit flex-none rounded-2xl bg-cyan-600 px-2.5 py-0.5 text-center text-xs sm:mx-0 sm:w-fit sm:px-4"
           >
             {{ product.product_categories.name }}
           </div>
