@@ -163,7 +163,7 @@ function goBack() {
 
             <!-- Deskripsi -->
             <div class="flex flex-col gap-1">
-              <p class="text-xs font-normal text-white sm:text-sm">{{ product.description }}</p>
+              <p class="text-sm font-normal text-white">{{ product.description }}</p>
             </div>
           </div>
           <!-- END : Left -->
