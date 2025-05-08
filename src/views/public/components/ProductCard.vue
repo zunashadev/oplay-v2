@@ -80,7 +80,7 @@ const handleClickDetail = () => {
           <!-- Tidak ada paket -->
           <template v-else>
             <div class="flex flex-1 flex-col items-center justify-center gap-3">
-              <NotFoundMagnifyingGlass class="size-8 text-gray-500" />
+              <NotFoundMagnifyingGlass class="size-6 text-gray-500 sm:size-8" />
               <p class="text-center text-xs font-normal text-gray-500">
                 Maaf, untuk saat ini paket belum tersedia
               </p>
