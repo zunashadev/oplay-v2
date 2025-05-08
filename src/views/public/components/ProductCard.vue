@@ -30,25 +30,25 @@ const handleClickDetail = () => {
     <div class="flex flex-1 flex-col bg-white">
       <div class="flex flex-1 flex-col px-3 py-3 sm:px-5 sm:py-5">
         <!-- ... -->
-        <div class="flex flex-1 flex-col gap-5 pb-5">
-          <div class="flex flex-none items-start justify-between py-2">
+        <div class="flex flex-1 flex-col gap-3 pb-5 sm:gap-5">
+          <!-- Kategori  Produk -->
+          <div
+            class="mx-auto w-fit flex-none rounded-2xl bg-cyan-700 px-4 py-0.5 text-center text-xs sm:mx-0 sm:w-fit"
+          >
+            {{ product.product_categories.name }}
+          </div>
+
+          <div class="flex flex-none flex-col items-start gap-2 py-2">
             <!-- Logo Produk -->
             <img
               :src="getPublicImageUrl(product.product_image_path, 'product')"
               alt="Produk"
-              class="max-h-14 max-w-24"
+              class="max-h-10 max-w-16 sm:max-h-14 sm:max-w-24"
             />
-
-            <!-- Kategori  Produk -->
-            <div class="flex flex-col items-end justify-end gap-2">
-              <div class="w-fit rounded-2xl bg-cyan-700 px-4 py-0.5 text-xs">
-                {{ product.product_categories.name }}
-              </div>
+            <!-- Name -->
+            <div class="flex-none">
+              <p class="text-xl font-bold text-gray-950 sm:text-2xl">{{ product.name }}</p>
             </div>
-          </div>
-
-          <div class="flex-none">
-            <p class="text-2xl font-bold text-gray-950">{{ product.name }}</p>
           </div>
 
           <hr class="-mx-5 rounded-full border-gray-200" />
