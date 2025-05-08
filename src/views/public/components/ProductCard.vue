@@ -27,7 +27,7 @@ const handleClickDetail = () => {
 
 <template>
   <div class="flex flex-col overflow-hidden rounded-4xl">
-    <div class="flex flex-1 flex-col bg-gradient-to-t from-yellow-50 to-cyan-100">
+    <div class="flex flex-1 flex-col bg-gradient-to-t from-yellow-50 to-cyan-50">
       <div class="flex flex-1 flex-col px-5 py-5">
         <!-- ... -->
         <div class="flex flex-1 flex-col gap-5 pb-5">
@@ -51,7 +51,7 @@ const handleClickDetail = () => {
             <p class="text-2xl font-bold text-gray-950">{{ product.name }}</p>
           </div>
 
-          <hr class="-mx-5 rounded-full border-gray-200" />
+          <hr class="-mx-5 rounded-full border-yellow-500/25" />
 
           <!-- Paket -->
           <template v-if="product.product_packages && product.product_packages.length">
@@ -86,7 +86,7 @@ const handleClickDetail = () => {
 
         <!-- Button -->
         <div class="flex flex-col gap-4">
-          <hr class="-mx-5 rounded-full border-gray-200" />
+          <hr class="-mx-5 rounded-full border-yellow-500/25" />
           <div class="flex flex-col flex-wrap gap-2">
             <ButtonComponent
               @click="handleClickDetail"
