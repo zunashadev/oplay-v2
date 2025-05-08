@@ -99,45 +99,9 @@ defineExpose({ openModal, closeModal });
 </script>
 
 <template>
-  <DialogModalComponent ref="dialogModalRef" title="Konfirmasi Pesanan" maxWidth="4xl">
-    <div class="flex flex-col gap-5">
+  <DialogModalComponent ref="dialogModalRef" title="Konfirmasi Pesanan" maxWidth="7xl">
+    <div class="flex w-full flex-col gap-5">
       <div class="flex w-full flex-col gap-5 sm:flex-row">
-        <!-- START : Delivery Type Metadata -->
-        <div class="w-full sm:w-1/2">
-          <!-- Customer to Admin -->
-          <template v-if="product.delivery_types.direction === 'customer_to_admin'">
-            <div class="flex flex-col gap-6">
-              <div class="flex flex-col gap-1">
-                <p class="text-lg font-medium">Lengkapi data berikut :</p>
-                <p class="text-sm text-gray-500">
-                  {{ product.delivery_types.label }} - {{ product.delivery_types.description }}
-                </p>
-              </div>
-              <div class="flex flex-col gap-2">
-                <div v-for="field in product.delivery_types.required_metadata_fields" :key="field">
-                  <InputComponent
-                    v-model="productDeliveryMetadataForm[field]"
-                    :label="field.charAt(0).toUpperCase() + field.slice(1)"
-                    :placeholder="`Masukkan ${field}`"
-                    :type="field.includes('password') ? 'password' : 'text'"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-          </template>
-
-          <!-- Admin to Customer -->
-          <template v-else>
-            <div class="flex h-full items-center justify-center">
-              <p class="text-center text-sm">
-                Akun akan dikirim setelah anda mengirim bukti pembayaran.
-              </p>
-            </div>
-          </template>
-        </div>
-        <!-- END : Delivery Type Metadata -->
-
         <!-- START : Order Detail -->
         <div class="flex w-full flex-col gap-5 sm:w-1/2">
           <!-- START : Produk -->
@@ -152,7 +116,6 @@ defineExpose({ openModal, closeModal });
                 {{ product.name }}
               </p>
               <p class="text-sm text-gray-400">{{ pkg.name }}</p>
-              <p class="text-sm text-gray-400">{{ duration.name }}</p>
             </div>
           </div>
           <!-- END : Produk -->
@@ -171,7 +134,7 @@ defineExpose({ openModal, closeModal });
                 <!-- Diskon -->
                 <div class="flex items-center justify-between">
                   <p class="text-sm font-normal text-gray-400">Diskon</p>
-                  <p class="text-sm font-normal text-red-500">
+                  <p class="text-sm font-normal text-white">
                     <span v-if="pkg.discount_type === 'fixed_amount'">
                       -{{ formatRupiah(pkg.discount_value) }}
                     </span>
@@ -212,6 +175,47 @@ defineExpose({ openModal, closeModal });
           <!-- END : Detail Pesanan -->
         </div>
         <!-- END : Order Detail -->
+
+        <hr class="rounded-full border-gray-700 sm:hidden" />
+
+        <!-- START : Delivery Type Metadata -->
+        <div class="w-full sm:w-1/2">
+          <!-- Customer to Admin -->
+          <template v-if="product.delivery_types.direction === 'customer_to_admin'">
+            <div class="flex h-full flex-col gap-6 rounded-md bg-gray-800 px-5 py-5">
+              <div class="flex flex-col gap-1">
+                <p class="text-md font-medium">Lengkapi data berikut :</p>
+                <p class="text-sm text-gray-500">
+                  {{ product.delivery_types.label }} - {{ product.delivery_types.description }}
+                </p>
+              </div>
+              <div class="flex flex-col gap-2">
+                <div v-for="field in product.delivery_types.required_metadata_fields" :key="field">
+                  <InputComponent
+                    v-model="productDeliveryMetadataForm[field]"
+                    :label="field.charAt(0).toUpperCase() + field.slice(1)"
+                    :placeholder="`Masukkan ${field}`"
+                    :type="field.includes('password') ? 'password' : 'text'"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <!-- Admin to Customer -->
+          <template v-else>
+            <div class="flex h-full items-center justify-center">
+              <div class="rounded-md border border-red-500 bg-red-500/10 px-5 py-5">
+                <p class="text-center text-xs text-red-500 sm:text-sm">
+                  Akun akan dikirim setelah anda mengirim
+                  <span class="font-semibold">bukti pembayaran</span>.
+                </p>
+              </div>
+            </div>
+          </template>
+        </div>
+        <!-- END : Delivery Type Metadata -->
       </div>
 
       <hr class="rounded-full border-gray-800" />

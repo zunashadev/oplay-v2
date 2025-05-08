@@ -2,12 +2,14 @@
 import { ref, onMounted } from 'vue';
 import { formatRupiah } from '@/utils/format';
 import { calculateFinalPrice } from '@/utils/priceCalculator';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
 // 📌 Stores
 import { useOrderStore } from '@/stores/orderStore';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
+import DiscountPriceComponent from '@/components/discounts/DiscountPrice.vue';
 
 // 📌 Icons
 import FileUploadIcon from '@/components/icons/FileUpload.vue';
@@ -47,8 +49,7 @@ onMounted(() => {
               <div class="flex w-60">
                 <div class="flex items-center gap-3">
                   <img
-                    v-if="order.product_image_url"
-                    :src="order.product_image_url"
+                    :src="getPublicImageUrl(order.product_image_path, 'product')"
                     alt="Produk"
                     class="max-h-8"
                   />
@@ -59,67 +60,29 @@ onMounted(() => {
               </div>
               <!--  -->
               <div class="flex w-36 flex-col gap-1">
-                <p class="text-sm font-normal text-gray-500">Paket</p>
+                <p class="text-sm font-normal text-gray-400">Paket</p>
                 <p class="text-sm font-medium text-white">{{ order.product_package_name }}</p>
               </div>
               <!--  -->
               <div class="flex w-72 flex-col gap-1">
-                <p class="text-sm font-normal text-gray-500">Harga</p>
+                <p class="text-sm font-normal text-gray-400">Harga</p>
 
-                <!-- Discount -->
-                <template
-                  v-if="
-                    order.product_package_discount_type &&
-                    order.product_package_discount_type !== '' &&
-                    order.product_package_discount_value > 0
-                  "
-                >
-                  <div class="flex items-center gap-1">
-                    <p class="text-sm font-normal text-gray-400 line-through">
-                      {{ formatRupiah(order.product_package_price) }}
-                    </p>
-                    <p class="text-sm font-normal text-yellow-500">
-                      {{
-                        formatRupiah(
-                          calculateFinalPrice(
-                            order.product_package_price,
-                            order.product_package_discount_type,
-                            order.product_package_discount_value,
-                          ),
-                        )
-                      }}
-                    </p>
-                    <span
-                      v-if="order.product_package_discount_type === 'fixed_amount'"
-                      class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                      >-{{ formatRupiah(order.product_package_discount_value) }}</span
-                    >
-                    <span
-                      v-if="order.product_package_discount_type === 'percentage'"
-                      class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs"
-                      >-{{ order.product_package_discount_value }}%</span
-                    >
-                  </div>
-                </template>
-                <!-- No Discount -->
-                <template v-else>
-                  <div>
-                    <p class="text-sm font-normal text-gray-200">
-                      {{ formatRupiah(order.product_package_price) }}
-                    </p>
-                  </div>
-                </template>
+                <DiscountPriceComponent
+                  :price="order.product_package_price"
+                  :discount-type="order.product_package_discount_type"
+                  :discount-value="order.product_package_discount_value"
+                />
               </div>
               <!--  -->
               <div class="flex w-36 flex-col gap-1">
-                <p class="text-sm font-normal text-gray-500">Durasi</p>
+                <p class="text-sm font-normal text-gray-400">Durasi</p>
                 <p class="text-sm font-medium text-white">
                   {{ order.product_package_duration_name }}
                 </p>
               </div>
               <!--  -->
               <div class="flex w-36 flex-col gap-1">
-                <p class="text-sm font-normal text-gray-500">Total Harga</p>
+                <p class="text-sm font-normal text-gray-400">Total Harga</p>
                 <p class="text-sm font-medium text-white">
                   {{ formatRupiah(order.total_price) }}
                 </p>
@@ -127,7 +90,7 @@ onMounted(() => {
             </div>
             <!-- Status -->
             <div class="flex w-24 flex-col gap-1 sm:items-end">
-              <p class="text-sm font-normal text-gray-500">Status</p>
+              <p class="text-sm font-normal text-gray-400">Status</p>
               <template v-if="order.status">
                 <p
                   class="rounded-full px-3 py-1 text-center text-xs font-medium capitalize"

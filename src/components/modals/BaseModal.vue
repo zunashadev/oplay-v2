@@ -1,7 +1,26 @@
 <script setup>
-import { ref, watch, onMounted, watchEffect, inject, defineExpose, onBeforeUnmount } from 'vue';
+import {
+  ref,
+  watch,
+  onMounted,
+  watchEffect,
+  inject,
+  defineExpose,
+  onBeforeUnmount,
+  computed,
+} from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import emitter from '@/utils/eventBus';
+
+// 📌 Props
+const props = defineProps({
+  maxWidth: {
+    type: String,
+    default: 'xl',
+    validator: (value) =>
+      ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl'].includes(value),
+  },
+});
 
 const isOpen = ref(false);
 const emit = defineEmits(['close']);
@@ -18,6 +37,35 @@ function closeModal() {
 }
 
 defineExpose({ openModal, closeModal });
+
+// Dynamic class binding untuk max-width dan width
+const widthClass = computed(() => {
+  // const map = {
+  //   sm: 'max-w-sm w-sm',
+  //   md: 'max-w-md w-md',
+  //   lg: 'max-w-lg w-lg',
+  //   xl: 'max-w-xl w-xl',
+  //   '2xl': 'max-w-2xl w-2xl',
+  //   '3xl': 'max-w-3xl w-3xl',
+  //   '4xl': 'max-w-4xl w-4xl',
+  //   '5xl': 'max-w-5xl w-5xl',
+  //   '6xl': 'max-w-6xl w-6xl',
+  //   '7xl': 'max-w-7xl w-7xl',
+  // };
+  const map = {
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    '3xl': 'max-w-3xl',
+    '4xl': 'max-w-4xl',
+    '5xl': 'max-w-5xl',
+    '6xl': 'max-w-6xl',
+    '7xl': 'max-w-7xl',
+  };
+  return `${map[props.maxWidth]}`;
+});
 </script>
 
 <template>
@@ -47,7 +95,8 @@ defineExpose({ openModal, closeModal });
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-lg shadow-xl transition-all"
+              class="relative w-full transform overflow-hidden rounded-2xl shadow-xl transition-all"
+              :class="widthClass"
               tabindex="0"
             >
               <slot>INI BASE BRO!</slot>

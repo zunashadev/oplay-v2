@@ -14,11 +14,10 @@ useNavbarPadding(navbarRef);
 <template>
   <div class="relative min-h-screen text-white">
     <!-- START : NavBar -->
-    <div
-      ref="navbarRef"
-      class="fixed top-0 left-0 z-50 w-full sm:px-12 md:px-24 lg:px-32 xl:px-36 2xl:px-40"
-    >
-      <NavBarPartial />
+    <div ref="navbarRef" class="fixed top-0 right-0 left-0 z-50 w-full">
+      <div class="public-navbar-padding-x w-full">
+        <NavBarPartial />
+      </div>
     </div>
     <!-- END : NavBar -->
 
