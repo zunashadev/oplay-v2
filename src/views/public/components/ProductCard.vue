@@ -26,7 +26,7 @@ const handleClickDetail = () => {
 </script>
 
 <template>
-  <div class="flex flex-col overflow-hidden rounded-4xl">
+  <div class="flex flex-col overflow-hidden rounded-3xl sm:rounded-4xl">
     <div class="flex flex-1 flex-col bg-white">
       <div class="flex flex-1 flex-col px-3 py-3 sm:px-5 sm:py-5">
         <!-- ... -->
