@@ -69,13 +69,12 @@ watch([keyword, selectedCategory], () => {
 
       <!-- START : Filter -->
       <div
-        class="flex w-full flex-col items-center justify-end gap-4 rounded-2xl sm:w-1/2 lg:flex-row"
+        class="flex w-full flex-col items-center justify-end gap-2 rounded-2xl sm:w-1/2 sm:gap-4 lg:flex-row"
       >
         <!-- 📌 Search -->
         <div class="w-full sm:max-w-96">
           <InputComponent v-model="keyword" placeholder="Cari produk..." />
         </div>
-
         <!-- 📌 Filter -->
         <template v-if="categoryStore.categories.length">
           <ListboxSelectComponent
