@@ -33,7 +33,7 @@ const finalPrice = computed(() =>
   <div class="flex items-center gap-1">
     <!-- Has Discount -->
     <template v-if="hasDiscount">
-      <div class="flex flex-col items-center sm:flex-row sm:gap-2">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2">
         <!-- Normal Price -->
         <p class="text-xs font-normal text-gray-500 line-through">
           {{ formatRupiah(price) }}
