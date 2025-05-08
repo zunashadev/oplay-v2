@@ -35,25 +35,25 @@ const finalPrice = computed(() =>
       <p class="text-xs font-normal text-gray-500 line-through">
         {{ formatRupiah(price) }}
       </p>
-      <p class="text-base font-normal text-yellow-500">
+      <p class="text-xs font-normal text-yellow-500 sm:text-base">
         {{ formatRupiah(finalPrice) }}
       </p>
       <span
         v-if="discountType === 'fixed_amount'"
-        class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs text-white"
+        class="ml-1 flex-none rounded-sm bg-red-500 px-1 text-xs text-white sm:ml-2 sm:px-1.5"
       >
         -{{ formatRupiah(discountValue) }}
       </span>
       <span
         v-else-if="discountType === 'percentage'"
-        class="ml-2 rounded-sm bg-red-500 px-1.5 text-xs text-white"
+        class="ml-1 flex-none rounded-sm bg-red-500 px-1 text-xs text-white sm:ml-2 sm:px-1.5"
       >
         -{{ discountValue }}%
       </span>
     </template>
 
     <template v-else>
-      <p class="text-base font-normal text-yellow-500">
+      <p class="text-xs font-normal text-yellow-500 sm:text-base">
         {{ formatRupiah(price) }}
       </p>
     </template>

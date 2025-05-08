@@ -61,7 +61,7 @@ const handleClickDetail = () => {
                   <div class="flex-none">
                     <BoxOpenSolidIcon class="size-3 text-gray-400 sm:size-4" />
                   </div>
-                  <div>
+                  <div class="flex flex-col">
                     <p class="text-xs font-normal text-gray-500">
                       {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
                     </p>
