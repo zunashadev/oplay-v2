@@ -43,7 +43,7 @@ import ButtonComponent from '@/components/buttons/Button.vue';
           :whilePress="{ scale: 0.95 }"
           class="w-full flex-none sm:w-1/2"
         >
-          <ButtonComponent color="gray" textColor="black" class="w-full"
+          <ButtonComponent color="gray" textColor="white" class="w-full"
             >Hubungi Penjual</ButtonComponent
           >
         </motion.div>

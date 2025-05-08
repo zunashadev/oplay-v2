@@ -27,7 +27,7 @@ const handleClickDetail = () => {
 
 <template>
   <div class="flex flex-col overflow-hidden rounded-3xl sm:rounded-4xl">
-    <div class="flex flex-1 flex-col bg-white">
+    <div class="flex flex-1 flex-col bg-linear-to-b from-gray-700 to-gray-800">
       <div class="flex flex-1 flex-col px-3 py-3 sm:px-5 sm:py-5">
         <!-- ... -->
         <div class="flex flex-1 flex-col gap-3 pb-3 sm:gap-5 sm:pb-5">
@@ -47,13 +47,13 @@ const handleClickDetail = () => {
             />
             <!-- Name -->
             <div class="flex-none">
-              <p class="text-center text-xl font-bold text-gray-950 sm:text-2xl">
+              <p class="text-center text-xl font-semibold text-white sm:text-2xl">
                 {{ product.name }}
               </p>
             </div>
           </div>
 
-          <hr class="-mx-5 rounded-full border-gray-200" />
+          <hr class="-mx-5 rounded-full border-gray-700" />
 
           <!-- Paket -->
           <template v-if="product.product_packages && product.product_packages.length">
@@ -90,7 +90,7 @@ const handleClickDetail = () => {
 
         <!-- Button -->
         <div class="flex flex-col gap-4">
-          <hr class="-mx-5 rounded-full border-gray-200" />
+          <hr class="-mx-5 rounded-full border-gray-700" />
           <div class="flex flex-col flex-wrap gap-2">
             <ButtonComponent
               @click="handleClickDetail"
