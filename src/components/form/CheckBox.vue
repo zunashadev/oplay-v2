@@ -32,7 +32,7 @@ const emit = defineEmits(['update:modelValue']);
         @change="emit('update:modelValue', $event.target.checked)"
         :disabled="disabled"
         :required="required"
-        class="peer checked:bg-lightning-yellow-400 border-blue-charcoal-800 checked:border-blue-charcoal-800-500 h-5 w-5 cursor-pointer appearance-none rounded border shadow-sm transition-all disabled:cursor-not-allowed disabled:opacity-50"
+        class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-700 shadow-sm transition-all checked:border-yellow-600 checked:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
       <span
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform text-black opacity-0 peer-checked:opacity-100"

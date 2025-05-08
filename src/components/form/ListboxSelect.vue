@@ -73,7 +73,7 @@ const selected = computed({
     <Listbox v-model="selected" :disabled="disabled">
       <div class="relative">
         <ListboxButton
-          class="border-blue-charcoal-800 relative w-full cursor-default rounded-md border bg-black py-2 pr-10 pl-3 text-left text-sm shadow-sm transition-all duration-300 ease-in outline-none hover:cursor-pointer hover:border-yellow-500/50 focus:border-yellow-500 focus:ring-0 focus:outline-none"
+          class="relative w-full cursor-default rounded-md border border-gray-700 bg-black py-2 pr-10 pl-3 text-left text-sm shadow-sm transition-all duration-300 ease-in outline-none hover:cursor-pointer hover:border-yellow-500/50 focus:border-yellow-500 focus:ring-0 focus:outline-none"
           :class="[
             error ? 'border-red-500' : '',
             success ? 'border-green-500' : '',

@@ -38,8 +38,8 @@ const items = [
   <div class="flex gap-24">
     <!-- 📌 Benefits -->
     <div class="flex flex-col gap-10 lg:w-1/2 lg:flex-none">
-      <div class="text-3xl/10 font-medium sm:text-4xl/12 md:text-5xl/16">
-        Kenapa harus memilih kami?
+      <div class="text-4xl/14 font-semibold sm:text-5xl/16 md:text-6xl/20">
+        Kenapa harus memilih <span class="text-yellow-500">OPLAY</span>?
       </div>
 
       <!-- 📌 Illustration : <sm -->
@@ -50,7 +50,7 @@ const items = [
         />
       </div>
 
-      <div class="flex flex-col gap-5">
+      <div class="flex flex-col gap-8">
         <div
           v-for="(item, index) in items"
           :key="index"

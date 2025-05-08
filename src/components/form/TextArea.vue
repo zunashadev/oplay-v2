@@ -52,7 +52,7 @@ const emit = defineEmits(['update:modelValue']);
       :required="required"
       :data-error="error"
       :data-success="success"
-      class="peer border-blue-charcoal-800 hover:border-lightning-yellow-400/50 focus:border-lightning-yellow-400 block w-full resize-none rounded-md border bg-black px-2.5 py-2 text-sm leading-none text-white shadow-sm transition-all duration-300 ease-in outline-none placeholder:text-gray-500 focus:ring-0 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[error=true]:border-red-500 data-[success=true]:border-green-500"
+      class="peer block w-full resize-none rounded-md border border-gray-700 bg-black px-2.5 py-2 text-sm leading-none text-white shadow-sm transition-all duration-300 ease-in outline-none placeholder:text-gray-500 hover:border-yellow-500/50 focus:border-yellow-500 focus:ring-0 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[error=true]:border-red-500 data-[success=true]:border-green-500"
     ></textarea>
   </div>
 </template>

@@ -68,7 +68,7 @@ const emit = defineEmits(['update:modelValue']);
         :data-error="error"
         :data-success="success"
         :data-icon-placement="iconPlacement"
-        class="peer border-blue-charcoal-800 w-full rounded-md border bg-black px-2.5 py-2 text-sm text-white shadow-sm transition-all ease-in outline-none placeholder:text-gray-500 hover:border-yellow-500/50 focus:border-yellow-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:cursor-not-allowed data-[error=true]:border-red-500 data-[icon-placement=end]:pe-9 data-[icon-placement=start]:ps-9 data-[success=true]:border-green-500"
+        class="peer w-full rounded-md border border-gray-700 bg-black px-2.5 py-2 text-sm text-white shadow-sm transition-all ease-in outline-none placeholder:text-gray-500 hover:border-yellow-500/50 focus:border-yellow-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:cursor-not-allowed data-[error=true]:border-red-500 data-[icon-placement=end]:pe-9 data-[icon-placement=start]:ps-9 data-[success=true]:border-green-500"
       />
 
       <!-- Slot untuk icon di kanan -->

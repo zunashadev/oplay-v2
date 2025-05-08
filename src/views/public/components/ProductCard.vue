@@ -27,7 +27,7 @@ const handleClickDetail = () => {
 
 <template>
   <div class="flex flex-col overflow-hidden rounded-3xl sm:rounded-4xl">
-    <div class="flex flex-1 flex-col bg-linear-to-b from-gray-700 to-gray-800">
+    <div class="flex flex-1 flex-col bg-gray-800">
       <div class="flex flex-1 flex-col px-3 py-3 sm:px-5 sm:py-5">
         <!-- ... -->
         <div class="flex flex-1 flex-col gap-3 pb-3 sm:gap-5 sm:pb-5">

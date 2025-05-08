@@ -48,7 +48,7 @@ watch([keyword, selectedCategory], () => {
   <div class="flex flex-col gap-8">
     <!-- START : Header -->
     <div
-      class="page-padding-x reset-page-padding-x relative flex flex-col items-center justify-between gap-6 bg-gray-900 py-6 sm:flex-row sm:gap-12"
+      class="page-padding-x reset-page-padding-x relative flex flex-col items-start justify-between gap-6 bg-gray-900 py-6 sm:flex-row sm:items-center sm:gap-12"
     >
       <!-- START : Background -->
       <div class="absolute inset-0 -z-0 h-full">
@@ -60,7 +60,10 @@ watch([keyword, selectedCategory], () => {
 
       <!-- START : Title -->
       <div class="z-10">
-        <p class="text-2xl font-semibold">Daftar Produk</p>
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-1 rounded-md bg-yellow-500"></div>
+          <p class="text-2xl font-semibold">Daftar Produk</p>
+        </div>
       </div>
       <!-- END : Title -->
 
