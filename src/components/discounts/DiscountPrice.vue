@@ -39,7 +39,7 @@ const finalPrice = computed(() =>
           {{ formatRupiah(price) }}
         </p>
         <!-- Final Price -->
-        <p class="text-xs font-normal text-yellow-500 sm:text-base">
+        <p class="text-xs font-medium text-yellow-500 sm:text-base">
           {{ formatRupiah(finalPrice) }}
         </p>
       </div>
@@ -52,7 +52,7 @@ const finalPrice = computed(() =>
 
     <!-- No Discount -->
     <template v-else>
-      <p class="text-xs font-normal text-yellow-500 sm:text-base">
+      <p class="text-xs font-medium text-yellow-500 sm:text-base">
         {{ formatRupiah(price) }}
       </p>
     </template>
