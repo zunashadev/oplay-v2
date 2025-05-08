@@ -98,6 +98,7 @@ const handleClickDetail = () => {
               textColor="black"
               color="yellow"
               class="group"
+              size="md"
             >
               <div class="flex items-center gap-0 transition-all group-hover:gap-6">
                 <p class="-mr-4">Lihat Detail</p>

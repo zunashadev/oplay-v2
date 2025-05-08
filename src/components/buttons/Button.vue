@@ -51,20 +51,34 @@ const props = defineProps({
 
 const computedSizeClasses = computed(() => {
   if (props.variant === 'link') {
+    // const sizes = {
+    //   xs: 'text-sm',
+    //   sm: 'text-sm',
+    //   md: 'text-base',
+    //   lg: 'text-base',
+    // };
+
     const sizes = {
-      xs: 'text-sm',
-      sm: 'text-sm',
-      md: 'text-base',
-      lg: 'text-base',
+      xs: 'text-xs sm:text-sm md:text-sm lg:text-sm', // maksimum: text-sm
+      sm: 'text-sm sm:text-sm md:text-base lg:text-base', // maksimum: text-base
+      md: 'text-sm sm:text-base md:text-base lg:text-base', // maksimum: text-base
+      lg: 'text-base sm:text-base md:text-base lg:text-base', // maksimum: text-base
     };
 
     return sizes[props.size] || sizes.md; // Hanya mengembalikan ukuran teks tanpa padding
   } else {
+    // const sizes = {
+    //   xs: 'px-2 py-1 text-sm',
+    //   sm: 'px-3 py-1.5 text-sm',
+    //   md: 'px-4 py-2 text-base',
+    //   lg: 'px-5 py-2.5 text-base',
+    // };
+
     const sizes = {
-      xs: 'px-2 py-1 text-sm',
-      sm: 'px-3 py-1.5 text-sm',
-      md: 'px-4 py-2 text-base',
-      lg: 'px-5 py-2.5 text-base',
+      xs: 'text-xs px-1.5 py-1 sm:text-sm sm:px-2 sm:py-1 md:text-sm md:px-2.5 md:py-1 lg:text-sm lg:px-3 lg:py-1.5',
+      sm: 'text-sm px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:text-base md:px-3.5 md:py-2 lg:text-base lg:px-4 lg:py-2',
+      md: 'text-sm px-3 py-1.5 sm:text-base sm:px-4 sm:py-2 md:px-4 md:py-2 lg:text-base lg:px-4 lg:py-2',
+      lg: 'text-base px-4 py-2 sm:px-4.5 sm:py-2.5 md:px-5 md:py-2.5 lg:px-5 lg:py-2.5',
     };
 
     return sizes[props.size] || sizes.md; // Mengembalikan padding + ukuran teks
