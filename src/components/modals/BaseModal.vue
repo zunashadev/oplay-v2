@@ -95,7 +95,7 @@ const widthClass = computed(() => {
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative w-full transform overflow-hidden rounded-2xl shadow-xl transition-all"
+              class="relative w-full transform overflow-hidden rounded-xl shadow-xl transition-all"
               :class="widthClass"
               tabindex="0"
             >

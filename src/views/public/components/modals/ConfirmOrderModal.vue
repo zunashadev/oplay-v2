@@ -184,8 +184,8 @@ defineExpose({ openModal, closeModal });
           <template v-if="product.delivery_types.direction === 'customer_to_admin'">
             <div class="flex h-full flex-col gap-6 rounded-md bg-gray-800 px-5 py-5">
               <div class="flex flex-col gap-1">
-                <p class="text-md font-medium">Lengkapi data berikut :</p>
-                <p class="text-sm text-gray-500">
+                <p class="sm:text-md text-base font-medium">Lengkapi data berikut :</p>
+                <p class="text-xs text-gray-500 sm:text-sm">
                   {{ product.delivery_types.label }} - {{ product.delivery_types.description }}
                 </p>
               </div>
