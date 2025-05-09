@@ -94,7 +94,7 @@ const selected = computed({
           leave-to-class="opacity-0"
         >
           <ListboxOptions
-            class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-800 py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none"
+            class="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-800 py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none"
           >
             <ListboxOption
               v-for="(option, index) in options"

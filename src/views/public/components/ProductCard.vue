@@ -26,7 +26,7 @@ const handleClickDetail = () => {
 </script>
 
 <template>
-  <div class="flex flex-col overflow-hidden rounded-3xl sm:rounded-4xl">
+  <div class="flex flex-col overflow-hidden rounded-3xl transition-all sm:rounded-4xl">
     <div class="relative flex flex-1 flex-col bg-gray-800 px-3 py-3 sm:px-5 sm:py-5">
       <div class="absolute inset-0 z-0 h-32 w-full sm:h-44">
         <div
@@ -55,7 +55,7 @@ const handleClickDetail = () => {
           <img
             :src="getPublicImageUrl(product.product_image_path, 'product')"
             alt="Produk"
-            class="max-h-10 max-w-16 sm:max-h-14 sm:max-w-24"
+            class="max-h-14 max-w-28 sm:max-h-16 sm:max-w-40"
           />
           <!-- Name -->
           <div class="flex-none">
