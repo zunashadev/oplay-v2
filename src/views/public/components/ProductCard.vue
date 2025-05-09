@@ -73,7 +73,7 @@ const handleClickDetail = () => {
             <template v-for="pkg in product.product_packages" :key="pkg.id">
               <div class="flex items-center gap-1.5 sm:gap-3">
                 <div class="flex-none">
-                  <BoxOpenSolidIcon class="size-3 text-gray-400 sm:size-4" />
+                  <BoxOpenSolidIcon class="size-3 text-gray-600 sm:size-4" />
                 </div>
                 <div class="flex flex-col">
                   <p class="text-xs font-normal text-gray-500">
@@ -101,7 +101,7 @@ const handleClickDetail = () => {
       </div>
 
       <!-- Button -->
-      <div class="flex flex-col gap-4">
+      <div class="z-10 flex flex-col gap-4">
         <hr class="-mx-5 rounded-full border-gray-700" />
         <div class="flex flex-col flex-wrap gap-2">
           <ButtonComponent

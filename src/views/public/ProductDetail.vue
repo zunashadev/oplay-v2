@@ -100,7 +100,7 @@ function goBack() {
 
   <!-- START : Loading Done -->
   <template v-else>
-    <div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-5 sm:gap-8">
       <!-- START : Header -->
       <div class="flex items-center gap-3 sm:gap-6">
         <div
@@ -114,7 +114,7 @@ function goBack() {
       <!-- END : Header -->
 
       <!-- START : Detail Produk -->
-      <div v-if="product" class="relative overflow-hidden rounded-4xl bg-gray-900">
+      <div v-if="product" class="relative overflow-hidden rounded-4xl bg-gray-800">
         <!-- START : Background -->
         <div class="absolute -z-0 h-52 w-full sm:h-72 md:h-96">
           <div
@@ -127,7 +127,7 @@ function goBack() {
             <div
               class="absolute inset-0 z-10 bg-gradient-to-t from-transparent to-cyan-500/25"
             ></div>
-            <div class="absolute inset-0 z-10 bg-gradient-to-b from-transparent to-gray-900"></div>
+            <div class="absolute inset-0 z-10 bg-gradient-to-b from-transparent to-gray-800"></div>
           </div>
         </div>
         <!-- END : Background -->
@@ -147,9 +147,13 @@ function goBack() {
         <!-- START : Detail Produk -->
         <div class="relative flex w-full flex-col gap-2 p-2 md:flex-row">
           <!-- START : Left -->
-          <div class="flex w-full flex-col gap-5 rounded-3xl bg-gray-800 px-5 py-5 md:w-2/3">
+          <div
+            class="flex w-full flex-col gap-5 rounded-3xl bg-gray-900 px-5 py-5 shadow-sm md:w-2/3"
+          >
             <!-- Nama -->
-            <p class="text-2xl font-semibold sm:text-4xl">{{ product.name }}</p>
+            <div class="pt-3">
+              <p class="text-2xl font-semibold sm:text-4xl">{{ product.name }}</p>
+            </div>
 
             <div class="flex flex-col gap-3">
               <!-- Kategori -->
@@ -168,7 +172,7 @@ function goBack() {
               </div>
             </div>
 
-            <hr class="rounded-full border-gray-700" />
+            <hr class="rounded-full border-gray-800" />
 
             <!-- Deskripsi -->
             <div class="flex flex-col gap-1">
@@ -178,7 +182,9 @@ function goBack() {
           <!-- END : Left -->
 
           <!-- START : Right -->
-          <div class="flex w-full flex-col gap-5 rounded-3xl bg-gray-800 px-5 py-5 md:w-1/3">
+          <div
+            class="flex w-full flex-col gap-5 rounded-3xl bg-gray-900 px-5 py-5 shadow-sm md:w-1/3"
+          >
             <p class="text-xl font-medium">📋 Buat Pesanan</p>
             <!-- Pilih Paket -->
             <div class="flex flex-col gap-3">
@@ -193,7 +199,7 @@ function goBack() {
                       :class="
                         selectedPackage?.id === pkg.id
                           ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                          : 'bg-gray-700/50'
+                          : 'bg-gray-800'
                       "
                     >
                       <BoxOpenSolidIcon class="size-4 text-gray-600" />
@@ -249,7 +255,7 @@ function goBack() {
                         :class="[
                           selectedDuration?.id === duration.id
                             ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                            : 'bg-gray-700/50',
+                            : 'bg-gray-800',
                         ]"
                       >
                         <p class="text-sm">{{ duration.name }}</p>
@@ -260,7 +266,7 @@ function goBack() {
               </template>
             </div>
 
-            <hr class="rounded-full border-gray-700" />
+            <hr class="rounded-full border-gray-800" />
 
             <!-- Total Harga -->
             <div class="flex items-center justify-between">
@@ -268,7 +274,7 @@ function goBack() {
               <p class="text-xl text-yellow-500">{{ formatRupiah(totalPrice) }}</p>
             </div>
 
-            <hr class="rounded-full border-gray-700" />
+            <hr class="rounded-full border-gray-800" />
 
             <!-- Tombol Buat Pesanan -->
             <div class="flex w-full flex-col gap-2">

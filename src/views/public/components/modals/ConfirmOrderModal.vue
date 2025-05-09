@@ -120,7 +120,7 @@ defineExpose({ openModal, closeModal });
           </div>
           <!-- END : Produk -->
 
-          <hr class="rounded-full border-gray-800" />
+          <hr class="rounded-full border-gray-700" />
 
           <!-- START : Detail Pesanan -->
           <div class="flex flex-col gap-5">
@@ -162,7 +162,7 @@ defineExpose({ openModal, closeModal });
               </div>
             </div>
 
-            <hr class="rounded-full border-gray-800" />
+            <hr class="rounded-full border-gray-700" />
 
             <!-- Total Harga -->
             <div class="flex items-center justify-between">
@@ -176,13 +176,13 @@ defineExpose({ openModal, closeModal });
         </div>
         <!-- END : Order Detail -->
 
-        <hr class="rounded-full border-gray-800 sm:hidden" />
+        <hr class="rounded-full border-gray-700 sm:hidden" />
 
         <!-- START : Delivery Type Metadata -->
         <div class="w-full sm:w-1/2">
           <!-- Customer to Admin -->
           <template v-if="product.delivery_types.direction === 'customer_to_admin'">
-            <div class="flex h-full flex-col gap-6 rounded-md bg-gray-800 px-5 py-5">
+            <div class="flex h-full flex-col gap-6 rounded-md border border-gray-700 px-5 py-5">
               <div class="flex flex-col gap-1">
                 <p class="sm:text-md text-base font-medium">Lengkapi data berikut :</p>
                 <p class="text-xs text-gray-500 sm:text-sm">
@@ -218,7 +218,7 @@ defineExpose({ openModal, closeModal });
         <!-- END : Delivery Type Metadata -->
       </div>
 
-      <hr class="rounded-full border-gray-800" />
+      <hr class="rounded-full border-gray-700" />
 
       <!-- Confirm Button -->
       <div class="flex">
