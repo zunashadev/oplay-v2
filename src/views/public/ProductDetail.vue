@@ -114,35 +114,43 @@ function goBack() {
       <!-- END : Header -->
 
       <!-- START : Detail Produk -->
-      <div v-if="product" class="space-y-2 rounded-4xl bg-gray-900 p-2">
-        <div
-          class="h-28 w-full overflow-hidden rounded-3xl bg-cover bg-center sm:h-52"
-          :style="{
-            backgroundImage: `url('${getPublicImageUrl(product.product_banner_image_path, 'banner')}')`,
-          }"
-        >
-          <div class="h-full w-full bg-gray-950/50 backdrop-blur-sm">
-            <div class="flex h-full w-full items-center px-6 sm:px-10">
-              <div class="flex items-center gap-3 sm:gap-8">
-                <img
-                  :src="getPublicImageUrl(product.product_image_path, 'product')"
-                  alt="Produk"
-                  class="max-h-16 w-fit sm:max-h-32"
-                />
-                <div>
-                  <p class="text-3xl font-semibold sm:text-6xl">{{ product.name }}</p>
-                </div>
-              </div>
-            </div>
+      <div v-if="product" class="relative overflow-hidden rounded-4xl bg-gray-900">
+        <!-- START : Background -->
+        <div class="absolute -z-0 h-52 w-full sm:h-72 md:h-96">
+          <div
+            class="h-full w-full bg-cover bg-center opacity-50"
+            :style="{
+              backgroundImage: `url('${getPublicImageUrl(product.product_banner_image_path, 'banner')}')`,
+            }"
+          >
+            <div class="h-full w-full bg-gray-950/25 backdrop-blur-xs"></div>
+            <div
+              class="absolute inset-0 z-10 bg-gradient-to-t from-transparent to-cyan-500/25"
+            ></div>
+            <div class="absolute inset-0 z-10 bg-gradient-to-b from-transparent to-gray-900"></div>
           </div>
         </div>
+        <!-- END : Background -->
 
+        <!-- START : Product -->
+        <div class="relative px-2 pt-2">
+          <div class="flex h-full w-full items-center justify-center px-5 py-8 sm:px-8 sm:py-12">
+            <img
+              :src="getPublicImageUrl(product.product_image_path, 'product')"
+              alt="Produk"
+              class="max-h-16 w-fit max-w-48 sm:max-h-32 sm:max-w-80"
+            />
+          </div>
+        </div>
         <!-- END : Product -->
 
         <!-- START : Detail Produk -->
-        <div class="flex w-full flex-col gap-2 md:flex-row">
+        <div class="relative flex w-full flex-col gap-2 p-2 md:flex-row">
           <!-- START : Left -->
           <div class="flex w-full flex-col gap-5 rounded-3xl bg-gray-800 px-5 py-5 md:w-2/3">
+            <!-- Nama -->
+            <p class="text-2xl font-semibold sm:text-4xl">{{ product.name }}</p>
+
             <div class="flex flex-col gap-3">
               <!-- Kategori -->
               <div class="flex flex-col gap-1">
