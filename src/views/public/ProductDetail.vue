@@ -116,7 +116,7 @@ function goBack() {
       <!-- START : Detail Produk -->
       <div v-if="product" class="space-y-2 rounded-4xl bg-gray-900 p-2">
         <div
-          class="h-28 w-full overflow-clip rounded-3xl bg-cover bg-center sm:h-52"
+          class="h-28 w-full overflow-hidden rounded-3xl bg-cover bg-center sm:h-52"
           :style="{
             backgroundImage: `url('${getPublicImageUrl(product.product_banner_image_path, 'banner')}')`,
           }"
@@ -185,7 +185,7 @@ function goBack() {
                       :class="
                         selectedPackage?.id === pkg.id
                           ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                          : 'bg-gray-700'
+                          : 'bg-gray-700/50'
                       "
                     >
                       <BoxOpenSolidIcon class="size-4 text-gray-600" />
@@ -205,7 +205,7 @@ function goBack() {
               </template>
 
               <template v-else>
-                <p class="text-sm text-gray-600">Paket belum tersedia</p>
+                <p class="text-xs text-gray-600 sm:text-sm">Paket belum tersedia</p>
               </template>
             </div>
             <!-- Pilih Durasi -->
@@ -213,7 +213,9 @@ function goBack() {
               <p class="text-sm text-gray-400">Pilih durasi :</p>
 
               <template v-if="!selectedPackage">
-                <p class="text-sm font-normal text-gray-600">Pilih paket untuk melihat durasi</p>
+                <p class="text-xs font-normal text-gray-600 sm:text-sm">
+                  Pilih paket untuk melihat durasi
+                </p>
               </template>
 
               <template v-else>
@@ -223,7 +225,7 @@ function goBack() {
                     !selectedPackage.product_package_durations.length
                   "
                 >
-                  <p class="text-sm font-normal text-gray-600">
+                  <p class="text-xs font-normal text-gray-600 sm:text-sm">
                     Mohon maaf, untuk saat ini pilihan durasi belum tersedia
                   </p>
                 </template>
@@ -239,7 +241,7 @@ function goBack() {
                         :class="[
                           selectedDuration?.id === duration.id
                             ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                            : 'bg-gray-700',
+                            : 'bg-gray-700/50',
                         ]"
                       >
                         <p class="text-sm">{{ duration.name }}</p>
