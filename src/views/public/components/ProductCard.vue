@@ -27,87 +27,98 @@ const handleClickDetail = () => {
 
 <template>
   <div class="flex flex-col overflow-hidden rounded-3xl sm:rounded-4xl">
-    <div class="flex flex-1 flex-col bg-gray-800">
-      <div class="flex flex-1 flex-col px-3 py-3 sm:px-5 sm:py-5">
-        <!-- ... -->
-        <div class="flex flex-1 flex-col gap-3 pb-3 sm:gap-5 sm:pb-5">
-          <!-- Kategori  Produk -->
-          <div
-            class="mx-auto w-fit flex-none rounded-2xl bg-cyan-600 px-2.5 py-0.5 text-center text-xs sm:mx-0 sm:w-fit sm:px-4"
-          >
-            {{ product.product_categories.name }}
-          </div>
+    <div class="relative flex flex-1 flex-col bg-gray-800 px-3 py-3 sm:px-5 sm:py-5">
+      <div class="absolute inset-0 z-0 h-32 w-full sm:h-44">
+        <div
+          class="h-full w-full bg-cover bg-center opacity-50"
+          :style="{
+            backgroundImage: `url('${getPublicImageUrl(product.product_banner_image_path, 'banner')}')`,
+          }"
+        >
+          <div class="h-full w-full bg-gray-950/25 backdrop-blur-xs"></div>
+          <div class="absolute inset-0 z-10 bg-gradient-to-t from-transparent to-cyan-500/25"></div>
+          <div class="absolute inset-0 z-10 bg-gradient-to-b from-transparent to-gray-800"></div>
+        </div>
+      </div>
 
-          <div class="flex flex-none flex-col items-center gap-2 py-2 sm:items-start">
-            <!-- Logo Produk -->
-            <img
-              :src="getPublicImageUrl(product.product_image_path, 'product')"
-              alt="Produk"
-              class="max-h-10 max-w-16 sm:max-h-14 sm:max-w-24"
-            />
-            <!-- Name -->
-            <div class="flex-none">
-              <p class="text-center text-xl font-semibold text-white sm:text-2xl">
-                {{ product.name }}
-              </p>
-            </div>
-          </div>
-
-          <hr class="-mx-5 rounded-full border-gray-700" />
-
-          <!-- Paket -->
-          <template v-if="product.product_packages && product.product_packages.length">
-            <div class="flex flex-col gap-2 sm:gap-3">
-              <template v-for="pkg in product.product_packages" :key="pkg.id">
-                <div class="flex items-center gap-1.5 sm:gap-3">
-                  <div class="flex-none">
-                    <BoxOpenSolidIcon class="size-3 text-gray-400 sm:size-4" />
-                  </div>
-                  <div class="flex flex-col">
-                    <p class="text-xs font-normal text-gray-500">
-                      {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
-                    </p>
-                    <DiscountPriceComponent
-                      :price="pkg.price"
-                      :discount-type="pkg.discount_type"
-                      :discount-value="pkg.discount_value"
-                    />
-                  </div>
-                </div>
-              </template>
-            </div>
-          </template>
-          <!-- Tidak ada paket -->
-          <template v-else>
-            <div class="flex flex-1 flex-col items-center justify-center gap-3">
-              <NotFoundMagnifyingGlass class="size-6 text-gray-500 sm:size-8" />
-              <p class="text-center text-xs font-normal text-gray-500">
-                Maaf, untuk saat ini paket belum tersedia
-              </p>
-            </div>
-          </template>
+      <!-- ... -->
+      <div class="z-10 flex flex-1 flex-col gap-3 pb-3 sm:gap-5 sm:pb-5">
+        <!-- Kategori  Produk -->
+        <div
+          class="mx-auto w-fit flex-none rounded-2xl bg-cyan-600 px-2.5 py-0.5 text-center text-xs sm:mx-0 sm:w-fit sm:px-4"
+        >
+          {{ product.product_categories.name }}
         </div>
 
-        <!-- Button -->
-        <div class="flex flex-col gap-4">
-          <hr class="-mx-5 rounded-full border-gray-700" />
-          <div class="flex flex-col flex-wrap gap-2">
-            <ButtonComponent
-              @click="handleClickDetail"
-              variant="solid"
-              textColor="black"
-              color="yellow"
-              class="group"
-              size="md"
-            >
-              <div class="flex items-center gap-0 transition-all group-hover:gap-6">
-                <p class="-mr-4">Lihat Detail</p>
-                <ArrowCircleRightIcon
-                  class="size-4 text-black opacity-0 transition-all group-hover:opacity-100"
-                />
-              </div>
-            </ButtonComponent>
+        <div class="flex flex-none flex-col items-center gap-2 py-2 sm:items-start">
+          <!-- Logo Produk -->
+          <img
+            :src="getPublicImageUrl(product.product_image_path, 'product')"
+            alt="Produk"
+            class="max-h-10 max-w-16 sm:max-h-14 sm:max-w-24"
+          />
+          <!-- Name -->
+          <div class="flex-none">
+            <p class="text-center text-xl font-semibold text-white sm:text-2xl">
+              {{ product.name }}
+            </p>
           </div>
+        </div>
+
+        <hr class="-mx-5 rounded-full border-gray-700" />
+
+        <!-- Paket -->
+        <template v-if="product.product_packages && product.product_packages.length">
+          <div class="flex flex-col gap-2 sm:gap-3">
+            <template v-for="pkg in product.product_packages" :key="pkg.id">
+              <div class="flex items-center gap-1.5 sm:gap-3">
+                <div class="flex-none">
+                  <BoxOpenSolidIcon class="size-3 text-gray-400 sm:size-4" />
+                </div>
+                <div class="flex flex-col">
+                  <p class="text-xs font-normal text-gray-500">
+                    {{ pkg.name }} <span v-if="pkg.is_best_seller">🔥</span>
+                  </p>
+                  <DiscountPriceComponent
+                    :price="pkg.price"
+                    :discount-type="pkg.discount_type"
+                    :discount-value="pkg.discount_value"
+                  />
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
+        <!-- Tidak ada paket -->
+        <template v-else>
+          <div class="flex flex-1 flex-col items-center justify-center gap-3">
+            <NotFoundMagnifyingGlass class="size-6 text-gray-500 sm:size-8" />
+            <p class="text-center text-xs font-normal text-gray-500">
+              Maaf, untuk saat ini paket belum tersedia
+            </p>
+          </div>
+        </template>
+      </div>
+
+      <!-- Button -->
+      <div class="flex flex-col gap-4">
+        <hr class="-mx-5 rounded-full border-gray-700" />
+        <div class="flex flex-col flex-wrap gap-2">
+          <ButtonComponent
+            @click="handleClickDetail"
+            variant="solid"
+            textColor="black"
+            color="yellow"
+            class="group"
+            size="md"
+          >
+            <div class="flex items-center gap-0 transition-all group-hover:gap-6">
+              <p class="-mr-4">Lihat Detail</p>
+              <ArrowCircleRightIcon
+                class="size-4 text-black opacity-0 transition-all group-hover:opacity-100"
+              />
+            </div>
+          </ButtonComponent>
         </div>
       </div>
     </div>

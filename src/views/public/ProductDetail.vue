@@ -114,54 +114,53 @@ function goBack() {
       <!-- END : Header -->
 
       <!-- START : Detail Produk -->
-      <div v-if="product">
-        <!-- START : Product -->
-        <div class="rounded-4xl bg-gray-900 px-2 py-2">
-          <div class="relative">
-            <!-- <div class="h-32 rounded-2xl bg-gray-700"></div> -->
-            <img
-              :src="getPublicImageUrl(product.product_banner_image_path, 'banner')"
-              alt="Gambar"
-              class="h-full max-h-32 w-full rounded-3xl object-cover sm:max-h-32"
-            />
-            <div class="absolute -bottom-12 w-full px-6 sm:-bottom-8 sm:px-12">
-              <div
-                class="flex flex-col items-center gap-3 rounded-3xl bg-gray-900/50 px-3 py-3 backdrop-blur-sm sm:flex-row sm:gap-5 sm:px-6 sm:py-5"
-              >
+      <div v-if="product" class="space-y-2 rounded-4xl bg-gray-900 p-2">
+        <div
+          class="h-28 w-full overflow-clip rounded-3xl bg-cover bg-center sm:h-52"
+          :style="{
+            backgroundImage: `url('${getPublicImageUrl(product.product_banner_image_path, 'banner')}')`,
+          }"
+        >
+          <div class="h-full w-full bg-gray-950/50 backdrop-blur-sm">
+            <div class="flex h-full w-full items-center px-6 sm:px-10">
+              <div class="flex items-center gap-3 sm:gap-8">
                 <img
                   :src="getPublicImageUrl(product.product_image_path, 'product')"
                   alt="Produk"
-                  class="max-h-16 w-fit sm:max-h-16"
+                  class="max-h-16 w-fit sm:max-h-32"
                 />
-                <p class="text-xl font-semibold sm:text-4xl">{{ product.name }}</p>
+                <div>
+                  <p class="text-3xl font-semibold sm:text-6xl">{{ product.name }}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <!-- END : Product -->
 
         <!-- START : Detail Produk -->
-        <div class="mt-20 flex w-full flex-col gap-2 sm:mt-16 md:flex-row md:gap-2">
+        <div class="flex w-full flex-col gap-2 md:flex-row">
           <!-- START : Left -->
-          <div class="flex w-full flex-col gap-5 rounded-3xl bg-gray-900 px-5 py-5 md:w-2/3">
+          <div class="flex w-full flex-col gap-5 rounded-3xl bg-gray-800 px-5 py-5 md:w-2/3">
             <div class="flex flex-col gap-3">
               <!-- Kategori -->
-              <div class="flex flex-col gap-2">
-                <p class="text-xs font-normal text-white sm:text-base">Kategori :</p>
+              <div class="flex flex-col gap-1">
+                <p class="text-xs font-normal text-gray-400 sm:text-base">Kategori :</p>
                 <p class="w-fit rounded-full bg-cyan-600 px-3 py-0.5 text-xs text-white sm:text-sm">
                   {{ product.product_categories.name }}
                 </p>
               </div>
               <!-- Metode Pengiriman -->
-              <div class="flex flex-col gap-2">
-                <p class="text-xs font-normal text-white sm:text-base">Metode Pengiriman :</p>
+              <div class="flex flex-col gap-1">
+                <p class="text-xs font-normal text-gray-400 sm:text-base">Metode Pengiriman :</p>
                 <p class="text-xs text-white sm:text-sm">
                   {{ product.delivery_types.label }}
                 </p>
               </div>
             </div>
 
-            <hr class="rounded-full border-gray-800" />
+            <hr class="rounded-full border-gray-700" />
 
             <!-- Deskripsi -->
             <div class="flex flex-col gap-1">
@@ -171,7 +170,7 @@ function goBack() {
           <!-- END : Left -->
 
           <!-- START : Right -->
-          <div class="flex h-full w-full flex-col gap-5 rounded-3xl bg-gray-900 px-5 py-5 md:w-1/3">
+          <div class="flex w-full flex-col gap-5 rounded-3xl bg-gray-800 px-5 py-5 md:w-1/3">
             <p class="text-xl font-medium">📋 Buat Pesanan</p>
             <!-- Pilih Paket -->
             <div class="flex flex-col gap-3">
@@ -186,7 +185,7 @@ function goBack() {
                       :class="
                         selectedPackage?.id === pkg.id
                           ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                          : 'bg-gray-800'
+                          : 'bg-gray-700'
                       "
                     >
                       <BoxOpenSolidIcon class="size-4 text-gray-600" />
@@ -240,7 +239,7 @@ function goBack() {
                         :class="[
                           selectedDuration?.id === duration.id
                             ? 'outline-lightning-yellow-400 bg-gray-900 outline'
-                            : 'bg-gray-800',
+                            : 'bg-gray-700',
                         ]"
                       >
                         <p class="text-sm">{{ duration.name }}</p>
@@ -251,7 +250,7 @@ function goBack() {
               </template>
             </div>
 
-            <hr class="rounded-full border-gray-800" />
+            <hr class="rounded-full border-gray-700" />
 
             <!-- Total Harga -->
             <div class="flex items-center justify-between">
@@ -259,7 +258,7 @@ function goBack() {
               <p class="text-xl text-yellow-500">{{ formatRupiah(totalPrice) }}</p>
             </div>
 
-            <hr class="rounded-full border-gray-800" />
+            <hr class="rounded-full border-gray-700" />
 
             <!-- Tombol Buat Pesanan -->
             <div class="flex w-full flex-col gap-2">
