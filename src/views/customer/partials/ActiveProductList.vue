@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
@@ -27,7 +28,7 @@ const formatKey = (key) => {
         <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
         <p class="text-xl font-medium">Produk Aktif</p>
       </div>
-      <!-- <div>tools</div> -->
+      <div>Filter by Status</div>
     </div>
 
     <div class="flex flex-col gap-1">
@@ -77,7 +78,15 @@ const formatKey = (key) => {
               class="flex flex-col gap-3 bg-gray-800 px-4 py-3 first:rounded-t-lg last:rounded-b-lg sm:px-5 sm:py-5"
             >
               <div class="flex items-center justify-between">
-                <p class="font-medium">{{ productDelivery.delivery_types.label }}</p>
+                <div class="flex items-center gap-3">
+                  <img
+                    :src="getPublicImageUrl(productDelivery.orders.product_image_path, 'product')"
+                    alt="Produk"
+                    class="max-h-6"
+                  />
+                  <p class="text-sm">- {{ productDelivery.orders.product_name }}</p>
+                </div>
+
                 <div
                   class="rounded-full px-2.5 py-1 text-xs capitalize"
                   :class="{
@@ -99,29 +108,39 @@ const formatKey = (key) => {
 
               <hr class="rounded-full border-gray-700" />
 
-              <div class="flex flex-col gap-1">
-                <div
-                  v-for="[key, value] in Object.entries(productDelivery?.metadata || {})"
-                  :key="key"
-                >
-                  <div class="flex items-center gap-1">
-                    <p class="text-sm text-gray-500 capitalize">{{ formatKey(key) }} :</p>
-                    <p v-if="value" class="text-sm">{{ value }}</p>
-                    <p v-else class="text-sm text-red-500">Belum tersedia</p>
+              <div class="flex flex-col gap-2">
+                <p class="font-medium">{{ productDelivery.delivery_types.label }}</p>
+                <div class="flex flex-col gap-1">
+                  <div
+                    v-for="[key, value] in Object.entries(productDelivery?.metadata || {})"
+                    :key="key"
+                  >
+                    <div class="flex items-center gap-1">
+                      <p class="text-sm text-gray-500 capitalize">{{ formatKey(key) }} :</p>
+                      <p v-if="value" class="text-sm">{{ value }}</p>
+                      <p v-else class="text-sm text-red-500">Belum tersedia</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <hr class="rounded-full border-gray-700" />
 
-              <div class="flex flex-col items-center justify-end gap-1 sm:flex-row sm:gap-3">
-                <ButtonComponent size="xs" color="green" textColor="black" class="w-full sm:w-1/2">
-                  Konfirmasi Produk
-                </ButtonComponent>
-                <ButtonComponent size="xs" color="red" textColor="black" class="w-full sm:w-1/2">
-                  Ajukan Pengembalian
-                </ButtonComponent>
-              </div>
+              <template v-if="productDelivery.status === 'delivered'">
+                <div class="flex flex-col items-center justify-end gap-1 sm:flex-row sm:gap-3">
+                  <ButtonComponent
+                    size="xs"
+                    color="green"
+                    textColor="black"
+                    class="w-full sm:w-1/2"
+                  >
+                    Konfirmasi Produk
+                  </ButtonComponent>
+                  <ButtonComponent size="xs" color="red" textColor="black" class="w-full sm:w-1/2">
+                    Ajukan Pengembalian
+                  </ButtonComponent>
+                </div>
+              </template>
             </div>
           </template>
         </template>

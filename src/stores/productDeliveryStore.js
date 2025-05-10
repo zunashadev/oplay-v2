@@ -65,7 +65,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       // 📌 Select Supabase
       const { data, error: fetchError } = await supabase
         .from('product_deliveries')
-        .select(`*, orders (id, user_id), delivery_types(*)`)
+        .select(`*, orders (*), delivery_types(*)`)
         .order('created_at', { ascending: false });
 
       if (fetchError) throw fetchError;
