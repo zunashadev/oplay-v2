@@ -50,6 +50,41 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
   //   ...
 
   /**------------------------------------------------------------------------
+   *    Fetch Product Deliveries by Users
+   *------------------------------------------------------------------------**/
+
+  const fetchProductDeliveriesByUser = async () => {
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      // 📌 Cek User
+      const user_id = useAuthStore().user?.id;
+      if (!user_id) throw new Error('User tidak ditemukan/belum login');
+
+      // 📌 Select Supabase
+      const { data, error: fetchError } = await supabase
+        .from('product_deliveries')
+        .select(`*, orders (id, user_id), delivery_types(*)`)
+        .order('created_at', { ascending: false });
+
+      if (fetchError) throw fetchError;
+
+      // 📌 Filter hasil data berdasarkan user_id dari relasi orders
+      const filteredData = data.filter((delivery) => delivery.orders?.user_id === user_id);
+
+      productDeliveries.value = filteredData;
+      handleResponse({ message, error }, 'success', 'mengambil data pengiriman produk', {
+        showToast: false,
+      });
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'mengambil data pengiriman produk', { err });
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**------------------------------------------------------------------------
    *    Fetch Product Delivery by ID
    *------------------------------------------------------------------------**/
 
@@ -186,6 +221,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
     currentProductDelivery,
 
     // 📌 Methods
+    fetchProductDeliveriesByUser,
     fetchProductDeliveryById,
     addProductDelivery,
     updateProductDelivery,

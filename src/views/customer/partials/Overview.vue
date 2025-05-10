@@ -102,7 +102,7 @@ onMounted(() => {
           <p v-else class="text-sm text-red-500">Saldo tidak tersedia 😢</p>
         </div>
         <!-- Button -->
-        <ButtonComponent textColor="black" size="sm" class="w-full sm:w-min">
+        <ButtonComponent textColor="black" size="xs" class="w-full sm:w-min">
           Gunakan
         </ButtonComponent>
       </div>

@@ -34,13 +34,13 @@ import UserRewardsPartial from './partials/UserRewards.vue';
     <div class="flex flex-col gap-3">
       <div class="flex flex-col gap-3 sm:flex-row">
         <!-- START : ... -->
-        <div class="w-full flex-1/2">
+        <div class="w-full sm:w-1/2">
           <ActiveProductListPartial />
         </div>
         <!-- END : ... -->
 
         <!-- START : ... -->
-        <div class="w-full flex-1/2">
+        <div class="w-full sm:w-1/2">
           <UserRewardsPartial />
         </div>
         <!-- END : ... -->

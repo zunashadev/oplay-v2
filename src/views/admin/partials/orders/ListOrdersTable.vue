@@ -86,7 +86,7 @@ function openProductDeliveryModal(productDeliveryId) {
       <template #cell-custom-product="{ row }">
         <div class="flex flex-col gap-5">
           <!-- Product -->
-          <div class="flex items-center gap-3">
+          <div class="flex flex-col gap-2">
             <img
               :src="getPublicImageUrl(row.product_image_path, 'product')"
               alt="Produk"
@@ -163,9 +163,9 @@ function openProductDeliveryModal(productDeliveryId) {
 
       <!-- Bukti Pembayaran -->
       <template #cell-custom-payment-proof="{ row }">
-        <div v-if="row.payment_proof_image_url" class="text-center">
+        <div v-if="row.payment_proof_image_path" class="text-center">
           <a
-            :href="row.payment_proof_image_url"
+            :href="getPublicImageUrl(row.payment_proof_image_path)"
             target="_blank"
             rel="noopener"
             class="text-lightning-yellow-400 hover:text-lightning-yellow-300 text-sm underline transition"

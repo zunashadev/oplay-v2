@@ -240,10 +240,10 @@ export const useOrderStore = defineStore('orderStore', () => {
       const productDeliveryStore = useProductDeliveryStore();
 
       productDeliveryStore.addProductDelivery(
-        data.id,
-        product.delivery_type_id,
-        'pending',
-        productDeliveryMetadata,
+        data.id, // ID product
+        product.delivery_type_id, // Delivery Type
+        'pending', // Status
+        productDeliveryMetadata, // Metadata
       );
 
       // 📌 Kirim Notifikasi Bot Telegram
@@ -257,6 +257,7 @@ export const useOrderStore = defineStore('orderStore', () => {
 
       const jwtToken = useAuthStore().session?.access_token;
 
+      // !!! Jangan Lupa diaktifkan
       // await sendTelegramNotification(botTelegramNotificationPayload, jwtToken);
 
       handleResponse({ message, error }, 'success', 'menambahkan pesanan');
