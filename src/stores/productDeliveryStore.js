@@ -207,6 +207,40 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
     }
   };
 
+  /**------------------------------------------------------------------------
+   *    Confirm Product Delivery -> Mengubah status ke 'confirmed'
+   *------------------------------------------------------------------------**/
+
+  const confirmProductDelivery = async (productDeliveryId) => {
+    if (!productDeliveryId) {
+      const err = new Error('ID Pengiriman Produk diperlukan');
+      handleResponse({ message, error }, 'error', 'konfirmasi pengiriman produk', { err });
+      throw err;
+    }
+
+    loading.value = true;
+    resetMessageState();
+
+    try {
+      const { data, error: updateError } = await supabase
+        .from('product_deliveries')
+        .update({ status: 'confirmed' })
+        .eq('id', productDeliveryId)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      handleResponse({ message, error }, 'success', 'konfirmasi pengiriman produk');
+      return data;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'konfirmasi pengiriman produk', { err });
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   /**========================================================================
    **   RETURNS
    *========================================================================**/
@@ -225,5 +259,6 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
     fetchProductDeliveryById,
     addProductDelivery,
     updateProductDelivery,
+    confirmProductDelivery,
   };
 });

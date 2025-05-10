@@ -19,6 +19,15 @@ onMounted(() => {
 const formatKey = (key) => {
   return key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 };
+
+// 📌 Konfirmasi Pengiriman Produk
+const confirmProductDelivery = async (id) => {
+  const result = await productDeliveryStore.confirmProductDelivery(id);
+
+  if (result) {
+    await productDeliveryStore.fetchProductDeliveriesByUser(); // refresh data
+  }
+};
 </script>
 
 <template>
@@ -28,7 +37,9 @@ const formatKey = (key) => {
         <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
         <p class="text-xl font-medium">Produk Aktif</p>
       </div>
-      <div>Filter by Status</div>
+      <div class="text-sm text-gray-500 transition-all hover:cursor-pointer hover:text-yellow-500">
+        Lihat semua produk
+      </div>
     </div>
 
     <div class="flex flex-col gap-1">
@@ -129,6 +140,7 @@ const formatKey = (key) => {
               <template v-if="productDelivery.status === 'delivered'">
                 <div class="flex flex-col items-center justify-end gap-1 sm:flex-row sm:gap-3">
                   <ButtonComponent
+                    @click="confirmProductDelivery(productDelivery.id)"
                     size="xs"
                     color="green"
                     textColor="black"
