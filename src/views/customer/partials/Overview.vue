@@ -20,74 +20,86 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:gap-5">
-    <!-- 📌 START : Jumlah Akun -->
-    <div
-      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
-    >
-      <!-- Top -->
-      <div class="flex w-full justify-between">
-        <div class="flex items-center gap-4">
-          <div class="flex-none rounded-xl bg-gray-800 p-3">
-            <img src="/images/apps.png" class="h-6 w-auto sm:h-8" />
+  <div class="flex w-full flex-col items-stretch gap-2 sm:gap-5 xl:flex-row">
+    <div class="flex w-full flex-1 gap-2 sm:gap-5">
+      <!-- 📌 START : Jumlah Akun -->
+      <div
+        class="flex w-full flex-1 flex-col items-start justify-between gap-2 rounded-xl bg-gray-900 px-3 py-3 sm:gap-3 sm:px-5 sm:py-5"
+      >
+        <!-- Top -->
+        <div class="flex w-full justify-between">
+          <div class="flex items-center gap-2 sm:gap-4">
+            <div
+              class="flex size-10 flex-none items-center justify-center rounded-xl bg-gray-800 sm:size-14"
+            >
+              <img src="/images/apps.png" class="h-6 w-auto sm:h-8" />
+            </div>
+            <p class="text-sm font-medium text-white sm:text-base">Produk Aktif</p>
           </div>
-          <p class="font-medium text-white">Produk Aktif</p>
+          <div>
+            <div class="rounded-full border border-gray-700 p-1.5 sm:p-2">
+              <ArrowUpRightIcon class="size-2 text-gray-500 sm:size-2.5" />
+            </div>
+          </div>
         </div>
-        <div>
-          <div class="rounded-full border border-gray-700 p-2">
-            <ArrowUpRightIcon class="size-2.5 text-gray-500" />
+        <!-- Bottom -->
+        <div class="w-full text-end">
+          <div class="space-x-1 text-2xl font-medium text-white sm:text-3xl">
+            <span>12</span>
+            <span class="text-sm text-gray-500">/</span>
+            <span class="text-sm text-gray-500">20</span>
           </div>
+          <p class="text-xs text-gray-500">Produk</p>
         </div>
       </div>
-      <!-- Bottom -->
-      <div class="w-full text-end">
-        <p class="text-3xl font-medium text-white">12</p>
-        <p class="text-xs text-gray-500">Produk</p>
-      </div>
-    </div>
-    <!-- 📌 END : Jumlah Akun -->
+      <!-- 📌 END : Jumlah Akun -->
 
-    <!-- 📌 START : Jumlah Referral -->
-    <div
-      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
-    >
-      <!-- Top -->
-      <div class="flex w-full justify-between">
-        <div class="flex items-center gap-4">
-          <div class="flex-none rounded-xl bg-gray-800 p-3">
-            <img src="/images/referral.png" class="h-6 w-auto sm:h-8" />
+      <!-- 📌 START : Jumlah Referral -->
+      <div
+        class="flex w-full flex-1 flex-col items-start justify-between gap-2 rounded-xl bg-gray-900 px-3 py-3 sm:gap-3 sm:px-5 sm:py-5"
+      >
+        <!-- Top -->
+        <div class="flex w-full justify-between">
+          <div class="flex items-center gap-2 sm:gap-4">
+            <div
+              class="flex size-10 flex-none items-center justify-center rounded-xl bg-gray-800 sm:size-14"
+            >
+              <img src="/images/referral.png" class="h-7 w-auto sm:h-9" />
+            </div>
+            <p class="text-sm font-medium text-white sm:text-base">Referral</p>
           </div>
-          <p class="font-medium text-white">Referral</p>
+          <div>
+            <div class="rounded-full border border-gray-700 p-1.5 sm:p-2">
+              <ArrowUpRightIcon class="size-2 text-gray-500 sm:size-2.5" />
+            </div>
+          </div>
         </div>
-        <div>
-          <div class="rounded-full border border-gray-700 p-2">
-            <ArrowUpRightIcon class="size-2.5 text-gray-500" />
-          </div>
+        <!-- Bottom -->
+        <div class="w-full text-end">
+          <p class="text-2xl font-medium text-white sm:text-3xl">8</p>
+          <p class="text-xs text-gray-500">Pengguna</p>
         </div>
       </div>
-      <!-- Bottom -->
-      <div class="w-full text-end">
-        <p class="text-3xl font-medium text-white">8</p>
-        <p class="text-xs text-gray-500">Pengguna</p>
-      </div>
+      <!-- 📌 END : Jumlah Referral -->
     </div>
-    <!-- 📌 END : Jumlah Referral -->
 
     <!-- 📌 START : Saldo -->
     <div
-      class="flex w-full flex-1 flex-col items-start justify-between gap-3 rounded-xl bg-gray-900 px-5 py-5"
+      class="flex w-full flex-1 flex-col items-start justify-between gap-2 rounded-xl bg-gray-900 px-3 py-3 sm:gap-3 sm:px-5 sm:py-5"
     >
       <!-- Top -->
       <div class="flex w-full justify-between">
-        <div class="flex items-center gap-4">
-          <div class="flex-none rounded-xl bg-gray-800 p-3">
+        <div class="flex items-center gap-2 sm:gap-4">
+          <div
+            class="flex size-10 flex-none items-center justify-center rounded-xl bg-gray-800 sm:size-14"
+          >
             <img src="/images/money-bag.png" class="h-6 w-auto sm:h-8" />
           </div>
-          <p class="font-medium text-white">Saldo</p>
+          <p class="text-sm font-medium text-white sm:text-base">Saldo</p>
         </div>
         <div>
-          <div class="rounded-full border border-gray-700 p-2">
-            <ArrowUpRightIcon class="size-2.5 text-gray-500" />
+          <div class="rounded-full border border-gray-700 p-1.5 sm:p-2">
+            <ArrowUpRightIcon class="size-2 text-gray-500 sm:size-2.5" />
           </div>
         </div>
       </div>
