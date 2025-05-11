@@ -5,7 +5,7 @@ import UserProfilePartial from './partials/UserProfile.vue';
 import OverviewPartial from './partials/Overview.vue';
 import MenuPartial from './partials/Menu.vue';
 import NotificationPartial from './partials/Notification.vue';
-import ActiveProductListPartial from './partials/ActiveProductList.vue';
+import MyNewProductListPartial from './partials/MyNewProductList.vue';
 import TransactionHistoryPartial from './partials/TransactionHistory.vue';
 import UserRewardsPartial from './partials/UserRewards.vue';
 </script>
@@ -44,7 +44,7 @@ import UserRewardsPartial from './partials/UserRewards.vue';
       <div class="flex flex-col gap-3 sm:flex-row">
         <!-- START : ... -->
         <div class="w-full sm:w-1/2">
-          <ActiveProductListPartial />
+          <MyNewProductListPartial />
         </div>
         <!-- END : ... -->
 

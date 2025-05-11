@@ -98,6 +98,16 @@ const router = createRouter({
           },
         },
         {
+          path: 'my-product',
+          name: 'CustomerDashboardMyProduct',
+          component: () => import('../views/customer/MyProducts.vue'),
+          meta: {
+            title: 'Customer Dashboard Produk Saya',
+            requiresAuth: true,
+            requiredRoles: ['customer'],
+          },
+        },
+        {
           path: 'payment',
           name: 'CustomerPayment',
           component: () => import('../views/customer/Payment.vue'),

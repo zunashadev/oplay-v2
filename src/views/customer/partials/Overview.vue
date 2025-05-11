@@ -37,9 +37,15 @@ onMounted(() => {
             <p class="text-sm font-medium text-white sm:text-base">Produk Aktif</p>
           </div>
           <div>
-            <div class="rounded-full border border-gray-700 p-1.5 sm:p-2">
-              <ArrowUpRightIcon class="size-2 text-gray-500 sm:size-2.5" />
-            </div>
+            <RouterLink :to="{ name: 'CustomerDashboardMyProduct' }">
+              <div
+                class="group rounded-full border border-gray-700 p-1.5 transition-all hover:cursor-pointer hover:border-yellow-500 sm:p-2"
+              >
+                <ArrowUpRightIcon
+                  class="size-2 text-gray-500 transition-all group-hover:text-yellow-500 sm:size-2.5"
+                />
+              </div>
+            </RouterLink>
           </div>
         </div>
         <!-- Bottom -->
@@ -69,8 +75,12 @@ onMounted(() => {
             <p class="text-sm font-medium text-white sm:text-base">Referral</p>
           </div>
           <div>
-            <div class="rounded-full border border-gray-700 p-1.5 sm:p-2">
-              <ArrowUpRightIcon class="size-2 text-gray-500 sm:size-2.5" />
+            <div
+              class="group rounded-full border border-gray-700 p-1.5 transition-all hover:cursor-pointer hover:border-yellow-500 sm:p-2"
+            >
+              <ArrowUpRightIcon
+                class="size-2 text-gray-500 transition-all group-hover:text-yellow-500 sm:size-2.5"
+              />
             </div>
           </div>
         </div>
@@ -98,8 +108,12 @@ onMounted(() => {
           <p class="text-sm font-medium text-white sm:text-base">Saldo</p>
         </div>
         <div>
-          <div class="rounded-full border border-gray-700 p-1.5 sm:p-2">
-            <ArrowUpRightIcon class="size-2 text-gray-500 sm:size-2.5" />
+          <div
+            class="group rounded-full border border-gray-700 p-1.5 transition-all hover:cursor-pointer hover:border-yellow-500 sm:p-2"
+          >
+            <ArrowUpRightIcon
+              class="size-2 text-gray-500 transition-all group-hover:text-yellow-500 sm:size-2.5"
+            />
           </div>
         </div>
       </div>

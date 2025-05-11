@@ -53,7 +53,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
    *    Fetch Product Deliveries by Users
    *------------------------------------------------------------------------**/
 
-  const fetchProductDeliveriesByUser = async () => {
+  const fetchProductDeliveriesByUser = async (statusFilter = null) => {
     loading.value = true;
     resetMessageState();
 
@@ -71,7 +71,12 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       if (fetchError) throw fetchError;
 
       // 📌 Filter hasil data berdasarkan user_id dari relasi orders
-      const filteredData = data.filter((delivery) => delivery.orders?.user_id === user_id);
+      let filteredData = data.filter((delivery) => delivery.orders?.user_id === user_id);
+
+      // 📌 Jika statusFilter diberikan, filter juga berdasarkan status
+      if (statusFilter) {
+        filteredData = filteredData.filter((delivery) => delivery.status === statusFilter);
+      }
 
       productDeliveries.value = filteredData;
       handleResponse({ message, error }, 'success', 'mengambil data pengiriman produk', {
