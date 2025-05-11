@@ -112,7 +112,9 @@ const handleClickDetail = () => {
             class="group"
             size="md"
           >
-            <div class="flex items-center gap-0 transition-all group-hover:gap-6">
+            <div
+              class="flex items-center gap-0 transition-all group-hover:gap-6 group-active:gap-8"
+            >
               <p class="-mr-4">Lihat Detail</p>
               <ArrowCircleRightIcon
                 class="size-4 text-black opacity-0 transition-all group-hover:opacity-100"

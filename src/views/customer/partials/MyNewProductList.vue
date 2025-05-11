@@ -29,13 +29,13 @@ const confirmProductDelivery = async (id) => {
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
-        <p class="text-xl font-medium">Produk Baru Kamu</p>
+        <p class="text-lg font-medium sm:text-xl">Produk Baru Kamu</p>
       </div>
       <RouterLink :to="{ name: 'CustomerDashboardMyProduct' }">
         <div
-          class="text-sm text-gray-500 transition-all hover:cursor-pointer hover:text-yellow-500"
+          class="text-xs text-gray-500 transition-all hover:cursor-pointer hover:text-yellow-500 sm:text-sm"
         >
-          Lihat semua produk
+          Lihat semua
         </div>
       </RouterLink>
     </div>

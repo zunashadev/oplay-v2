@@ -29,7 +29,7 @@ onMounted(() => {
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="h-6 w-1 rounded-md bg-yellow-500"></div>
-        <p class="text-xl font-medium">Riwayat Transaksi</p>
+        <p class="text-lg font-medium sm:text-xl">Riwayat Transaksi</p>
       </div>
       <!-- <div>tools</div> -->
     </div>

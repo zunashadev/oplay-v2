@@ -11,6 +11,9 @@ import ButtonComponent from '@/components/buttons/Button.vue';
 // 📌 Icons
 import ArrowUpRightIcon from '@/components/icons/ArrowUpRight.vue';
 
+// 📌 Decorations
+import DecorationOneDecoration from '@/components/decorations/DecorationOne.vue';
+
 // 📌 ...
 const walletStore = useWalletStore();
 
@@ -95,10 +98,11 @@ onMounted(() => {
 
     <!-- 📌 START : Saldo -->
     <div
-      class="flex w-full flex-1 flex-col items-start justify-between gap-2 rounded-xl bg-gray-900 px-3 py-3 sm:gap-3 sm:px-5 sm:py-5"
+      class="relative flex w-full flex-1 flex-col items-start justify-between gap-2 overflow-hidden rounded-xl bg-gray-900 px-3 py-3 sm:gap-3 sm:px-5 sm:py-5"
     >
+      <DecorationOneDecoration class="absolute -bottom-16 -left-10 w-32 text-gray-800" />
       <!-- Top -->
-      <div class="flex w-full justify-between">
+      <div class="z-10 flex w-full justify-between">
         <div class="flex items-center gap-2 sm:gap-4">
           <div
             class="flex size-10 flex-none items-center justify-center rounded-xl bg-gray-800 sm:size-14"
@@ -118,7 +122,7 @@ onMounted(() => {
         </div>
       </div>
       <!-- Bottom -->
-      <div class="flex w-full flex-col items-center justify-end gap-3 text-end sm:flex-row">
+      <div class="z-10 flex w-full flex-col items-center justify-end gap-3 text-end sm:flex-row">
         <!-- Saldo -->
         <div class="">
           <p v-if="walletStore.loading" class="text-center text-white">Memuat wallet...</p>

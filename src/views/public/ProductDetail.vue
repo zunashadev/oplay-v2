@@ -100,16 +100,21 @@ function goBack() {
 
   <!-- START : Loading Done -->
   <template v-else>
-    <div class="flex flex-col gap-5 sm:gap-8">
+    <div class="flex flex-col gap-5 sm:gap-6">
       <!-- START : Header -->
-      <div class="flex items-center gap-3 sm:gap-6">
+      <div class="flex items-center gap-2.5 sm:gap-3">
         <div
           @click="goBack"
-          class="rounded-full bg-gray-800 p-1.5 transition-all hover:cursor-pointer hover:bg-gray-700"
+          class="group flex items-center gap-3 rounded-full bg-gray-900 p-1 transition-all hover:cursor-pointer hover:bg-gray-800"
         >
-          <AngleSmallLeftIcon class="size-5" />
+          <div class="rounded-full bg-gray-800 p-1.5 transition-all group-hover:bg-gray-700">
+            <AngleSmallLeftIcon class="size-5 text-gray-400 group-hover:text-white" />
+          </div>
+          <div class="pe-3 text-sm text-gray-400 transition-all group-hover:text-white">
+            Kembali
+          </div>
         </div>
-        <p class="text-lg font-medium sm:text-xl">Detail Produk</p>
+        <p class="text-sm font-normal text-gray-500 sm:text-lg">Detail Produk</p>
       </div>
       <!-- END : Header -->
 
