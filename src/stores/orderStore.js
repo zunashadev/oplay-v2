@@ -16,6 +16,13 @@ export const useOrderStore = defineStore('orderStore', () => {
 
   // State
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -90,7 +97,7 @@ export const useOrderStore = defineStore('orderStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchOrders = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -101,14 +108,12 @@ export const useOrderStore = defineStore('orderStore', () => {
 
       if (fetchError) throw fetchError;
 
-      console.log(ordersData);
-
       orders.value = ordersData;
       handleResponse({ message, error }, 'success', 'mengambil semua data pesanan');
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil semua data pesanan', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -117,7 +122,7 @@ export const useOrderStore = defineStore('orderStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchOrdersByUser = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -139,7 +144,7 @@ export const useOrderStore = defineStore('orderStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data pesanan', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -148,7 +153,7 @@ export const useOrderStore = defineStore('orderStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchOrderById = async (orderId) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -173,7 +178,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       currentOrder.value = null;
       handleResponse({ message, error }, 'error', 'mengambil data pesanan berdasarkan id', { err });
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -189,7 +194,7 @@ export const useOrderStore = defineStore('orderStore', () => {
     status = 'pending',
     productDeliveryMetadata,
   ) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     try {
@@ -266,7 +271,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'error', 'menambahkan pesanan', { err });
       return null;
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -275,7 +280,7 @@ export const useOrderStore = defineStore('orderStore', () => {
    *------------------------------------------------------------------------**/
 
   const submitPaymentProof = async (orderId, paymentProofImageFile) => {
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     let payment_proof_image_path = null;
@@ -314,7 +319,7 @@ export const useOrderStore = defineStore('orderStore', () => {
 
       return null;
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -329,7 +334,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       throw err;
     }
 
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -353,7 +358,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'error', 'memperbarui status pesanan', { err });
       throw err;
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -362,7 +367,7 @@ export const useOrderStore = defineStore('orderStore', () => {
    *------------------------------------------------------------------------**/
 
   const deleteOrder = async (orderId) => {
-    loading.value = true;
+    isDeleting.value = true;
     resetMessageState();
 
     try {
@@ -402,7 +407,7 @@ export const useOrderStore = defineStore('orderStore', () => {
       handleResponse({ message, error }, 'error', 'menghapus pesanan', { err });
       return false;
     } finally {
-      loading.value = false;
+      isDeleting.value = false;
     }
   };
 
@@ -413,6 +418,13 @@ export const useOrderStore = defineStore('orderStore', () => {
   return {
     // 📌 States
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
 

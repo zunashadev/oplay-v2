@@ -15,6 +15,13 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
 
   // 📌 State
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -50,7 +57,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
    *------------------------------------------------------------------------**/
 
   const fetchCategories = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -70,7 +77,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data kategori', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -79,7 +86,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
    *------------------------------------------------------------------------**/
 
   const addCategory = async (name) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     try {
@@ -115,7 +122,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
       handleResponse({ message, error }, 'error', 'menambah kategori', { err });
       throw err;
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -124,7 +131,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
    *------------------------------------------------------------------------**/
 
   const deleteCategory = async (categoryId) => {
-    loading.value = true;
+    isDeleting.value = true;
     resetMessageState();
 
     try {
@@ -143,7 +150,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menghapus kategori produk', { err });
     } finally {
-      loading.value = false;
+      isDeleting.value = false;
     }
   };
 
@@ -154,8 +161,16 @@ export const useProductCategoryStore = defineStore('productCategoryStore', () =>
   return {
     // 📌 States
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
+
     categories,
 
     // 📌 Methods

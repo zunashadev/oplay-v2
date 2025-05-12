@@ -128,7 +128,7 @@ const addProduct = async () => {
           type="submit"
           variant="solid"
           textColor="black"
-          :disabled="productStore?.loading"
+          :disabled="productStore?.isCreating"
         >
           Tambah Produk
         </ButtonComponent>

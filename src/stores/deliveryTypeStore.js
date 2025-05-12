@@ -14,6 +14,13 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
 
   // 📌 States
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -56,7 +63,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchDeliveryTypes = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -72,7 +79,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil semua data delivery types', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -81,7 +88,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchDeliveryTypeById = async (id) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -101,7 +108,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
       });
       throw err;
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -110,7 +117,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
    *------------------------------------------------------------------------**/
 
   const addDeliveryType = async (direction, key, label, description, requiredMetadataFields) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     try {
@@ -148,7 +155,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
       handleResponse({ message, error }, 'error', 'menambahkan delivery type', { err });
       return null;
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -157,7 +164,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
    *------------------------------------------------------------------------**/
 
   const updateDeliveryType = async (deliveryTypeId, updatedData) => {
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -176,7 +183,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengedit metode pemesanan', { err });
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -185,7 +192,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
    *------------------------------------------------------------------------**/
 
   const deleteDeliveryType = async (deliveryTypeId) => {
-    loading.value = true;
+    isDeleting.value = true;
     resetMessageState();
 
     try {
@@ -214,7 +221,7 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
       handleResponse({ message, error }, 'error', 'menghapus metode pengiriman', { err });
       return false;
     } finally {
-      loading.value = false;
+      isDeleting.value = false;
     }
   };
 
@@ -225,6 +232,13 @@ export const useDeliveryTypeStore = defineStore('deliveryTypeStore', () => {
   return {
     // 📌 States
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
 

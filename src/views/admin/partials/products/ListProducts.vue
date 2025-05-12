@@ -187,9 +187,9 @@ function truncated(text) {
     </div>
     <!-- END : Filter -->
 
-    <!-- START : LIST PRODUCTS -->
+    <!-- START : List Products -->
     <!-- loading -->
-    <template v-if="productStore.loading">
+    <template v-if="productStore.isFetchingList">
       <div class="py-10 text-center">
         <span class="text-gray-500">Loading produk...</span>
       </div>
@@ -197,7 +197,7 @@ function truncated(text) {
 
     <template v-else>
       <!-- Products Kosong -->
-      <template v-if="!productStore.loading && productStore.products.length === 0">
+      <template v-if="!productStore.isFetchingList && productStore.products.length === 0">
         <div class="py-10 text-center">
           <span class="text-gray-500">Belum ada produk.</span>
         </div>
@@ -433,7 +433,7 @@ function truncated(text) {
           <!-- END : BODY -->
         </div>
       </template>
-      <!-- END : LIST PRODUCTS -->
+      <!-- END : List Products -->
     </template>
   </div>
 </template>

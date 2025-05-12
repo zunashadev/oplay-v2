@@ -91,7 +91,7 @@ function goBack() {
   <ConfirmOrderModalComponent ref="confirmOrderModalRef" />
 
   <!-- START : Loading -->
-  <template v-if="productStore.loading">
+  <template v-if="productStore.isFetchingDetail">
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs">
       <WaveLoaderComponent />
     </div>

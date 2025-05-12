@@ -13,6 +13,13 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
   // 📌 State
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -40,7 +47,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchProductPackages = async (productId) => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -60,7 +67,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data paket produk', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -69,7 +76,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
    *------------------------------------------------------------------------**/
 
   const getProductPackageById = async (packageId) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -89,7 +96,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
       handleResponse({ message, error }, 'error', 'mengambil detail paket produk', { err });
       return null;
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -105,7 +112,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     discount_value = 0,
     is_best_seller = false,
   ) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     try {
@@ -149,7 +156,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menambah paket produk', { err });
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -158,7 +165,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
    *------------------------------------------------------------------------**/
 
   const deleteProductPackage = async (packageId) => {
-    loading.value = true;
+    isDeleting.value = true;
     resetMessageState();
 
     try {
@@ -178,7 +185,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menghapus paket produk', { err });
     } finally {
-      loading.value = false;
+      isDeleting.value = false;
     }
   };
 
@@ -190,7 +197,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     packageId,
     updatedFields = {}, // { name, price, discount_type, discount_value, is_best_seller }
   ) => {
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -229,7 +236,7 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengedit paket produk', { err });
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -239,10 +246,18 @@ export const useProductPackageStore = defineStore('productPackageStore', () => {
 
   return {
     // 📌 States
-    packages,
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
+
+    packages,
 
     // 📌 Methods
     resetMessageState,

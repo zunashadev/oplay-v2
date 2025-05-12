@@ -14,6 +14,13 @@ export const useWalletStore = defineStore('walletStore', () => {
 
   // 📌 State
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -59,7 +66,7 @@ export const useWalletStore = defineStore('walletStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchWallets = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -75,7 +82,7 @@ export const useWalletStore = defineStore('walletStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil semua data wallet', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -84,7 +91,7 @@ export const useWalletStore = defineStore('walletStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchWalletById = async (walletId) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -110,7 +117,7 @@ export const useWalletStore = defineStore('walletStore', () => {
       handleResponse({ message, error }, 'error', 'mengambil data wallet berdasarkan id', { err });
       return null;
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -119,7 +126,7 @@ export const useWalletStore = defineStore('walletStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchWalletByUser = async () => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -145,7 +152,7 @@ export const useWalletStore = defineStore('walletStore', () => {
         err,
       });
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -154,7 +161,7 @@ export const useWalletStore = defineStore('walletStore', () => {
    *------------------------------------------------------------------------**/
 
   const updateWallet = async (walletId, updatedFields = {}) => {
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -179,7 +186,7 @@ export const useWalletStore = defineStore('walletStore', () => {
       handleResponse({ message, error }, 'error', 'mengedit wallet', { err });
       return null;
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -189,6 +196,13 @@ export const useWalletStore = defineStore('walletStore', () => {
 
   return {
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
 

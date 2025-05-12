@@ -14,6 +14,13 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
 
   // 📌 States
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -54,7 +61,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
    *------------------------------------------------------------------------**/
 
   const fetchProductDeliveriesByUser = async (statusFilter = null) => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -79,13 +86,14 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       }
 
       productDeliveries.value = filteredData;
+
       handleResponse({ message, error }, 'success', 'mengambil data pengiriman produk', {
         showToast: false,
       });
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data pengiriman produk', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -94,7 +102,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
    *------------------------------------------------------------------------**/
 
   const fetchProductDeliveryById = async (productDeliveryId) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -131,7 +139,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       );
       return null;
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -140,7 +148,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
    *------------------------------------------------------------------------**/
 
   const addProductDelivery = async (orderId, deliveryTypeId, status = 'pending', metadata = {}) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     try {
@@ -175,7 +183,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       handleResponse({ message, error }, 'error', 'menambahkan product delivery', { err });
       return null;
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -190,7 +198,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       throw err;
     }
 
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -208,7 +216,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       handleResponse({ message, error }, 'error', 'memperbarui data pengiriman produk', { err });
       throw err;
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -223,7 +231,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       throw err;
     }
 
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -242,7 +250,7 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
       handleResponse({ message, error }, 'error', 'konfirmasi pengiriman produk', { err });
       throw err;
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -253,6 +261,13 @@ export const useProductDeliveryStore = defineStore('productDeliveryStore', () =>
   return {
     // 📌 States
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
 

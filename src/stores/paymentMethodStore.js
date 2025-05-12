@@ -14,6 +14,13 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
   // 📌 State
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -138,7 +145,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
    *------------------------------------------------------------------------**/
 
   const fetchPaymentMethods = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -156,7 +163,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data payment methods', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -165,7 +172,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
    *------------------------------------------------------------------------**/
 
   const fetchPaymentMethodById = async (id) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -189,7 +196,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
       });
       return null;
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -206,7 +213,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     logoImageFile = null,
     is_active = true,
   ) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     let qr_code_image_path = null;
@@ -269,7 +276,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
       throw err;
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -278,7 +285,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
    *------------------------------------------------------------------------**/
 
   const deletePaymentMethod = async (id) => {
-    loading.value = true;
+    isDeleting.value = true;
     resetMessageState();
 
     try {
@@ -319,7 +326,7 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menghapus metode pembayaran', { err });
     } finally {
-      loading.value = false;
+      isDeleting.value = false;
     }
   };
 
@@ -329,6 +336,13 @@ export const usePaymentMethodStore = defineStore('paymentMethod', () => {
 
   return {
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
 

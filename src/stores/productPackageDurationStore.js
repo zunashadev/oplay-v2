@@ -14,6 +14,13 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
 
   // 📌 State
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -41,7 +48,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
    *------------------------------------------------------------------------**/
 
   const fetchProductPackageDurations = async (productPackageId) => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -55,7 +62,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil data durasi paket produk', { err });
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -64,7 +71,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
    *------------------------------------------------------------------------**/
 
   const addProductPackageDuration = async (product_package_id, name, value) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     console.log('Masuk store');
@@ -96,7 +103,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menambah durasi paket produk', { err });
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -105,7 +112,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
    *------------------------------------------------------------------------**/
 
   const deleteProductPackageDuration = async (durationId) => {
-    loading.value = true;
+    isDeleting.value = true;
     resetMessageState();
 
     try {
@@ -125,7 +132,7 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menghapus durasi paket produk', { err });
     } finally {
-      loading.value = false;
+      isDeleting.value = false;
     }
   };
 
@@ -135,10 +142,18 @@ export const useProductPackageDurationStore = defineStore('productPackageDuratio
 
   return {
     // State
-    durations,
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
+
+    durations,
 
     // Methods
     resetMessageState,

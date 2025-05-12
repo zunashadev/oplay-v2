@@ -14,6 +14,13 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
 
   // 📌 State
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -105,7 +112,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchAllRewardSettings = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -122,7 +129,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil semua reward setting', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -131,7 +138,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchRewardSettingById = async (id) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -152,7 +159,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
         err,
       });
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -161,7 +168,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchGroupedRewardSettings = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -184,7 +191,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil reward setting terkelompok', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -193,7 +200,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
    *------------------------------------------------------------------------**/
 
   const addRewardSetting = async (type, key, description, amount, is_active = false) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     try {
@@ -228,7 +235,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
       handleResponse({ message, error }, 'error', 'menambah reward setting', { err });
       throw err;
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -237,7 +244,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
    *------------------------------------------------------------------------**/
 
   const toggleRewardSettingStatus = async (id, newStatus) => {
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -255,7 +262,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengubah status is_active', { err });
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -264,7 +271,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
    *------------------------------------------------------------------------**/
 
   const updateRewardSettingAmount = async (id, newAmount) => {
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -287,7 +294,7 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengubah amount reward', { err });
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -297,6 +304,13 @@ export const useRewardSettingStore = defineStore('rewardSettingStore', () => {
 
   return {
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
 

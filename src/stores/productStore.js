@@ -15,6 +15,13 @@ export const useProductStore = defineStore('productStore', () => {
 
   // 📌 States
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -161,7 +168,7 @@ export const useProductStore = defineStore('productStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchProducts = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -183,7 +190,7 @@ export const useProductStore = defineStore('productStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil daftar produk', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -192,7 +199,7 @@ export const useProductStore = defineStore('productStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchProductBySlug = async (slug) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -221,7 +228,7 @@ export const useProductStore = defineStore('productStore', () => {
       });
       throw err;
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -230,7 +237,7 @@ export const useProductStore = defineStore('productStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchProductById = async (id) => {
-    loading.value = true;
+    isFetchingDetail.value = true;
     resetMessageState();
 
     try {
@@ -257,7 +264,7 @@ export const useProductStore = defineStore('productStore', () => {
       handleResponse({ message, error }, 'error', 'mengambil produk berdasarkan ID', { err });
       throw err;
     } finally {
-      loading.value = false;
+      isFetchingDetail.value = false;
     }
   };
 
@@ -266,7 +273,7 @@ export const useProductStore = defineStore('productStore', () => {
    *------------------------------------------------------------------------**/
 
   const searchAndFilterProducts = async ({ keyword = '', categoryId = null }) => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -299,7 +306,7 @@ export const useProductStore = defineStore('productStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menyaring produk', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -315,7 +322,7 @@ export const useProductStore = defineStore('productStore', () => {
     productImageFile,
     productBannerImageFile,
   ) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     let product_image_path = null;
@@ -383,7 +390,7 @@ export const useProductStore = defineStore('productStore', () => {
 
       throw err;
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -397,7 +404,7 @@ export const useProductStore = defineStore('productStore', () => {
     newProductImageFile = null,
     newProductBannerImageFile = null,
   ) => {
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -453,7 +460,7 @@ export const useProductStore = defineStore('productStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengedit produk', { err });
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -463,7 +470,7 @@ export const useProductStore = defineStore('productStore', () => {
    *------------------------------------------------------------------------**/
 
   const deleteProduct = async (productId) => {
-    loading.value = true;
+    isDeleting.value = true;
     resetMessageState();
 
     try {
@@ -507,7 +514,7 @@ export const useProductStore = defineStore('productStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'menghapus produk', { err });
     } finally {
-      loading.value = false;
+      isDeleting.value = false;
     }
   };
 
@@ -518,6 +525,13 @@ export const useProductStore = defineStore('productStore', () => {
   return {
     // 📌 States
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
 

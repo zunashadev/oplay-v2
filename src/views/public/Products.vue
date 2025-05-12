@@ -98,13 +98,13 @@ watch([keyword, selectedCategory], () => {
       class="grid w-full"
       :class="{
         'grid-cols-2 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4':
-          productStore.loading || (productStore.products && productStore.products.length),
+          productStore.isFetchingList || (productStore.products && productStore.products.length),
         'grid-cols-1 place-items-center':
-          !productStore.loading && (!productStore.products || !productStore.products.length),
+          !productStore.isFetchingList && (!productStore.products || !productStore.products.length),
       }"
     >
       <!-- START : Loading -->
-      <template v-if="productStore.loading">
+      <template v-if="productStore.isFetchingList">
         <ProductCardLoadingSkeletonComponent v-for="n in 8" :key="n" />
       </template>
       <!-- END : Loading -->

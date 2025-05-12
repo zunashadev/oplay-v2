@@ -14,6 +14,13 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
 
   // 📌 State
   const loading = ref(false);
+
+  const isFetchingList = ref(false);
+  const isFetchingDetail = ref(false);
+  const isCreating = ref(false);
+  const isUpdating = ref(false);
+  const isDeleting = ref(false);
+
   const message = ref(null);
   const error = ref(null);
 
@@ -48,7 +55,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchAllRewardEvents = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -71,7 +78,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil semua reward event', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -80,7 +87,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
    *------------------------------------------------------------------------**/
 
   const fetchRewardEventsByUser = async () => {
-    loading.value = true;
+    isFetchingList.value = true;
     resetMessageState();
 
     try {
@@ -106,7 +113,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
     } catch (err) {
       handleResponse({ message, error }, 'error', 'mengambil reward events', { err });
     } finally {
-      loading.value = false;
+      isFetchingList.value = false;
     }
   };
 
@@ -115,7 +122,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
    *------------------------------------------------------------------------**/
 
   const addRewardEvent = async (payload) => {
-    loading.value = true;
+    isCreating.value = true;
     resetMessageState();
 
     try {
@@ -168,7 +175,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
       handleResponse({ message, error }, 'error', 'menambahkan reward', { err });
       return null;
     } finally {
-      loading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -177,7 +184,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
    *------------------------------------------------------------------------**/
 
   const claimRewardEvent = async (reward_event_id) => {
-    loading.value = true;
+    isUpdating.value = true;
     resetMessageState();
 
     try {
@@ -228,7 +235,7 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
       handleResponse({ message, error }, 'error', 'mengklaim reward', { err });
       return null;
     } finally {
-      loading.value = false;
+      isUpdating.value = false;
     }
   };
 
@@ -238,6 +245,13 @@ export const useRewardEventStore = defineStore('rewardEventStore', () => {
 
   return {
     loading,
+
+    isFetchingList,
+    isFetchingDetail,
+    isCreating,
+    isUpdating,
+    isDeleting,
+
     message,
     error,
 
