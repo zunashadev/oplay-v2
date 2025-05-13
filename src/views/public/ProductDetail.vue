@@ -11,6 +11,7 @@ import { useOrderStore } from '@/stores/orderStore';
 
 // 📌 Components
 import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
+import GeometryLoaderComponent from '@/components/loaders/GeometryLoader.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 import DiscountPriceComponent from '@/components/discounts/DiscountPrice.vue';
 
@@ -90,36 +91,48 @@ function goBack() {
 <template>
   <ConfirmOrderModalComponent ref="confirmOrderModalRef" />
 
-  <!-- START : Loading -->
-  <template v-if="productStore.isFetchingDetail">
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs">
-      <WaveLoaderComponent />
-    </div>
-  </template>
-  <!-- END : Loading -->
-
   <!-- START : Loading Done -->
-  <template v-else>
-    <div class="flex flex-col gap-5 sm:gap-6">
-      <!-- START : Header -->
-      <div class="flex items-center gap-2.5 sm:gap-3">
-        <div
-          @click="goBack"
-          class="group flex items-center gap-3 rounded-full bg-gray-900 p-1 transition-all hover:cursor-pointer hover:bg-gray-800"
-        >
-          <div class="rounded-full bg-gray-800 p-1.5 transition-all group-hover:bg-gray-700">
-            <AngleSmallLeftIcon class="size-5 text-gray-400 group-hover:text-white" />
-          </div>
-          <div class="pe-3 text-sm text-gray-400 transition-all group-hover:text-white">
-            Kembali
-          </div>
+  <div class="flex flex-col gap-5 sm:gap-6">
+    <!-- START : Header -->
+    <div class="flex items-center gap-2.5 sm:gap-3">
+      <div
+        @click="goBack"
+        class="group flex items-center gap-3 rounded-full bg-gray-900 p-1 transition-all hover:cursor-pointer hover:bg-gray-800"
+      >
+        <div class="rounded-full bg-gray-800 p-1.5 transition-all group-hover:bg-gray-700">
+          <AngleSmallLeftIcon class="size-5 text-gray-400 group-hover:text-white" />
         </div>
-        <p class="text-sm font-normal text-gray-500 sm:text-lg">Detail Produk</p>
+        <div class="pe-3 text-sm text-gray-400 transition-all group-hover:text-white">Kembali</div>
       </div>
-      <!-- END : Header -->
+      <p class="text-sm font-normal text-gray-500 sm:text-lg">Detail Produk</p>
+    </div>
+    <!-- END : Header -->
+
+    <!-- START : Loading -->
+    <template v-if="productStore.isFetchingDetail">
+      <div class="flex h-96 w-full items-center justify-center">
+        <GeometryLoaderComponent />
+      </div>
+    </template>
+    <!-- END : Loading -->
+
+    <!-- START : Loading Done -->
+    <template v-else>
+      <!-- START : No Data -->
+      <template v-if="!product || product.length === 0">
+        <div class="flex flex-col items-center gap-8 py-20">
+          <div class="flex-none">
+            <img src="/images/illustrations/PageEaten.svg" class="max-w-32 sm:max-w-52" />
+          </div>
+          <p class="px-5 text-center text-sm text-gray-500">
+            Maaf, terdapat kesalahan dalam memuat data produk 🤕
+          </p>
+        </div>
+      </template>
+      <!-- END : No Data -->
 
       <!-- START : Detail Produk -->
-      <div v-if="product" class="relative overflow-hidden rounded-4xl bg-gray-800">
+      <div v-else class="relative overflow-hidden rounded-4xl bg-gray-800">
         <!-- START : Background -->
         <div class="absolute -z-0 h-52 w-full sm:h-72 md:h-96">
           <div
@@ -307,14 +320,8 @@ function goBack() {
         <!-- END : Detail Produk -->
       </div>
       <!-- END : Detail Produk -->
-
-      <!-- START : Loading -->
-      <!-- ! Perlu diperhatikan lagi -->
-      <div v-else>
-        <p>Maaf, terdapat kesalahan dalam memuat data produk :(</p>
-      </div>
-      <!-- END : Loading -->
-    </div>
-  </template>
+    </template>
+    <!-- END : Loading Done -->
+  </div>
   <!-- END : Loading Done -->
 </template>

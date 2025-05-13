@@ -87,11 +87,13 @@ function openProductDeliveryModal(productDeliveryId) {
         <div class="flex flex-col gap-5">
           <!-- Product -->
           <div class="flex flex-col gap-2">
-            <img
-              :src="getPublicImageUrl(row.product_image_path, 'product')"
-              alt="Produk"
-              class="max-h-8"
-            />
+            <div class="flex-none">
+              <img
+                :src="getPublicImageUrl(row.product_image_path, 'product')"
+                alt="Produk"
+                class="max-h-8"
+              />
+            </div>
             <p class="text-base font-medium">
               {{ row.product_name }}
             </p>

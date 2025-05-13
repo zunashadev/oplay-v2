@@ -152,7 +152,7 @@ const addRewardEvent = async () => {
           type="submit"
           variant="solid"
           textColor="black"
-          :disabled="rewardEventStore.loading"
+          :disabled="rewardEventStore.isCreating"
         >
           Beri Reward
         </ButtonComponent>

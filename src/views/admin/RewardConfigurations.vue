@@ -8,6 +8,8 @@ import { useRewardSettingStore } from '@/stores/rewardSettingStore';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
+import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
+import GeometryLoaderComponent from '@/components/loaders/GeometryLoader.vue';
 
 import EditRewardSettingAmountModalComponent from './components/modals/EditRewardSettingAmountModal.vue';
 
@@ -44,12 +46,14 @@ function generateRewardSettings() {
 
   <div class="flex flex-col gap-12">
     <!-- START : Loading -->
-    <template v-if="rewardSettingStore.loading">
-      <p>Loading...</p>
+    <template v-if="rewardSettingStore.isFetchingList">
+      <div class="flex h-96 w-full items-center justify-center">
+        <GeometryLoaderComponent />
+      </div>
     </template>
     <!-- END : Loading -->
 
-    <!-- START : !Lodaing -->
+    <!-- START : Lodaing Done -->
     <template v-else>
       <!-- START : Generate Reward Settings -->
       <template v-if="Object.keys(rewardSettingStore.groupedRewardSettings).length === 0">
@@ -150,6 +154,6 @@ function generateRewardSettings() {
       </template>
       <!-- END : Daftar Hadiah -->
     </template>
-    <!-- END : !Lodaing -->
+    <!-- END : Lodaing Done -->
   </div>
 </template>

@@ -170,7 +170,7 @@ const updateProductDelivery = async () => {
                 type="submit"
                 variant="solid"
                 textColor="black"
-                :disabled="productDeliveryStore.loading"
+                :disabled="productDeliveryStore.isUpdating"
               >
                 Edit Pengiriman Produk
               </ButtonComponent>

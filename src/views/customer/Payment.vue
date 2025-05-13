@@ -76,7 +76,7 @@ onMounted(async () => {
 <template>
   <PaymentSuccessModalComponent ref="paymentSuccessModalRef" />
 
-  <template v-if="orderStore.loading">
+  <template v-if="orderStore.isFetchingDetail">
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs">
       <WaveLoaderComponent />
     </div>

@@ -19,7 +19,7 @@ const confirmProductDelivery = async (id) => {
   const result = await productDeliveryStore.confirmProductDelivery(id);
 
   if (result) {
-    await productDeliveryStore.fetchProductDeliveriesByUser(); // refresh data
+    await productDeliveryStore.fetchProductDeliveriesByUser('delivered'); // refresh data
   }
 };
 </script>
@@ -42,7 +42,7 @@ const confirmProductDelivery = async (id) => {
 
     <div class="flex flex-col gap-3">
       <!-- START : Loading -->
-      <template v-if="productDeliveryStore.loading">
+      <template v-if="productDeliveryStore.isFetchingList">
         <div
           v-for="x in 2"
           :key="x"

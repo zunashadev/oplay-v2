@@ -95,7 +95,7 @@ onMounted(() => {
       <div class="flex w-full flex-col items-center justify-end gap-3 text-end sm:flex-row">
         <!-- Saldo -->
         <div class="">
-          <p v-if="walletStore.loading" class="text-center text-white">Memuat wallet...</p>
+          <p v-if="walletStore.isFetchingDetail" class="text-center text-white">Memuat wallet...</p>
           <p v-else-if="walletStore.currentWallet" class="text-2xl font-semibold text-yellow-500">
             {{ formatRupiah(walletStore.currentWallet?.balance) }}
           </p>

@@ -208,7 +208,7 @@ const directions = [
         type="submit"
         variant="solid"
         textColor="black"
-        :disabled="deliveryTypeStore.loading"
+        :disabled="deliveryTypeStore.isUpdating"
       >
         Edit Metode Pengiriman
       </ButtonComponent>

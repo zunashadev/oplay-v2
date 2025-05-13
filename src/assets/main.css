@@ -182,7 +182,8 @@
 }
 
 .page-padding-y {
-  @apply py-24 sm:py-28 md:py-32 lg:py-36;
+  /* @apply py-24 sm:py-28 md:py-32 lg:py-36; */
+  @apply pt-24 pb-80 sm:pt-28 sm:pb-80 md:pt-32 md:pb-80 lg:pt-36 lg:pb-80;
 }
 
 .reset-page-padding-x {

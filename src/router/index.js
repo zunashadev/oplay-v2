@@ -243,6 +243,17 @@ const router = createRouter({
         },
       ],
     },
+    // 📌 Print Daftar Produk
+    {
+      path: '/print-products',
+      name: 'AdminDashboardPrintProducts',
+      component: () => import('../views/admin/PrintProducts.vue'),
+      meta: {
+        title: 'Cetak Daftar Produk',
+        requiresAuth: true,
+        requiredRoles: ['admin'],
+      },
+    },
     // 404 Not Found
     // {
     //   path: '/:pathMatch(.*)*',

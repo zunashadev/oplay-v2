@@ -49,7 +49,7 @@ const handleClaim = async (id) => {
 
     <div class="flex flex-col gap-3">
       <!-- START : Loading -->
-      <template v-if="rewardEventStore.loading">
+      <template v-if="rewardEventStore.isFetchingList">
         <div
           v-for="x in 2"
           :key="x"

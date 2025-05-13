@@ -75,7 +75,7 @@ const updateWalletBalance = async () => {
         type="submit"
         variant="solid"
         textColor="black"
-        :disabled="walletStore.loading"
+        :disabled="walletStore.isUpdating"
       >
         Edit Wallet Balance
       </ButtonComponent>

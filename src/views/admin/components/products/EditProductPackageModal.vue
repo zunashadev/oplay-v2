@@ -168,7 +168,7 @@ const updateProductPackage = async () => {
         type="submit"
         variant="solid"
         textColor="black"
-        :disabled="productPackageStore.loading"
+        :disabled="productPackageStore.isUpdating"
       >
         Edit Produk
       </ButtonComponent>

@@ -10,6 +10,7 @@ import { useProductCategoryStore } from '@/stores/productCategoryStore';
 
 // 📌 Components
 import ButtonComponent from '@/components/buttons/Button.vue';
+import GeometryLoaderComponent from '@/components/loaders/GeometryLoader.vue';
 
 import InputComponent from '@/components/form/Input.vue';
 import ListboxSelectComponent from '@/components/form/ListboxSelect.vue';
@@ -171,33 +172,41 @@ function truncated(text) {
         <InputComponent v-model="keyword" placeholder="Cari produk..." />
       </div>
 
-      <!-- 📌 Filter -->
-      <template v-if="categoryStore.categories.length">
-        <ListboxSelectComponent
-          class="w-full sm:max-w-52"
-          v-model="selectedCategory"
-          :options="categoryStore.categories"
-          labelKey="name"
-          valueKey="id"
-          placeholder="Pilih kategori"
-          required
-        >
-        </ListboxSelectComponent>
-      </template>
+      <div class="flex items-center gap-3">
+        <!-- 📌 Filter -->
+        <template v-if="categoryStore.categories.length">
+          <ListboxSelectComponent
+            class="w-full sm:max-w-52"
+            v-model="selectedCategory"
+            :options="categoryStore.categories"
+            labelKey="name"
+            valueKey="id"
+            placeholder="Pilih kategori"
+            required
+          >
+          </ListboxSelectComponent>
+        </template>
+        <div>
+          <RouterLink :to="{ name: 'AdminDashboardPrintProducts' }">
+            <ButtonComponent textColor="black">Cetak</ButtonComponent>
+          </RouterLink>
+        </div>
+      </div>
     </div>
     <!-- END : Filter -->
 
     <!-- START : List Products -->
-    <!-- loading -->
+    <!-- START : loading -->
     <template v-if="productStore.isFetchingList">
-      <div class="py-10 text-center">
-        <span class="text-gray-500">Loading produk...</span>
+      <div class="flex h-96 w-full items-center justify-center">
+        <GeometryLoaderComponent />
       </div>
     </template>
+    <!-- END : loading -->
 
     <template v-else>
       <!-- Products Kosong -->
-      <template v-if="!productStore.isFetchingList && productStore.products.length === 0">
+      <template v-if="!productStore.products || productStore.products.length === 0">
         <div class="py-10 text-center">
           <span class="text-gray-500">Belum ada produk.</span>
         </div>
