@@ -71,7 +71,7 @@ useNavbarPadding(navbarRef);
           <div class="flex flex-1/2">
             <!-- Navigation -->
             <div class="flex flex-col gap-3">
-              <p class="text-base font-semibold text-gray-950">Page</p>
+              <p class="text-base font-semibold text-gray-950">Halaman</p>
               <div class="flex flex-col gap-1">
                 <p class="text-sm text-yellow-900">Home</p>
                 <p class="text-sm text-yellow-900">Produk</p>

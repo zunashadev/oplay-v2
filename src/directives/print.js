@@ -19,7 +19,7 @@ export default {
       printWindow.document.write(`
         <html>
           <head>
-            <title>Print</title>
+            <title>Daftar Produk</title>
             <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
             <style>
               @media print {
