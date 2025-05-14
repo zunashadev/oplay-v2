@@ -109,7 +109,7 @@ const updateProduct = async () => {
 </script>
 
 <template>
-  <DialogModalComponent ref="dialogModalRef" title="Edit Produk">
+  <DialogModalComponent ref="dialogModalRef" title="Edit Produk" maxWidth="5xl">
     <form @submit.prevent="updateProduct" class="flex flex-col gap-5">
       <div class="flex flex-col gap-5">
         <!-- Nama -->

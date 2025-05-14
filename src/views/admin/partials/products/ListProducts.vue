@@ -112,6 +112,24 @@ watch([keyword, selectedCategory], () => {
     categoryId: selectedCategory.value,
   });
 });
+
+// 📌 Expand Descriptions
+// Menyimpan ID produk yang sedang di-expand
+const expandedDescriptionProductIds = ref(new Set());
+
+// Fungsi toggle expand/collapse
+const toggleExpand = (productId) => {
+  if (expandedDescriptionProductIds.value.has(productId)) {
+    expandedDescriptionProductIds.value.delete(productId);
+  } else {
+    expandedDescriptionProductIds.value.add(productId);
+  }
+};
+
+// Mengecek apakah produk sedang di-expand
+const isExpanded = (productId) => {
+  return expandedDescriptionProductIds.value.has(productId);
+};
 </script>
 
 <template>
@@ -256,10 +274,31 @@ watch([keyword, selectedCategory], () => {
                   <p class="text-sm">{{ product.delivery_types.label }}</p>
                 </div>
 
-                <div>
+                <div class="flex flex-col gap-2">
                   <p class="text-xs font-normal text-gray-400">Description</p>
-                  <div class="ql-editor">
+
+                  <!-- <div class="ql-editor">
                     <div v-html="product.description"></div>
+                  </div> -->
+
+                  <div class="rounded-xl p-3">
+                    <div
+                      class="ql-editor scrollbar-custom relative max-h-16 overflow-hidden rounded-xl bg-gray-800 transition-all duration-300 ease-in-out"
+                      :class="{ '!max-h-full': isExpanded(product.id) }"
+                    >
+                      <div v-html="product.description"></div>
+                    </div>
+
+                    <div
+                      class="mt-2 w-fit cursor-pointer text-sm text-gray-500 hover:underline"
+                      @click="toggleExpand(product.id)"
+                    >
+                      {{
+                        isExpanded(product.id)
+                          ? 'Tampilkan lebih sedikit'
+                          : 'Tampilkan selengkapnya'
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>
