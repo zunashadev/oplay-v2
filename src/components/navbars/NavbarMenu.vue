@@ -6,17 +6,13 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue';
 // Icons
 import BarsStaggeredIcon from '../icons/BarsStaggered.vue';
 
+// Constants
+import { menuItems } from '@/constants/menuItems';
+
 const router = useRouter();
 const route = useRoute();
 
-// START : Menu
-const menuItems = ref([
-  { name: 'Beranda', link: 'PublicHome' },
-  { name: 'Produk', link: 'PublicProducts' },
-  { name: 'FAQ', link: 'PublicFAQ' },
-  { name: 'Contact', link: '' },
-]);
-// END : Menu
+const navbarMenuItems = menuItems.navbar;
 </script>
 
 <template>
@@ -43,7 +39,7 @@ const menuItems = ref([
           class="fixed top-20 right-12 left-12 z-50 transform rounded-lg bg-gray-800 px-5 py-8 text-center shadow-lg"
         >
           <div class="flex flex-col items-center gap-3">
-            <div v-for="(menu, index) in menuItems" :key="index" class="flex w-full">
+            <div v-for="(menu, index) in navbarMenuItems" :key="index" class="flex w-full">
               <RouterLink
                 :to="{ name: menu.link }"
                 class="w-full px-4 py-1.5 text-sm font-medium transition-all hover:cursor-pointer hover:text-yellow-500"
@@ -65,7 +61,7 @@ const menuItems = ref([
 
   <!-- START : Responsive : Desktop -->
   <div class="hidden items-center gap-2 md:flex">
-    <div v-for="(menu, index) in menuItems" :key="index">
+    <div v-for="(menu, index) in navbarMenuItems" :key="index">
       <RouterLink
         :to="{ name: menu.link }"
         class="block w-full px-4 py-1.5 text-center font-medium transition-all hover:cursor-pointer hover:text-yellow-500"

@@ -207,12 +207,31 @@ const isExpanded = (productId) => {
       <!-- Products -->
       <template v-else>
         <div
-          v-for="(product, index) in productStore.products"
+          v-for="product in productStore.products"
           :key="product.id"
-          class="overflow-hidden rounded-xl bg-gray-900"
+          class="relative overflow-hidden rounded-4xl bg-gray-800"
         >
+          <!-- START : Background -->
+          <div class="absolute -z-0 h-96 w-full">
+            <div
+              class="h-full w-full bg-cover bg-center opacity-50"
+              :style="{
+                backgroundImage: `url('${getPublicImageUrl(product.product_banner_image_path, 'banner')}')`,
+              }"
+            >
+              <div class="h-full w-full bg-gray-950/25 backdrop-blur-xs"></div>
+              <div
+                class="absolute inset-0 z-10 bg-gradient-to-t from-transparent to-cyan-500/25"
+              ></div>
+              <div
+                class="absolute inset-0 z-10 bg-gradient-to-b from-transparent to-gray-800"
+              ></div>
+            </div>
+          </div>
+          <!-- END : Background -->
+
           <!-- START : HEAD -->
-          <div class="flex items-center justify-between bg-gray-800 px-4 py-4">
+          <div class="relative flex items-center justify-between px-8 pt-8 pb-6">
             <div class="flex items-center space-x-3">
               <img
                 v-if="product.product_image_path"
@@ -249,202 +268,208 @@ const isExpanded = (productId) => {
           <!-- END : HEAD -->
 
           <!-- START : BODY -->
-          <div class="flex w-full flex-col gap-3 px-4 py-5">
-            <!-- START : Banner -->
-            <img
-              v-if="product.product_banner_image_path"
-              :src="getPublicImageUrl(product.product_banner_image_path)"
-              alt="Gambar"
-              class="h-44 w-full rounded-2xl object-cover"
-            />
-            <!-- END : Banner -->
+          <div class="relative p-2">
+            <div class="flex w-full flex-col gap-3 rounded-4xl bg-gray-900 px-4 py-4">
+              <!-- START : Banner -->
+              <img
+                v-if="product.product_banner_image_path"
+                :src="getPublicImageUrl(product.product_banner_image_path)"
+                alt="Gambar"
+                class="max-h-52 w-full rounded-2xl object-cover"
+              />
+              <!-- END : Banner -->
 
-            <!-- START : DETAIL -->
-            <div
-              class="flex w-full flex-col gap-5 rounded-md border border-dashed border-gray-600 px-3 py-3"
-            >
-              <p class="text-base font-medium">ℹ️ Informasi</p>
-              <div class="flex flex-col gap-2">
-                <div>
-                  <p class="text-xs font-normal text-gray-400">Category</p>
-                  <p class="text-sm">{{ product.product_categories.name }}</p>
-                </div>
-                <div>
-                  <p class="text-xs font-normal text-gray-400">Delivery Type</p>
-                  <p class="text-sm">{{ product.delivery_types.label }}</p>
-                </div>
+              <!-- START : DETAIL -->
+              <div
+                class="flex w-full flex-col gap-5 rounded-2xl border border-dashed border-gray-600 px-3 py-3"
+              >
+                <p class="text-base font-medium">ℹ️ Informasi</p>
+                <div class="flex flex-col gap-3">
+                  <div class="grid grid-cols-2">
+                    <div>
+                      <p class="text-xs font-normal text-gray-400">Category</p>
+                      <p class="text-sm">{{ product.product_categories.name }}</p>
+                    </div>
+                    <div>
+                      <p class="text-xs font-normal text-gray-400">Delivery Type</p>
+                      <p class="text-sm">{{ product.delivery_types.label }}</p>
+                    </div>
+                  </div>
 
-                <div class="flex flex-col gap-2">
-                  <p class="text-xs font-normal text-gray-400">Description</p>
+                  <hr class="rounded-full border-gray-800" />
 
-                  <!-- <div class="ql-editor">
+                  <div class="flex flex-col gap-2">
+                    <p class="text-xs font-normal text-gray-400">Description</p>
+
+                    <!-- <div class="ql-editor">
                     <div v-html="product.description"></div>
                   </div> -->
 
-                  <div class="rounded-xl p-3">
-                    <div
-                      class="ql-editor scrollbar-custom relative max-h-16 overflow-hidden rounded-xl bg-gray-800 transition-all duration-300 ease-in-out"
-                      :class="{ '!max-h-full': isExpanded(product.id) }"
-                    >
-                      <div v-html="product.description"></div>
-                    </div>
+                    <div class="rounded-xl p-3">
+                      <div
+                        class="ql-editor scrollbar-custom relative max-h-20 overflow-hidden rounded-sm bg-gray-800 transition-all duration-300 ease-in-out"
+                        :class="{ '!max-h-full': isExpanded(product.id) }"
+                      >
+                        <div v-html="product.description"></div>
+                      </div>
 
-                    <div
-                      class="mt-2 w-fit cursor-pointer text-sm text-gray-500 hover:underline"
-                      @click="toggleExpand(product.id)"
-                    >
-                      {{
-                        isExpanded(product.id)
-                          ? 'Tampilkan lebih sedikit'
-                          : 'Tampilkan selengkapnya'
-                      }}
+                      <div
+                        class="mt-2 w-fit cursor-pointer text-sm text-gray-500 hover:underline"
+                        @click="toggleExpand(product.id)"
+                      >
+                        {{
+                          isExpanded(product.id)
+                            ? 'Tampilkan lebih sedikit'
+                            : 'Tampilkan selengkapnya'
+                        }}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- END : DETAIL -->
+              <!-- END : DETAIL -->
 
-            <!-- START : PACKAGES -->
-            <div
-              class="flex w-full flex-col gap-5 rounded-md border border-dashed border-gray-600 px-3 py-3"
-            >
-              <div class="flex items-center justify-between">
-                <p class="text-base font-medium">📦 Paket</p>
-                <div
-                  class="group rounded-md border border-gray-600 bg-gray-800 p-1 transition-all hover:cursor-pointer hover:border-gray-500 hover:bg-gray-700"
-                >
-                  <PlusIcon
-                    @click="openAddProductPackageModal(product.id)"
-                    class="size-5 text-gray-500 group-hover:text-white"
-                  />
-                </div>
-              </div>
-
-              <template v-if="product.product_packages && product.product_packages.length">
-                <div class="flex flex-col gap-1">
+              <!-- START : PACKAGES -->
+              <div
+                class="flex w-full flex-col gap-5 rounded-2xl border border-dashed border-gray-600 px-3 py-3"
+              >
+                <div class="flex items-center justify-between">
+                  <p class="text-base font-medium">📦 Paket</p>
                   <div
-                    v-for="pkg in product.product_packages"
-                    :key="pkg.id"
-                    class="flex items-start justify-between gap-3 rounded-md border border-l-6 border-gray-600 bg-gray-800 px-5 py-5"
+                    class="group rounded-md border border-gray-600 bg-gray-800 p-1 transition-all hover:cursor-pointer hover:border-gray-500 hover:bg-gray-700"
                   >
-                    <div class="flex w-full flex-col gap-3">
-                      <div class="flex items-center gap-3">
-                        <p class="text-lg font-medium">{{ pkg.name }}</p>
-                        <p
-                          v-if="pkg.is_best_seller"
-                          class="rounded-md bg-yellow-500 px-3 py-0.5 text-xs font-medium text-black"
-                        >
-                          🔥 Terlaris
-                        </p>
-                      </div>
-                      <div class="flex w-full flex-col gap-6 text-gray-400">
-                        <div class="flex flex-col gap-1">
-                          <!-- Harga Normal -->
-                          <p class="text-sm font-normal">
-                            Harga Normal : {{ formatRupiah(pkg.price) }}
-                          </p>
-                          <template v-if="pkg.discount_type && pkg.discount_value">
-                            <!-- Nilai Diskon -->
-                            <p
-                              v-if="pkg.discount_type && pkg.discount_value"
-                              class="text-sm font-normal text-red-500"
-                            >
-                              Nilai Diskon :
-                              <span v-if="pkg.discount_type == 'fixed_amount'">
-                                -{{ formatRupiah(pkg.discount_value) }}
-                              </span>
+                    <PlusIcon
+                      @click="openAddProductPackageModal(product.id)"
+                      class="size-5 text-gray-500 group-hover:text-white"
+                    />
+                  </div>
+                </div>
 
-                              <span v-if="pkg.discount_type == 'percentage'">
-                                -{{ pkg.discount_value }}%
-                              </span>
-                            </p>
-                            <!-- Harga Akhir -->
-                            <p class="text-sm font-normal text-yellow-500">
-                              Harga Akhir :
-                              {{
-                                formatRupiah(
-                                  calculateFinalPrice(
-                                    pkg.price,
-                                    pkg.discount_type,
-                                    pkg.discount_value,
-                                  ),
-                                )
-                              }}
-                            </p>
-                          </template>
-                        </div>
-
+                <template v-if="product.product_packages && product.product_packages.length">
+                  <div class="flex flex-col gap-1">
+                    <div
+                      v-for="pkg in product.product_packages"
+                      :key="pkg.id"
+                      class="flex items-start justify-between gap-3 rounded-md border border-l-6 border-gray-600 bg-gray-800 px-5 py-5"
+                    >
+                      <div class="flex w-full flex-col gap-3">
                         <div class="flex items-center gap-3">
-                          <p class="text-sm font-normal">Durasi :</p>
-                          <div class="flex gap-3">
-                            <!-- Durations List -->
-                            <template
-                              v-if="
-                                pkg.product_package_durations &&
-                                pkg.product_package_durations.length
-                              "
-                            >
-                              <div
-                                v-for="duration in pkg.product_package_durations"
-                                :key="duration.id"
-                                class="flex gap-1"
+                          <p class="text-lg font-medium">{{ pkg.name }}</p>
+                          <p
+                            v-if="pkg.is_best_seller"
+                            class="rounded-md bg-yellow-500 px-3 py-0.5 text-xs font-medium text-black"
+                          >
+                            🔥 Terlaris
+                          </p>
+                        </div>
+                        <div class="flex w-full flex-col gap-6 text-gray-400">
+                          <div class="flex flex-col gap-1">
+                            <!-- Harga Normal -->
+                            <p class="text-sm font-normal">
+                              Harga Normal : {{ formatRupiah(pkg.price) }}
+                            </p>
+                            <template v-if="pkg.discount_type && pkg.discount_value">
+                              <!-- Nilai Diskon -->
+                              <p
+                                v-if="pkg.discount_type && pkg.discount_value"
+                                class="text-sm font-normal text-red-500"
+                              >
+                                Nilai Diskon :
+                                <span v-if="pkg.discount_type == 'fixed_amount'">
+                                  -{{ formatRupiah(pkg.discount_value) }}
+                                </span>
+
+                                <span v-if="pkg.discount_type == 'percentage'">
+                                  -{{ pkg.discount_value }}%
+                                </span>
+                              </p>
+                              <!-- Harga Akhir -->
+                              <p class="text-sm font-normal text-yellow-500">
+                                Harga Akhir :
+                                {{
+                                  formatRupiah(
+                                    calculateFinalPrice(
+                                      pkg.price,
+                                      pkg.discount_type,
+                                      pkg.discount_value,
+                                    ),
+                                  )
+                                }}
+                              </p>
+                            </template>
+                          </div>
+
+                          <div class="flex items-center gap-3">
+                            <p class="text-sm font-normal">Durasi :</p>
+                            <div class="flex gap-3">
+                              <!-- Durations List -->
+                              <template
+                                v-if="
+                                  pkg.product_package_durations &&
+                                  pkg.product_package_durations.length
+                                "
                               >
                                 <div
-                                  class="relative flex min-w-20 items-center justify-start gap-1 rounded-full bg-gray-200 py-0.5 ps-3 pe-8 text-black"
+                                  v-for="duration in pkg.product_package_durations"
+                                  :key="duration.id"
+                                  class="flex gap-1"
                                 >
-                                  <div class="flex gap-1 text-xs">
-                                    <p>{{ duration.name }}</p>
-                                  </div>
                                   <div
-                                    @click="openDeleteProductPackageDurationModal(duration.id)"
-                                    class="absolute right-0.5 rounded-full p-0.5 text-black transition-all hover:cursor-pointer hover:bg-red-600 hover:text-white"
+                                    class="relative flex min-w-20 items-center justify-start gap-1 rounded-full bg-gray-200 py-0.5 ps-3 pe-8 text-black"
                                   >
-                                    <CrossIcon class="size-3" />
+                                    <div class="flex gap-1 text-xs">
+                                      <p>{{ duration.name }}</p>
+                                    </div>
+                                    <div
+                                      @click="openDeleteProductPackageDurationModal(duration.id)"
+                                      class="absolute right-0.5 rounded-full p-0.5 text-black transition-all hover:cursor-pointer hover:bg-red-600 hover:text-white"
+                                    >
+                                      <CrossIcon class="size-3" />
+                                    </div>
                                   </div>
                                 </div>
+                              </template>
+                              <!-- Add Duration -->
+                              <div
+                                @click="openAddDurationModal(pkg.id)"
+                                class="group flex items-center justify-center rounded-full border border-dashed border-gray-600 bg-gray-200 px-3 transition-all hover:cursor-pointer hover:border-black hover:bg-yellow-500"
+                              >
+                                <span class="text-xs text-gray-600 group-hover:text-black"
+                                  >Tambah Durasi
+                                </span>
                               </div>
-                            </template>
-                            <!-- Add Duration -->
-                            <div
-                              @click="openAddDurationModal(pkg.id)"
-                              class="group flex items-center justify-center rounded-full border border-dashed border-gray-600 bg-gray-200 px-3 transition-all hover:cursor-pointer hover:border-black hover:bg-yellow-500"
-                            >
-                              <span class="text-xs text-gray-600 group-hover:text-black"
-                                >Tambah Durasi
-                              </span>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div class="flex flex-none gap-2">
-                      <!-- Edit -->
-                      <ButtonComponent
-                        @click="openEditProductPackageModal(pkg.id)"
-                        variant="link"
-                        color="yellow"
-                      >
-                        <EditIcon class="size-5" />
-                      </ButtonComponent>
+                      <div class="flex flex-none gap-2">
+                        <!-- Edit -->
+                        <ButtonComponent
+                          @click="openEditProductPackageModal(pkg.id)"
+                          variant="link"
+                          color="yellow"
+                        >
+                          <EditIcon class="size-5" />
+                        </ButtonComponent>
 
-                      <!-- Delete -->
-                      <ButtonComponent
-                        @click="openDeleteProductPackageModal(pkg.id)"
-                        variant="link"
-                        color="red"
-                      >
-                        <TrashIcon class="size-5" />
-                      </ButtonComponent>
+                        <!-- Delete -->
+                        <ButtonComponent
+                          @click="openDeleteProductPackageModal(pkg.id)"
+                          variant="link"
+                          color="red"
+                        >
+                          <TrashIcon class="size-5" />
+                        </ButtonComponent>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </template>
+                </template>
 
-              <p v-else class="text-sm text-gray-400">Belum ada paket untuk produk ini.</p>
+                <p v-else class="text-sm text-gray-400">Belum ada paket untuk produk ini.</p>
+              </div>
+              <!-- END : PACKAGES -->
             </div>
-            <!-- END : PACKAGES -->
           </div>
           <!-- END : BODY -->
         </div>
