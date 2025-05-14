@@ -265,6 +265,15 @@ const router = createRouter({
     //   }
     // }
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // Jika navigasi kembali (back/forward), gunakan posisi tersimpan
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      // Scroll ke atas untuk navigasi biasa
+      return { left: 0, top: 0 };
+    }
+  },
 });
 
 // Navigation Guard Global

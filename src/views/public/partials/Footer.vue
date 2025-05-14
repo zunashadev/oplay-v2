@@ -31,7 +31,7 @@ const navbarMenuItems = menuItems.footer;
           <div class="flex items-center gap-3">
             <RouterLink
               :to="{ name: 'PublicHome' }"
-              class="flex items-center space-x-1 sm:space-x-2"
+              class="flex items-center space-x-2 sm:space-x-3"
             >
               <div class="rounded-md bg-gray-950 p-1.5">
                 <img src="/app-logo.png" class="h-5 w-auto" />
