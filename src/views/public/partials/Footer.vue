@@ -26,19 +26,24 @@ const navbarMenuItems = menuItems.footer;
 
     <div class="relative flex flex-col gap-5 py-8 sm:flex-row">
       <!-- START : Left -->
-      <div class="flex flex-1/2 flex-col gap-5">
-        <div class="flex items-center gap-3">
-          <RouterLink :to="{ name: 'PublicHome' }" class="flex items-center space-x-1 sm:space-x-2">
-            <div class="rounded-md bg-gray-950 p-1.5">
-              <img src="/app-logo.png" class="h-5 w-auto" />
+      <div class="flex flex-1/2 flex-col justify-between gap-5">
+        <div class="flex flex-col gap-5">
+          <div class="flex items-center gap-3">
+            <RouterLink
+              :to="{ name: 'PublicHome' }"
+              class="flex items-center space-x-1 sm:space-x-2"
+            >
+              <div class="rounded-md bg-gray-950 p-1.5">
+                <img src="/app-logo.png" class="h-5 w-auto" />
+              </div>
+              <p class="text-xl font-semibold text-gray-950 sm:text-2xl">OPLAY</p>
+            </RouterLink>
+          </div>
+          <div>
+            <div class="flex flex-col text-sm text-gray-950">
+              <span class="font-semibold">OPLAY, Our Play!</span>
+              <span> Dapatkan Akun Premium dengan Harga Terjangkau. </span>
             </div>
-            <p class="text-xl font-semibold text-gray-950 sm:text-2xl">OPLAY</p>
-          </RouterLink>
-        </div>
-        <div>
-          <div class="flex flex-col text-sm text-gray-950">
-            <span class="font-semibold">OPLAY, Our Play!</span>
-            <span> Dapatkan Akun Premium dengan Harga Terjangkau. </span>
           </div>
         </div>
         <div class="flex items-center gap-2">
