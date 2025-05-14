@@ -112,32 +112,6 @@ watch([keyword, selectedCategory], () => {
     categoryId: selectedCategory.value,
   });
 });
-
-// 📌 Expand Description
-const maxLength = 200;
-const isExpanded = ref([]);
-
-// Reset state saat komponen dihancurkan
-onUnmounted(() => {
-  isExpanded.value = [];
-});
-
-// Inisialisasi isExpanded setelah produk di-fetch
-watch(
-  () => productStore.products,
-  (products) => {
-    isExpanded.value = products.map(() => false);
-  },
-  { immediate: true },
-);
-
-function toggleExpanded(index) {
-  isExpanded.value[index] = !isExpanded.value[index];
-}
-
-function truncated(text) {
-  return text.length <= maxLength ? text : text.slice(0, maxLength) + '...';
-}
 </script>
 
 <template>
@@ -281,18 +255,12 @@ function truncated(text) {
                   <p class="text-xs font-normal text-gray-400">Delivery Type</p>
                   <p class="text-sm">{{ product.delivery_types.label }}</p>
                 </div>
+
                 <div>
                   <p class="text-xs font-normal text-gray-400">Description</p>
-                  <p class="text-sm text-white">
-                    {{ isExpanded[index] ? product.description : truncated(product.description) }}
-                    <button
-                      v-if="product.description.length > maxLength"
-                      @click="toggleExpanded(index)"
-                      class="ml-1 text-blue-500 hover:cursor-pointer hover:underline"
-                    >
-                      {{ isExpanded[index] ? 'Read less' : 'Read more' }}
-                    </button>
-                  </p>
+                  <div class="ql-editor">
+                    <div v-html="product.description"></div>
+                  </div>
                 </div>
               </div>
             </div>

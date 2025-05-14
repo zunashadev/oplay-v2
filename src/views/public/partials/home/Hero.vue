@@ -43,9 +43,9 @@ import ButtonComponent from '@/components/buttons/Button.vue';
           :whilePress="{ scale: 0.95 }"
           class="w-full flex-none sm:w-1/2"
         >
-          <ButtonComponent color="gray" textColor="white" class="w-full"
-            >Hubungi Penjual</ButtonComponent
-          >
+          <ButtonComponent color="gray" textColor="white" class="w-full">
+            Hubungi Penjual
+          </ButtonComponent>
         </motion.div>
 
         <motion.div
@@ -54,9 +54,9 @@ import ButtonComponent from '@/components/buttons/Button.vue';
           :whilePress="{ scale: 0.95 }"
           class="w-full flex-none sm:w-1/2"
         >
-          <ButtonComponent color="yellow" textColor="black" class="w-full"
-            >Telusuri Produk</ButtonComponent
-          >
+          <ButtonComponent color="yellow" textColor="black" class="w-full">
+            Telusuri Produk
+          </ButtonComponent>
         </motion.div>
       </div>
     </div>

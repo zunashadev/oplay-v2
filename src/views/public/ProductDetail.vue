@@ -193,8 +193,8 @@ function goBack() {
             <hr class="rounded-full border-gray-800" />
 
             <!-- Deskripsi -->
-            <div class="flex flex-col gap-1">
-              <p class="text-sm font-normal text-white">{{ product.description }}</p>
+            <div class="ql-editor">
+              <div v-html="product.description"></div>
             </div>
           </div>
           <!-- END : Left -->

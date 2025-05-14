@@ -13,6 +13,7 @@ import InputComponent from '@/components/form/Input.vue';
 import TextAreaComponent from '@/components/form/TextArea.vue';
 import FileInputComponent from '@/components/form/FileInput.vue';
 import SelectComponent from '@/components/form/Select.vue';
+import QuillEditorComponent from '@/components/form/QuillEditor.vue';
 
 // 📌 Inisialisasi Stores
 const productCategoryStore = useProductCategoryStore();
@@ -141,10 +142,17 @@ const updateProduct = async () => {
         </SelectComponent>
 
         <!-- Deskripsi -->
-        <TextAreaComponent
+        <!-- <TextAreaComponent
           v-model="description"
           label="Deskripsi"
           placeholder="Masukkan deskripsi"
+          required
+        /> -->
+
+        <QuillEditorComponent
+          v-model="description"
+          label="Deskripsi"
+          placeholder="Masukkan deskripsi produk secara detail"
           required
         />
 
