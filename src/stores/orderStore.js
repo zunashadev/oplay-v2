@@ -14,7 +14,7 @@ export const useOrderStore = defineStore('orderStore', () => {
    **   STATE & COMPUTED
    *========================================================================**/
 
-  // State
+  // 📌 State
   const loading = ref(false);
 
   const isFetchingList = ref(false);
