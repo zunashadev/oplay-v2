@@ -70,6 +70,15 @@ const router = createRouter({
             requiresGuest: true,
           },
         },
+        {
+          path: 'verify-success',
+          name: 'AuthVerifySuccess',
+          component: () => import('../views/auth/VerifySuccess.vue'),
+          meta: {
+            title: 'Verify Success',
+            requiresGuest: true,
+          },
+        },
       ],
     },
     // 📌 Customer
@@ -252,6 +261,15 @@ const router = createRouter({
         title: 'Cetak Daftar Produk',
         requiresAuth: true,
         requiredRoles: ['admin'],
+      },
+    },
+    {
+      path: '/test-verify',
+      name: 'TestVerify',
+      component: () => import('../views/TestVerify.vue'),
+      meta: {
+        title: 'Test Verify Page',
+        requiresAuth: false, // Bebas diakses siapa saja
       },
     },
     // 404 Not Found

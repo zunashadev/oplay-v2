@@ -74,11 +74,11 @@ const updateProfile = async () => {
       </div>
 
       <button
-        :disabled="authStore.loading"
+        :disabled="authStore.isUpdating"
         @click="updateProfile"
         class="w-full rounded bg-blue-500 py-2 text-white hover:bg-blue-600 disabled:bg-gray-300"
       >
-        {{ authStore.loading ? 'Menyimpan...' : 'Simpan Perubahan' }}
+        {{ authStore.isUpdating ? 'Menyimpan...' : 'Simpan Perubahan' }}
       </button>
     </div>
     <!-- END : TEMP FORM EDIT PROFILE -->

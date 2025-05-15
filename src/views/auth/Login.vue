@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/authStore';
 
 // Components
 import WaveLoaderComponent from '@/components/loaders/WaveLoader.vue';
+import GeometryLoaderComponent from '@/components/loaders/GeometryLoader.vue';
 import InputComponent from '@/components/form/Input.vue';
 import ButtonComponent from '@/components/buttons/Button.vue';
 
@@ -54,9 +55,9 @@ onMounted(() => {
 
 <template>
   <!-- START : Loading -> Page -->
-  <template v-if="authStore.loading">
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-xs">
-      <WaveLoaderComponent />
+  <template v-if="authStore.isCreating">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs">
+      <GeometryLoaderComponent />
     </div>
   </template>
   <!-- END : Loading -> Page -->
@@ -131,7 +132,7 @@ onMounted(() => {
           <!-- Login Button -->
           <div class="flex flex-col items-center space-y-3">
             <ButtonComponent
-              :disabled="authStore.loading"
+              :disabled="authStore.isCreating"
               type="submit"
               textColor="black"
               class="w-full"

@@ -45,7 +45,11 @@ const roles = [
   <div class="flex flex-col gap-5">
     <!-- START : USERS TABLE -->
     <div class="rounded-xl bg-gray-900 px-5 py-5">
-      <TableComponent :columns="columns" :data="authStore.users" :loading="authStore.loading">
+      <TableComponent
+        :columns="columns"
+        :data="authStore.users"
+        :loading="authStore.isFetchingList"
+      >
         <!-- Avatar -->
         <template #cell-custom-profile-avatar="{ row }">
           <div class="flex-none">

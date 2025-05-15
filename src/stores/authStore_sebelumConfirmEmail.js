@@ -209,7 +209,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  const registerOld = async (email, password, name, username, referral_code = null) => {
+  const register = async (email, password, name, username, referral_code = null) => {
     // 📌 Validasi form awal - ini juga sudah di cek pada komponen input (dsb) menggunakan required
     if (!name || !username || !email || !password) {
       const err = new Error('Nama lengkap, username, email, dan password diperlukan!');
@@ -330,81 +330,6 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   };
 
-  const register = async (email, password, name, username, referral_code = null) => {
-    // 📌 Validasi form awal - ini juga sudah di cek pada komponen input (dsb) menggunakan required
-    if (!name || !username || !email || !password) {
-      const err = new Error('Nama lengkap, username, email, dan password diperlukan!');
-      handleResponse({ message, error }, 'error', 'mendaftar', { err, showToast: false });
-      throw err;
-    }
-
-    isCreating.value = true;
-    resetMessageState();
-
-    try {
-      // 📌 validasi username unik
-      const { data: existingUsername } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('username', username)
-        .maybeSingle();
-
-      if (existingUsername) throw new Error(`Username "${username}" sudah digunakan`);
-
-      // 📌 Validasi referral tidak boleh diri sendiri
-      if (referral_code === username) {
-        throw new Error('Kode referral tidak boleh milik sendiri.');
-      }
-
-      // 📌 Validasi referral username (apakah ada)
-      let referrer_id = null;
-
-      if (referral_code) {
-        const { data: referrer, error: referrerError } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('username', referral_code)
-          .single();
-
-        if (referrerError || !referrer) {
-          throw new Error(`Kode referral "${referral_code}" tidak ditemukan`);
-        }
-
-        referrer_id = referrer.id;
-      }
-
-      // 📌 Register user (Supabase Auth)
-      const { data: userData, error: registerError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          // emailRedirectTo: `${window.location.origin}/auth/login`,
-          emailRedirectTo: `${window.location.origin}/test-verify`,
-          // emailRedirectTo: `https://www.google.com/`,
-          data: {
-            name,
-            username,
-            referral_code,
-            referrer_id,
-            role: 'customer',
-          },
-        },
-      });
-
-      if (registerError) throw registerError;
-
-      console.log('User berhasil dibuat:', userData.user);
-
-      handleResponse({ message, error }, 'success', 'mendaftar');
-      return { message: 'Registrasi berhasil. Silakan cek email untuk verifikasi.' };
-    } catch (err) {
-      handleResponse({ message, error }, 'error', 'mendaftar', { err });
-      throw err;
-    } finally {
-      isCreating.value = false;
-    }
-  };
-
   /**------------------------------------------------------------------------
    *    Login
    *------------------------------------------------------------------------**/
@@ -429,66 +354,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
       user.value = data.user;
       session.value = data.session;
-
-      // 📌 Coba ambil profile
-      let profile;
-
-      try {
-        profile = await fetchUserProfile();
-      } catch (err) {
-        console.error('Gagal ambil profile:', err);
-        profile = null; // set ke null atau nilai default
-      }
-
-      if (!profile) {
-        const metadata = data.user.user_metadata;
-
-        console.log(metadata);
-
-        // Validasi minimal metadata wajib ada
-        if (!metadata || !metadata.name || !metadata.username) {
-          throw new Error('Data profil tidak lengkap. Silakan hubungi admin.');
-        }
-
-        // Cek apakah username sudah digunakan (harusnya tidak, tapi validasi ulang)
-        const { data: existingUsername } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('username', metadata.username)
-          .maybeSingle();
-
-        if (existingUsername) {
-          throw new Error(`Username "${metadata.username}" sudah digunakan.`);
-        }
-
-        const profilePayload = {
-          id: data.user.id,
-          name: metadata.name,
-          username: metadata.username,
-          role: metadata.role || 'customer',
-          referral_code: metadata.username,
-          ...(metadata.referrer_id && { referrer_id: metadata.referrer_id }),
-        };
-
-        const { error: profileInsertError } = await supabase
-          .from('profiles')
-          .insert([profilePayload]);
-
-        if (profileInsertError) {
-          throw new Error('Gagal membuat profil saat login: ' + profileInsertError.message);
-        }
-
-        // Ambil ulang profil setelah insert
-        profile = await fetchUserProfile();
-
-        // Opsional: buat wallet
-        await createWalletForUser(data.session.access_token);
-
-        // Opsional: beri reward referral
-        if (metadata.referrer_id && metadata.referral_code) {
-          await giveReferralRewards(profile, metadata.referrer_id, metadata.referral_code);
-        }
-      }
+      await fetchUserProfile();
 
       handleResponse({ message, error }, 'success', 'login');
     } catch (err) {

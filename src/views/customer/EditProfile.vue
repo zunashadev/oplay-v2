@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
+import { getPublicImageUrl } from '@/utils/storageHelper';
 
 import ButtonComponent from '@/components/buttons/Button.vue';
 import InputComponent from '@/components/form/Input.vue';
@@ -49,60 +50,91 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 py-0">
-    <!-- START : PROFILE -->
-    <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
-      <form @submit.prevent="updateProfile" class="flex flex-col gap-8">
-        <div class="flex flex-col gap-5">
-          <!-- Name -->
-          <div class="flex flex-col gap-1">
-            <p class="text-sm font-normal text-gray-400">Nama</p>
-            <InputComponent v-model="name" placeholder="Masukkan nama" />
-          </div>
-          <!-- Username -->
-          <div class="flex flex-col gap-1">
-            <p class="text-sm font-normal text-gray-400">Username</p>
-            <InputComponent v-model="username" placeholder="Masukkan username" />
-          </div>
-          <!-- Avatar File -->
-          <div class="flex flex-col gap-1">
-            <p class="text-sm font-normal text-gray-400">Avatar</p>
-            <FileInputComponent v-model="avatarFile" class="" />
-          </div>
+  <div class="flex gap-5">
+    <!-- START : Left -->
+    <div class="flex h-min w-1/3 flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
+      <div class="flex w-full justify-center p-5">
+        <img
+          alt="User Avatar"
+          :src="getPublicImageUrl(authStore.profile.avatar_image_path, 'avatar')"
+          class="size-32 flex-none rounded-full object-cover"
+        />
+      </div>
+      <hr class="rounded-full border-gray-800" />
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-col">
+          <p class="text-sm text-gray-500">Nama</p>
+          <p class="text-sm">{{ authStore.profile.name }}</p>
         </div>
-        <!-- Submit Button -->
-        <ButtonComponent type="submit" variant="solid" textColor="black">
-          Simpan Perubahan
-        </ButtonComponent>
-      </form>
+        <div class="flex flex-col">
+          <p class="text-sm text-gray-500">Username</p>
+          <p class="text-sm">{{ authStore.profile.username }}</p>
+        </div>
+        <div class="flex flex-col">
+          <p class="text-sm text-gray-500">Email</p>
+          <p class="text-sm">{{ authStore.user.email }}</p>
+        </div>
+      </div>
     </div>
-    <!-- END : PROFILE -->
+    <!-- END : Left -->
 
-    <!-- START : USER -->
-    <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
-      <form @submit.prevent="updateUser" class="flex flex-col gap-8">
-        <div class="flex flex-col gap-5">
-          <!-- Email -->
-          <div class="flex flex-col gap-1">
-            <p class="text-sm font-normal text-gray-400">Email</p>
-            <InputComponent v-model="email" placeholder="Masukkan email" type="email" />
+    <!-- START : Right -->
+    <div class="flex w-2/3 flex-col gap-5 py-0">
+      <!-- START : PROFILE -->
+      <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
+        <form @submit.prevent="updateProfile" class="flex flex-col gap-8">
+          <div class="flex flex-col gap-5">
+            <!-- Name -->
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-normal text-gray-400">Nama</p>
+              <InputComponent v-model="name" placeholder="Masukkan nama" />
+            </div>
+            <!-- Username -->
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-normal text-gray-400">Username</p>
+              <InputComponent v-model="username" placeholder="Masukkan username" disabled />
+            </div>
+            <!-- Avatar File -->
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-normal text-gray-400">Avatar</p>
+              <FileInputComponent v-model="avatarFile" class="" />
+            </div>
           </div>
-          <!-- Username -->
-          <div class="flex flex-col gap-1">
-            <p class="text-sm font-normal text-gray-400">password</p>
-            <InputComponent
-              v-model="password"
-              placeholder="Masukkan password baru"
-              type="password"
-            />
+          <!-- Submit Button -->
+          <ButtonComponent type="submit" variant="solid" textColor="black">
+            Simpan Perubahan
+          </ButtonComponent>
+        </form>
+      </div>
+      <!-- END : PROFILE -->
+
+      <!-- START : USER -->
+      <div class="flex flex-col gap-5 rounded-xl bg-gray-900 px-5 py-5">
+        <form @submit.prevent="updateUser" class="flex flex-col gap-8">
+          <div class="flex flex-col gap-5">
+            <!-- Email -->
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-normal text-gray-400">Email</p>
+              <InputComponent v-model="email" placeholder="Masukkan email" type="email" />
+            </div>
+            <!-- Username -->
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-normal text-gray-400">password</p>
+              <InputComponent
+                v-model="password"
+                placeholder="Masukkan password baru"
+                type="password"
+              />
+            </div>
           </div>
-        </div>
-        <!-- Submit Button -->
-        <ButtonComponent type="submit" variant="solid" textColor="black">
-          Simpan Perubahan
-        </ButtonComponent>
-      </form>
+          <!-- Submit Button -->
+          <ButtonComponent type="submit" variant="solid" textColor="black">
+            Simpan Perubahan
+          </ButtonComponent>
+        </form>
+      </div>
+      <!-- END : USER -->
     </div>
-    <!-- END : USER -->
+    <!-- END : Right -->
   </div>
 </template>
