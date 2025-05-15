@@ -62,7 +62,7 @@ watch([keyword, selectedCategory], () => {
       <div class="z-10">
         <div class="flex items-center gap-3">
           <div class="h-8 w-1 rounded-md bg-yellow-500"></div>
-          <p class="text-2xl font-semibold">Daftar Produk Anjayyyy</p>
+          <p class="text-2xl font-semibold">Daftar Produk TEESSS</p>
         </div>
       </div>
       <!-- END : Title -->
