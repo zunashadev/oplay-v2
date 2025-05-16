@@ -76,7 +76,8 @@ const router = createRouter({
           component: () => import('../views/auth/VerifySuccess.vue'),
           meta: {
             title: 'Verify Success',
-            requiresGuest: true,
+            // requiresGuest: true,
+            // requiresAuth: false,
           },
         },
       ],
@@ -263,15 +264,6 @@ const router = createRouter({
         requiredRoles: ['admin'],
       },
     },
-    {
-      path: '/test-verify',
-      name: 'TestVerify',
-      component: () => import('../views/TestVerify.vue'),
-      meta: {
-        title: 'Test Verify Page',
-        requiresAuth: false, // Bebas diakses siapa saja
-      },
-    },
     // 404 Not Found
     // {
     //   path: '/:pathMatch(.*)*',
@@ -297,6 +289,10 @@ const router = createRouter({
 // Navigation Guard Global
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
+
+  // ⚠️ Skip guard jika tujuan adalah /auth/verify-success
+  if (to.name === 'AuthVerifySuccess') return next();
+
   await authStore.initAuth();
 
   // Set judul halaman
