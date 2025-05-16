@@ -378,9 +378,7 @@ export const useAuthStore = defineStore('authStore', () => {
         email,
         password,
         options: {
-          // emailRedirectTo: `${window.location.origin}/auth/login`,
-          emailRedirectTo: `${window.location.origin}/test-verify`,
-          // emailRedirectTo: `https://www.google.com/`,
+          emailRedirectTo: `${window.location.origin}/auth/verify-success`,
           data: {
             name,
             username,
@@ -438,56 +436,6 @@ export const useAuthStore = defineStore('authStore', () => {
       } catch (err) {
         console.error('Gagal ambil profile:', err);
         profile = null; // set ke null atau nilai default
-      }
-
-      if (!profile) {
-        const metadata = data.user.user_metadata;
-
-        console.log(metadata);
-
-        // Validasi minimal metadata wajib ada
-        if (!metadata || !metadata.name || !metadata.username) {
-          throw new Error('Data profil tidak lengkap. Silakan hubungi admin.');
-        }
-
-        // Cek apakah username sudah digunakan (harusnya tidak, tapi validasi ulang)
-        const { data: existingUsername } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('username', metadata.username)
-          .maybeSingle();
-
-        if (existingUsername) {
-          throw new Error(`Username "${metadata.username}" sudah digunakan.`);
-        }
-
-        const profilePayload = {
-          id: data.user.id,
-          name: metadata.name,
-          username: metadata.username,
-          role: metadata.role || 'customer',
-          referral_code: metadata.username,
-          ...(metadata.referrer_id && { referrer_id: metadata.referrer_id }),
-        };
-
-        const { error: profileInsertError } = await supabase
-          .from('profiles')
-          .insert([profilePayload]);
-
-        if (profileInsertError) {
-          throw new Error('Gagal membuat profil saat login: ' + profileInsertError.message);
-        }
-
-        // Ambil ulang profil setelah insert
-        profile = await fetchUserProfile();
-
-        // Opsional: buat wallet
-        await createWalletForUser(data.session.access_token);
-
-        // Opsional: beri reward referral
-        if (metadata.referrer_id && metadata.referral_code) {
-          await giveReferralRewards(profile, metadata.referrer_id, metadata.referral_code);
-        }
       }
 
       handleResponse({ message, error }, 'success', 'login');
@@ -612,6 +560,100 @@ export const useAuthStore = defineStore('authStore', () => {
   /**========================================================================
    **   PROFILE METHODS
    *========================================================================**/
+
+  const ensureSession = async () => {
+    if (user.value && session.value) return true;
+
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) {
+      console.log('Error mendapatkan session:', error.message);
+      return false;
+    }
+
+    if (!data?.session || !data.session.user) {
+      console.log('User belum login/session belum tersedia!');
+      return false;
+    }
+
+    user.value = data.session.user;
+    session.value = data.session;
+
+    return true;
+  };
+
+  /**------------------------------------------------------------------------
+   *    Create User Profile
+   *------------------------------------------------------------------------**/
+
+  const createUserProfile = async () => {
+    if (!user.value) {
+      throw new Error('User tidak valid untuk membuat profil');
+    }
+
+    isCreating.value = true;
+    resetMessageState();
+
+    try {
+      // 📌 Cek dulu profil user
+      const { data: existingProfile, error: fetchError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.value.id)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+
+      if (existingProfile) return existingProfile;
+
+      // 📌 Ambil metadata dari user untuk membuat profil baru
+      const metadata = user.value.user_metadata || {};
+
+      // Validasi minimal metadata wajib ada
+      if (!metadata || !metadata.name || !metadata.username) {
+        throw new Error('Data profil tidak lengkap. Silakan hubungi admin.');
+      }
+
+      const profilePayload = {
+        id: user.value.id,
+        name: metadata.name,
+        username: metadata.username,
+        role: metadata.role || 'customer',
+        referral_code: metadata.username,
+        ...(metadata.referrer_id && { referrer_id: metadata.referrer_id }),
+      };
+
+      // 📌 Insert profil baru
+      const { data: insertedProfile, error: insertError } = await supabase
+        .from('profiles')
+        .insert([profilePayload])
+        .select()
+        .single();
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      // Ambil ulang profil setelah insert
+      let profile = await fetchUserProfile();
+
+      // Opsional: buat wallet
+      await createWalletForUser(session.value.access_token);
+
+      // Opsional: beri reward referral
+      if (metadata.referrer_id && metadata.referral_code) {
+        await giveReferralRewards(profile, metadata.referrer_id, metadata.referral_code);
+      }
+
+      handleResponse({ message, error }, 'success', 'membuat profil');
+      return insertedProfile;
+    } catch (err) {
+      handleResponse({ message, error }, 'error', 'membuat profil', { err });
+      throw err;
+    } finally {
+      isCreating.value = false;
+    }
+  };
 
   /**------------------------------------------------------------------------
    *    Fetch User Profile
@@ -764,12 +806,8 @@ export const useAuthStore = defineStore('authStore', () => {
         try {
           await fetchUserProfile(); // Bisa lempar error jika profil tidak ada
         } catch (profileErr) {
-          // Profil user tidak ditemukan, logout paksa
           await logout();
-
-          // Redirect ke login atau halaman lain
           window.location.href = '/auth/login';
-
           throw new Error('Profil pengguna tidak ditemukan. Anda telah logout otomatis.');
         }
         return currentSession;
@@ -790,33 +828,36 @@ export const useAuthStore = defineStore('authStore', () => {
 
   const initAuthListener = async () => {
     supabase.auth.onAuthStateChange((event, currentSession) => {
+      const currentPath = window.location.pathname;
+      const skipRedirectPaths = ['/auth/verify-success', '/auth/reset-password'];
+      const shouldSkipRedirect = skipRedirectPaths.includes(currentPath);
+
       if (event === 'SIGNED_IN') {
         user.value = currentSession?.user || null;
         session.value = currentSession || null;
 
-        // Tambahkan delay sebelum mencoba fetch profil
         setTimeout(() => {
-          // Cek apakah masih dalam session yang valid
           if (user.value && user.value.id) {
             fetchUserProfile().catch((err) => {
               console.error('Failed to fetch profile after auth state change:', err);
-              // Jika profile tidak ditemukan, mungkin user telah dihapus
-              // Reset auth state dan redirect ke login
               resetAuthState();
-              // Redirect jika dibutuhkan
-              window.location.href = '/auth/login';
+
+              if (!shouldSkipRedirect) {
+                window.location.href = '/auth/login';
+              }
             });
           }
         }, 1000);
-      } else if (event === 'SIGNED_OUT') {
+      } else if (
+        event === 'SIGNED_OUT' ||
+        event === 'TOKEN_REFRESH_FAILED' ||
+        event === 'SESSION_EXPIRED'
+      ) {
         resetAuthState();
-        // Redirect jika dibutuhkan
-        window.location.href = '/auth/login';
-      } else if (event === 'TOKEN_REFRESH_FAILED' || event === 'SESSION_EXPIRED') {
-        // Logout secara paksa jika token refresh gagal atau sesi kadaluarsa
-        resetAuthState();
-        // Redirect jika dibutuhkan
-        window.location.href = '/auth/login';
+
+        if (!shouldSkipRedirect) {
+          window.location.href = '/auth/login';
+        }
       }
     });
   };
@@ -860,6 +901,8 @@ export const useAuthStore = defineStore('authStore', () => {
     updateUser,
     updateUserRole,
     fetchAllUsers,
+    ensureSession,
+    createUserProfile,
 
     // ...
     initAuthListener,
